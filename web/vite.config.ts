@@ -71,6 +71,31 @@ function offline(): Plugin {
   };
 }
 
+/**
+ * Dev only: the documentation at /docs/, as the hosted site has it, once it is built (`npm run docs:build`, into docs/.vitepress/dist).
+ * The app's Documentation link then opens these; without them it opens the public documentation.
+ */
+function serveDocs(): Plugin {
+  return {
+    name: "docxtor-serve-docs",
+    apply: "serve",
+    configureServer(server) {
+      const dir = resolve(__dirname, "../docs/.vitepress/dist");
+      const types: Record<string, string> = { ".html": "text/html; charset=utf-8", ".js": "text/javascript", ".css": "text/css", ".json": "application/json", ".svg": "image/svg+xml", ".png": "image/png", ".woff2": "font/woff2", ".txt": "text/plain", ".xml": "application/xml" };
+      server.middlewares.use("/docs", (req, res, next) => {
+        if (!existsSync(dir)) return next();
+        const path = decodeURIComponent((req.url ?? "/").split("?")[0]!);
+        // As Cloudflare Pages answers: a folder with its index.html, a page without its .html ending.
+        let file = resolve(dir, "." + (path.endsWith("/") ? `${path}index.html` : path));
+        if (!existsSync(file) && existsSync(`${file}.html`)) file = `${file}.html`;
+        if (!file.startsWith(dir) || !existsSync(file) || !statSync(file).isFile()) return next();
+        res.setHeader("content-type", types[file.slice(file.lastIndexOf("."))] ?? "application/octet-stream");
+        res.end(readFileSync(file));
+      });
+    },
+  };
+}
+
 /** Dev only: serves a built copy (`vite build --outDir`) under /__built/ so the offline tests can run the real service worker on the one test port. */
 function serveBuilt(): Plugin {
   return {
@@ -138,7 +163,7 @@ function bundledPackages(): Plugin {
 
 export default defineConfig({
   base: "./",
-  plugins: [devSave(), offline(), serveBuilt(), bundledPackages()],
+  plugins: [devSave(), offline(), serveBuilt(), serveDocs(), bundledPackages()],
   // Hunspell dictionaries are data files: the app fetches them, they are not code.
   assetsInclude: ["**/*.aff", "**/*.dic"],
   resolve: {

@@ -9,8 +9,28 @@ import type { App } from "./main";
  * links out with an empty one (`VITE_DOCXTOR_REPO=`): then there is no Report a problem or Source code.
  */
 export const REPO: string = ((import.meta.env.VITE_DOCXTOR_REPO as string | undefined) ?? "https://github.com/tinycommit-dev/docxtor").replace(/\/+$/, "");
-/** The documentation's address, the same way (`VITE_DOCXTOR_DOCS`; empty leaves the link out). */
-export const DOCS: string = (import.meta.env.VITE_DOCXTOR_DOCS as string | undefined) ?? "https://docxtor.tinycommit.dev/docs/";
+/** The public documentation: where the links go when this copy of the app has none of its own. */
+const PUBLIC_DOCS = "https://docxtor.tinycommit.dev/docs/";
+const SET_DOCS = import.meta.env.VITE_DOCXTOR_DOCS as string | undefined;
+/** Whether there is a documentation link at all (a build can leave it out with `VITE_DOCXTOR_DOCS=`), and its address until docsAddress() knows better. */
+export const DOCS: string = SET_DOCS ?? PUBLIC_DOCS;
+
+let docsFound: Promise<string> | null = null;
+/**
+ * The documentation for this copy of the app: the address a build names (`VITE_DOCXTOR_DOCS`), else the docs served beside the app
+ * (the hosted build and `npm run dev` after `npm run docs:build` have them at ./docs/), else the public documentation (the self-host
+ * archive and the Docker image carry the app only). The docs' hashmap.json is the sign they are there: a server that answers every
+ * address with the app's page (the dev server does) sends HTML, not JSON.
+ */
+export function docsAddress(): Promise<string> {
+  docsFound ??=
+    SET_DOCS !== undefined
+      ? Promise.resolve(SET_DOCS)
+      : fetch(new URL("docs/hashmap.json", document.baseURI), { cache: "no-store" })
+          .then((r) => (r.ok && (r.headers.get("content-type") ?? "").includes("json") ? new URL("docs/", document.baseURI).href : PUBLIC_DOCS))
+          .catch(() => PUBLIC_DOCS);
+  return docsFound;
+}
 export const VERSION: string = pkg.version;
 
 interface Topic {
@@ -144,7 +164,7 @@ function openTopics(app: App, first?: string) {
   const links = h(
     "div",
     { class: "help-links" },
-    ...(DOCS ? [h("button", { class: "btn ghost", type: "button", onclick: () => visit(DOCS) }, t("Documentation"))] : []),
+    ...(DOCS ? [h("button", { class: "btn ghost", type: "button", onclick: () => void docsAddress().then(visit) }, t("Documentation"))] : []),
     ...(REPO
       ? [
           h("button", { class: "btn ghost", type: "button", onclick: () => visit(reportUrl()) }, t("Report a problem")),
@@ -196,7 +216,9 @@ export function helpLinks(app: App): Extension {
       item("help.topics");
       item("help.whatsNew");
       if (DOCS) {
-        cmd("help.docs", t("Documentation"), () => visit(DOCS), { icon: "book" });
+        // Asked once, early, so the link opens at once when chosen (a new tab needs the click it came from).
+        void docsAddress();
+        cmd("help.docs", t("Documentation"), () => void docsAddress().then(visit), { icon: "book" });
         ctx.menus.register({ menu: "help", group: "4_links", command: "help.docs" });
       }
       if (REPO) {

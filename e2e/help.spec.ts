@@ -1,15 +1,20 @@
 // The Help menu: written help pages that work offline, what's new, and links to report a problem and to the source code.
-import { chooseMenu, dialog, expect, openFixture, openMenu, menuItem, test } from "./helpers";
+import { chooseMenu, dialog, expect, openFixture, openMenu, menuItem, test, type Page } from "./helpers";
 
 // The repository's and the documentation's addresses: the public ones unless the build names others (VITE_DOCXTOR_REPO, VITE_DOCXTOR_DOCS).
 const REPO = (process.env.VITE_DOCXTOR_REPO ?? "https://github.com/tinycommit-dev/docxtor").replace(/\/+$/, "");
 const DOCS = process.env.VITE_DOCXTOR_DOCS ?? "https://docxtor.tinycommit.dev/docs/";
+// Whether this copy has its own documentation at ./docs/: its hashmap.json answers as JSON. The dev server answers every address with
+// the app's page, which is no documentation.
+const ownDocs = (page: Page, has: boolean) =>
+  page.route("**/docs/hashmap.json", (route) => route.fulfill(has ? { contentType: "application/json", body: "{}" } : { contentType: "text/html", body: "<!doctype html>" }));
 
 test.describe("help", () => {
   test.beforeEach(async ({ page, context }) => {
     // The links open the project's pages: the tests don't go to the network for them.
     await context.route("https://github.com/**", (route) => route.fulfill({ contentType: "text/html", body: "<title>Docxtor</title>" }));
     await context.route("https://docxtor.tinycommit.dev/**", (route) => route.fulfill({ contentType: "text/html", body: "<title>Docxtor docs</title>" }));
+    await ownDocs(page, false);
     await openFixture(page, "simple.docx");
   });
 
@@ -78,6 +83,20 @@ test.describe("help", () => {
     const nav = (await links.boundingBox())!;
     const heading = (await page.getByRole("heading", { name: "Your documents" }).boundingBox())!;
     expect(nav.y + nav.height).toBeLessThan(heading.y);
+  });
+
+  test("a copy with its own documentation links to it, one without links to the public documentation", async ({ page, context }) => {
+    test.skip(process.env.VITE_DOCXTOR_DOCS !== undefined, "this build names its documentation's address");
+    await page.unroute("**/docs/hashmap.json");
+    await ownDocs(page, true);
+    await page.goto("/");
+    const own = new URL("/docs/", page.url()).href;
+    await expect(page.getByRole("navigation", { name: "About Docxtor" }).getByRole("link", { name: "Documentation" })).toHaveAttribute("href", own);
+    await page.route(own, (route) => route.fulfill({ contentType: "text/html", body: "<title>Own docs</title>" }));
+    await openFixture(page, "simple.docx");
+    const [tab] = await Promise.all([context.waitForEvent("page"), chooseMenu(page, "Help", "Documentation")]);
+    await tab.waitForURL(own);
+    await tab.close();
   });
 
   test("Source code opens the repository", async ({ page, context }) => {
