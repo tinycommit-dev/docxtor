@@ -2,7 +2,8 @@ name: Release
 
 # A pushed tag v<version> (the version in the root package.json: docs/deploy.md, "Cutting a release") runs the gates, builds everything,
 # tests the Docker image and the Cloudflare preview, then publishes: the GitHub release, the image on ghcr.io and the hosted app.
-# "Run workflow" with dry_run on (the default) builds and tests all of it and uploads nothing.
+# "Run workflow" with dry_run on (the default) builds and tests all of it and uploads nothing. With site_only on (and dry_run off) it puts the
+# current branch on the hosted app alone: the gates, the web build, the tested preview, then production; no release, no image, no programs.
 on:
   push:
     tags: ["v*"]
@@ -12,6 +13,10 @@ on:
         description: "Dry run: build and test everything, upload nothing (no release, no image push, no Cloudflare deploy)"
         type: boolean
         default: true
+      site_only:
+        description: "The hosted app only: gates, web build, tested preview, then production (no release, no image, no programs)"
+        type: boolean
+        default: false
 
 # Two releases never run at once, and a running one is never cancelled by the next.
 concurrency:
@@ -76,6 +81,7 @@ jobs:
   # The command and the MCP server, one archive each per platform. Linux builds are static (musl): they run on any distribution, whatever
   # its glibc, which is what a downloaded program needs; each is built on a machine of its own architecture.
   cli:
+    if: ${{ !inputs.site_only }}
     needs: version
     runs-on: ${{ matrix.os }}
     permissions:
@@ -175,6 +181,7 @@ jobs:
   # run against the pushed image on amd64. `latest` is added only at the end (image-latest), when everything else has passed. A dry run builds
   # amd64 only, keeps it local and runs the same tests.
   image:
+    if: ${{ !inputs.site_only }}
     needs: [gates, version]
     runs-on: ubuntu-24.04
     timeout-minutes: 90
@@ -339,7 +346,7 @@ jobs:
 
   # The GitHub release: every archive, SHA256SUMS over all of them, build provenance for each, and the CHANGELOG section as the notes.
   release:
-    if: ${{ !inputs.dry_run }}
+    if: ${{ !inputs.dry_run && !inputs.site_only }}
     needs: [gates, version, cli, web, image, preview]
     runs-on: ubuntu-24.04
     permissions:
@@ -387,6 +394,8 @@ jobs:
   # Everything has passed and the release is out: the hosted app goes live and the image gets `latest` (not for a pre-release).
   production:
     needs: [version, preview, release]
+    # after the release, or straight after the tested preview when only the site goes out
+    if: ${{ !cancelled() && needs.preview.result == 'success' && (needs.release.result == 'success' || inputs.site_only) }}
     runs-on: ubuntu-24.04
     environment: production # in the repository's settings, "Required reviewers" on this environment make it wait for a person (optional)
     permissions:
