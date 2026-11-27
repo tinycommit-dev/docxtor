@@ -96,6 +96,8 @@ test.describe("the production build", () => {
     // The app first: its service worker is in control of the address.
     await page.goto(URL0);
     await page.waitForFunction(() => !!(window as any).docxtor);
+    // Its Documentation link goes to these docs, beside it, not to another copy's.
+    await expect(page.locator(".start-links a", { hasText: "Documentation" })).toHaveAttribute("href", new URL("docs/", URL0).href);
     await page.evaluate(() => navigator.serviceWorker.ready.then(() => true));
     await page.reload();
     await page.waitForFunction(() => !!navigator.serviceWorker.controller, null, { timeout: 15000 });

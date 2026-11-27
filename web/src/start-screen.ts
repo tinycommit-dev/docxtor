@@ -2,6 +2,7 @@
 import type { PreviewLine } from "./files/fs";
 import { I, h, svg, t } from "@docxtor/editor";
 import type { App } from "./main";
+import { DOCS, REPO, docsAddress } from "./help";
 import { DOC_EXT, canPickFiles, canUseFolders, recents, setPinned } from "./files/fs";
 
 // ---------------------------------------------------------------------------
@@ -35,6 +36,17 @@ function resumeNotice(r: Resume): HTMLElement {
     h("p", {}, h("b", {}, t("Continue where you left off. ")), "Your browser needs your permission before Docxtor can open this file again."),
     b,
   );
+}
+
+/** GitHub's mark (the brand's own shape, filled), for the link to the source code. */
+const GITHUB =
+  '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .3a12 12 0 0 0-3.8 23.38c.6.11.82-.26.82-.58v-2.04c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.33-1.76-1.33-1.76-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .11-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.28-1.55 3.29-1.23 3.29-1.23.64 1.65.24 2.87.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.8 5.62-5.48 5.92.43.37.82 1.1.82 2.22v3.29c0 .32.21.69.82.57A12 12 0 0 0 12 .3"/></svg>';
+
+/** The documentation link: the public address at first, this copy's own docs as soon as docsAddress() finds them. */
+function docsLink(): HTMLAnchorElement {
+  const a = h("a", { class: "btn ghost start-action", href: DOCS, target: "_blank", rel: "noopener" }, svg(I.book), t("Documentation")) as HTMLAnchorElement;
+  void docsAddress().then((url) => (a.href = url));
+  return a;
 }
 
 let startEl: HTMLElement | null = null;
@@ -87,7 +99,26 @@ export async function showStart(app: App, resume?: Resume) {
     h(
       "div",
       { class: "start-inner" },
-      h("span", { class: "wordmark" }, "docxtor"),
+      h(
+        "div",
+        { class: "start-top" },
+        h("span", { class: "wordmark" }, "docxtor"),
+        h(
+          "div",
+          { class: "start-tools" },
+          DOCS || REPO
+            ? h(
+                "nav",
+                { class: "start-links", "aria-label": t("About Docxtor") },
+                DOCS ? docsLink() : null,
+                REPO
+                  ? h("a", { class: "btn ghost start-action", href: REPO, target: "_blank", rel: "noopener", title: t("Source code on GitHub"), "aria-label": t("Source code on GitHub") }, svg(GITHUB), "GitHub")
+                  : null,
+              )
+            : null,
+          app.darkButton("btn ghost start-action icon-btn"),
+        ),
+      ),
       h("h1", {}, t("Your documents")),
       h(
         "p",

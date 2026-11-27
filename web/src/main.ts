@@ -19,7 +19,7 @@ import { HistoryPanel, type DiffSummary } from "./ui/history-panel";
 import { Sidebar } from "./ui/sidebar";
 import { RECOVERY_DELAYS, type DocRef, type SaveState, type Taken } from "./app-shared";
 import { showStart } from "./start-screen";
-import { addStatus, manageExtensions, mount, pickAppLanguage, pickIconPack, pickTheme, setState, setTitle, showFidelity, toggleAutosave, updateWords } from "./app-chrome.ts";
+import { addStatus, darkButton, manageExtensions, mount, pickAppLanguage, pickIconPack, pickTheme, setState, setTitle, showFidelity, toggleAutosave, toggleDark, updateWords } from "./app-chrome.ts";
 import { createFromSource, createIn, importFiles, load, newFromTemplate, openDropped, openFromUrl, openPicker, openRecent, openRef, pickFileFromComputer, protect, readRecent, sample, syncUrl, unlockBytes } from "./app-open.ts";
 import { accept, checkpoint, diff, download, downloadAll, downloadAs, exportAs, makeCopy, markDirty, newQueue, onRemoved, onRenamed, onRestored, renameCurrent, renameDocument, restoreVersion, save, saveAs, stampAuthor } from "./app-save.ts";
 import { compareDocuments, countRecoverable, offerRecovery, onRecentsChange, openRecentKey, recentPlace, rememberRecent, showDetails, showRecovered, showTrash, togglePin, togglePinOf, viewSideBySide } from "./app-recent.ts";
@@ -97,6 +97,10 @@ export class App {
 
   /** Choose an icon pack: Docxtor's, the light one, or one an extension added. Remembered. */
   async pickIconPack() { return pickIconPack(this); }
+  /** Light if the app shows dark, dark if it shows light. Remembered. */
+  toggleDark() { toggleDark(this); }
+  /** A light and dark switch button, with the given classes. */
+  darkButton(className: string) { return darkButton(this, className); }
 
 
 

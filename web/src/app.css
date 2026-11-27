@@ -860,10 +860,18 @@ body {
     transform: translateY(6px);
   }
 }
+/* The wordmark, and on the same line the links to the documentation and the source: at the top, where a long list of documents can't push them away. */
+.docxtor .start-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-sm) var(--space-lg);
+  margin-bottom: var(--space-3xl);
+}
 .docxtor .start .wordmark {
   font-size: 20px;
   padding: 0;
-  margin-bottom: var(--space-3xl);
 }
 .docxtor .start h1 {
   margin: 0 0 var(--space-sm);
@@ -1082,6 +1090,25 @@ body {
   margin: 0;
   color: var(--muted);
   font-size: 12px;
+}
+.docxtor .start-tools,
+.docxtor .start-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+}
+.docxtor .start-action.icon-btn {
+  width: 34px;
+  padding: 0;
+}
+/* Links drawn as the start screen's buttons. */
+.docxtor .start-links a.btn {
+  color: var(--ink);
+  text-decoration: none;
+}
+.docxtor .start-links a.btn svg[fill="currentColor"] {
+  stroke: none;
 }
 .docxtor .start.drag .desk-tiles {
   outline: 2px dashed var(--signal);
