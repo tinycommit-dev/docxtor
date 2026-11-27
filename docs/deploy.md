@@ -34,7 +34,7 @@ git tag v0.1.0 && git push origin v0.1.0
 
 To try the whole workflow without publishing anything, run it by hand from the Actions tab ("Run workflow", dry run on): it builds and tests everything and uploads nothing. A dry run needs no secrets.
 
-To put the hosted app up without a release, run it by hand with dry run off and site only on: the gates, the web build, the Cloudflare preview and its production test, then the live site. Nothing else is published (no GitHub release, no image, no programs).
+To put the hosted app up without a release, run it by hand with dry run off and site only on: the web build, the Cloudflare preview and its production test, then the live site, in about six minutes. It does not run the checks again: it waits for CI on the same commit and stops if CI did not pass. Nothing else is published (no GitHub release, no image, no programs).
 
 `node scripts/release.mjs version` prints the version the three files agree on, `node scripts/release.mjs notes <version>` prints the notes.
 
