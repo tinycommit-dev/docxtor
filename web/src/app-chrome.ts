@@ -204,7 +204,7 @@ export function topbar(app: App): HTMLElement {
     navBtn,
     h("a", { class: "wordmark", href: "#/", title: t("Your documents"), "aria-label": t("Docxtor, your documents") }, "docxtor"),
     h("div", { class: "doc-meta" }, h("div", { class: "doc-head" }, app.titleInput, h("div", { class: "doc-sub" }, app.lockMark, app.led)), app.fe.menuBarEl),
-    h("div", { class: "top-actions" }, app.saveBtn, app.aiBtn),
+    h("div", { class: "top-actions" }, darkButton(app, "btn ghost icon-btn"), app.saveBtn, app.aiBtn),
   );
 }
 
@@ -256,6 +256,41 @@ export async function pickTheme(app: App) {
   if (!pick) return;
   app.fe.setTheme(pick.id);
   store(THEME_KEY, { theme: pick.id });
+}
+
+/** Whether the app shows dark now: Dark, a theme built on dark, or Match the system while the system is dark. */
+export function showsDark(app: App): boolean {
+  const id = app.fe.currentTheme;
+  const base = id === "light" || id === "dark" ? id : app.fe.extensions.themes.list().find((x) => x.id === id)?.base;
+  return base ? base === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+}
+
+/** Light if the app shows dark, dark if it shows light. Remembered, like a theme chosen in View, Theme. */
+export function toggleDark(app: App) {
+  const id = showsDark(app) ? "light" : "dark";
+  app.fe.setTheme(id);
+  store(THEME_KEY, { theme: id });
+}
+
+/** The light and dark switch: a sun while dark, a moon while light. It follows a theme chosen anywhere else, and the system's. */
+export function darkButton(app: App, className: string): HTMLButtonElement {
+  const b = h("button", { class: className, type: "button" }) as HTMLButtonElement;
+  const system = matchMedia("(prefers-color-scheme: dark)");
+  const show = () => {
+    // A start screen that closed takes its button with it: stop listening then.
+    if (!b.isConnected && b.dataset.shown) return void (off(), system.removeEventListener("change", show));
+    const dark = showsDark(app);
+    const label = dark ? t("Switch to light") : t("Switch to dark");
+    b.replaceChildren(svg(dark ? I.sun : I.moon));
+    b.title = label;
+    b.setAttribute("aria-label", label);
+    b.dataset.shown = "1";
+  };
+  const off = app.fe.on("theme", show);
+  system.addEventListener("change", show);
+  b.addEventListener("click", () => toggleDark(app));
+  show();
+  return b;
 }
 
 /** Choose an icon pack: Docxtor's, the light one, or one an extension added. Remembered. */

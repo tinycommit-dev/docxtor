@@ -103,16 +103,21 @@ export async function showStart(app: App, resume?: Resume) {
         "div",
         { class: "start-top" },
         h("span", { class: "wordmark" }, "docxtor"),
-        DOCS || REPO
-          ? h(
-              "nav",
-              { class: "start-links", "aria-label": t("About Docxtor") },
-              DOCS ? docsLink() : null,
-              REPO
-                ? h("a", { class: "btn ghost start-action", href: REPO, target: "_blank", rel: "noopener", title: t("Source code on GitHub"), "aria-label": t("Source code on GitHub") }, svg(GITHUB), "GitHub")
-                : null,
-            )
-          : null,
+        h(
+          "div",
+          { class: "start-tools" },
+          DOCS || REPO
+            ? h(
+                "nav",
+                { class: "start-links", "aria-label": t("About Docxtor") },
+                DOCS ? docsLink() : null,
+                REPO
+                  ? h("a", { class: "btn ghost start-action", href: REPO, target: "_blank", rel: "noopener", title: t("Source code on GitHub"), "aria-label": t("Source code on GitHub") }, svg(GITHUB), "GitHub")
+                  : null,
+              )
+            : null,
+          app.darkButton("btn ghost start-action icon-btn"),
+        ),
       ),
       h("h1", {}, t("Your documents")),
       h(

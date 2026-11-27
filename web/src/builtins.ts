@@ -53,6 +53,7 @@ const COMMAND_ICONS: Record<string, string> = {
   "view.navigator": "sidebar",
   "view.outline": "outline",
   "view.theme": "theme",
+  "view.toggleDark": "moon",
   "view.iconPack": "iconPack",
   "view.language": "globe",
   "help.extensions": "puzzle",
@@ -120,6 +121,7 @@ export function appCommands(app: App): Extension {
       cmd("view.navigator", t("Show navigator"), t("View"), () => app.sidebar.toggle(), undefined, undefined, { toggled: () => app.sidebar.open });
       cmd("view.outline", t("Show navigation pane"), t("View"), () => app.showPanel("navigation"), undefined, doc);
       cmd("view.theme", t("Theme…"), t("View"), () => app.pickTheme());
+      cmd("view.toggleDark", t("Switch light and dark"), t("View"), () => app.toggleDark());
       cmd("view.iconPack", t("Icons…"), t("View"), () => app.pickIconPack(), undefined, () => app.fe.iconPacks().length > 1);
       cmd("view.language", t("Display language…"), t("View"), () => app.pickLanguage(), undefined, () => app.fe.extensions.languages().length > 0);
       cmd("help.extensions", t("Manage extensions…"), t("Extensions"), () => app.manageExtensions());
@@ -151,6 +153,7 @@ export function appCommands(app: App): Extension {
       item("view", "2_panels", "view.navigator");
       item("view", "2_panels", "view.outline");
       item("view", "2_panels", "view.assistant");
+      item("view", "7_appearance", "view.toggleDark");
       item("view", "7_appearance", "view.theme");
       item("view", "7_appearance", "view.iconPack");
       item("view", "7_appearance", "view.language");

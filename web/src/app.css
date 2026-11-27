@@ -1091,10 +1091,16 @@ body {
   color: var(--muted);
   font-size: 12px;
 }
+.docxtor .start-tools,
 .docxtor .start-links {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: var(--space-sm);
+}
+.docxtor .start-action.icon-btn {
+  width: 34px;
+  padding: 0;
 }
 /* Links drawn as the start screen's buttons. */
 .docxtor .start-links a.btn {
