@@ -272,24 +272,30 @@ export function toggleDark(app: App) {
   store(THEME_KEY, { theme: id });
 }
 
-/** The light and dark switch: a sun while dark, a moon while light. It follows a theme chosen anywhere else, and the system's. */
+/** Draw a light and dark switch for what shows now: a sun while dark, a moon while light. */
+function paintDark(app: App, b: HTMLElement) {
+  const dark = showsDark(app);
+  const label = dark ? t("Switch to light") : t("Switch to dark");
+  b.replaceChildren(svg(dark ? I.sun : I.moon));
+  b.title = label;
+  b.setAttribute("aria-label", label);
+}
+
+let darkWatched = false;
+/**
+ * The light and dark switch. One listener, set up with the first switch, redraws every switch on the page when the theme or the
+ * system's choice changes; a switch keeps no listener of its own on anything else, so a start screen that closes leaves nothing behind.
+ */
 export function darkButton(app: App, className: string): HTMLButtonElement {
-  const b = h("button", { class: className, type: "button" }) as HTMLButtonElement;
-  const system = matchMedia("(prefers-color-scheme: dark)");
-  const show = () => {
-    // A start screen that closed takes its button with it: stop listening then.
-    if (!b.isConnected && b.dataset.shown) return void (off(), system.removeEventListener("change", show));
-    const dark = showsDark(app);
-    const label = dark ? t("Switch to light") : t("Switch to dark");
-    b.replaceChildren(svg(dark ? I.sun : I.moon));
-    b.title = label;
-    b.setAttribute("aria-label", label);
-    b.dataset.shown = "1";
-  };
-  const off = app.fe.on("theme", show);
-  system.addEventListener("change", show);
+  const b = h("button", { class: className, type: "button", "data-dark-switch": "" }) as HTMLButtonElement;
   b.addEventListener("click", () => toggleDark(app));
-  show();
+  paintDark(app, b);
+  if (!darkWatched) {
+    darkWatched = true;
+    const all = () => document.querySelectorAll<HTMLElement>("[data-dark-switch]").forEach((x) => paintDark(app, x));
+    app.fe.on("theme", all);
+    matchMedia("(prefers-color-scheme: dark)").addEventListener("change", all);
+  }
   return b;
 }
 
