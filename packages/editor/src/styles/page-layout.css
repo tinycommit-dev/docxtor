@@ -1,0 +1,233 @@
+/* Page borders, notes carried over, frames, drop caps and the page layout dialogs. */
+/* ---------- page layout: page borders, notes carried over, frames and drop caps ---------- */
+/* a section's page borders, drawn on the sheet under the text */
+.docxtor .sheet .pgb {
+  z-index: 0;
+}
+/* notes with a separator of their own: the notes part's line and text replace Word's short rule */
+.docxtor .notes[data-sep="custom"]::before {
+  display: none;
+}
+.docxtor .notes[data-cont]::before {
+  width: 100%;
+}
+.docxtor .notes-sep {
+  margin-bottom: 6px;
+}
+.docxtor .notes-sep .notes-line {
+  width: 33%;
+  border-top: 0.75px solid #000;
+  margin-bottom: 10px;
+}
+.docxtor .notes[data-cont] .notes-sep .notes-line {
+  width: 100%;
+}
+.docxtor .notes-notice {
+  margin-top: 2px;
+}
+.docxtor .notes-notice .fp,
+.docxtor .notes-sep .fp {
+  margin: 0 !important;
+}
+/* a frame floats beside the text; a drop cap is its first letter, as tall as the lines it spans */
+.docxtor .fp.pfloat {
+  max-width: 100%;
+  z-index: 1;
+}
+.docxtor .fp.dropcap {
+  white-space: nowrap;
+  overflow: visible;
+}
+.docxtor .fp.abs-frame {
+  z-index: 2;
+}
+
+/* the Columns dialog: unequal widths and the presets */
+.docxtor .cp-flex {
+  display: flex;
+  height: 100%;
+  overflow: hidden;
+}
+.docxtor .cp-flex[hidden] {
+  display: none;
+}
+.docxtor .cp-col {
+  min-width: 0;
+  overflow: hidden;
+}
+.docxtor .cp-gap {
+  position: relative;
+  min-width: 0;
+}
+.docxtor .cp-gap.cp-rule::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  border-inline-start: 1px solid var(--paper-ink);
+}
+.docxtor .col-presets button {
+  white-space: nowrap;
+}
+.docxtor .col-rows {
+  display: grid;
+  gap: 6px;
+  margin-bottom: var(--space-lg);
+}
+.docxtor .col-rows[hidden] {
+  display: none;
+}
+.docxtor .col-row {
+  display: grid;
+  grid-template-columns: 4.2em minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--space-sm);
+  align-items: center;
+}
+.docxtor .col-row.head {
+  color: var(--muted);
+  font-size: 11.5px;
+}
+.docxtor .col-row input {
+  height: 32px;
+  border: 0;
+  border-radius: var(--r-sm);
+  padding: 0 10px;
+  background: var(--key);
+  box-shadow: inset 0 0 0 1px var(--rule-2);
+}
+
+/* ---------- the page layout dialogs: page setup, page borders, page color, notes, hyphenation ---------- */
+.docxtor .ps-more {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+}
+.docxtor .pb-hex-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
+}
+.docxtor .pb-hex-row input {
+  flex: 1;
+  min-width: 0;
+  height: 34px;
+  border: 0;
+  border-radius: var(--r-sm);
+  padding: 0 10px;
+  background: var(--key);
+  box-shadow: inset 0 0 0 1px var(--rule-2);
+}
+.docxtor .pb-hex-row .on,
+.docxtor .ft-tile.on {
+  outline: 2px solid var(--ink);
+  outline-offset: 1px;
+}
+.docxtor .pb-dialog .bs-row {
+  flex-wrap: nowrap;
+  align-items: stretch;
+}
+.docxtor .pb-dialog .bs-row > .seg:first-child {
+  flex: 1 1 auto;
+  align-self: flex-start;
+}
+.docxtor .pb-preview {
+  flex: none;
+}
+.docxtor .pb-sample {
+  box-sizing: border-box;
+  display: grid;
+  place-items: center;
+  width: 104px;
+  height: 132px;
+  padding: 10px;
+  background: var(--paper);
+  color: #000;
+  font-size: 11px;
+  text-align: center;
+  border-radius: 2px;
+  box-shadow: inset 0 0 0 1px var(--rule-2);
+}
+.docxtor .pb-sample span:last-child {
+  display: none;
+}
+.docxtor .pf-dialog {
+  width: min(var(--dialog-l), 100%);
+}
+.docxtor .pf-row {
+  display: flex;
+  gap: var(--space-xl);
+  align-items: flex-start;
+}
+.docxtor .pf-panes {
+  flex: 1;
+  min-width: 0;
+}
+.docxtor .ft-preview {
+  flex: none;
+  width: 104px;
+  height: 134px;
+  background: var(--paper);
+  border-radius: 2px;
+  box-shadow: inset 0 0 0 1px var(--rule-2);
+}
+.docxtor .ft-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+  gap: var(--space-sm);
+}
+.docxtor .ft-tile {
+  aspect-ratio: 1;
+  border: 0;
+  border-radius: var(--r-sm);
+  background-color: var(--paper);
+  background-repeat: repeat;
+  box-shadow: inset 0 0 0 1px var(--rule-2);
+  cursor: pointer;
+}
+.docxtor .ft-tile:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 1px;
+}
+.docxtor .note-marks {
+  display: flex;
+  gap: 2px;
+  margin: var(--space-sm) 0;
+}
+.docxtor .note-mark {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  min-width: 0;
+}
+/* hyphenating by hand: a small panel by the text, so the word stays in view */
+.docxtor .hy-panel {
+  position: fixed;
+  inset-inline-end: var(--space-lg);
+  bottom: calc(var(--space-xl) + 28px);
+  z-index: 55;
+  width: 300px;
+  padding: var(--space-md) var(--space-lg);
+  background: var(--panel-hi);
+  border-radius: var(--r-lg);
+  box-shadow: var(--panel-shadow);
+  animation: pop-in 0.16s var(--ease);
+}
+.docxtor .hy-word {
+  margin: var(--space-sm) 0;
+  min-height: 1.4em;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+.docxtor .hy-buttons,
+.docxtor .hy-actions {
+  display: flex;
+  gap: var(--space-sm);
+}
+.docxtor .hy-actions {
+  justify-content: flex-end;
+  margin-top: var(--space-sm);
+}

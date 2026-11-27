@@ -1,0 +1,17 @@
+[package]
+name = "docxtor-mcp"
+description = "Model Context Protocol server exposing DOCX documents to AI agents"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+
+[[bin]]
+name = "docxtor-mcp"
+path = "src/main.rs"
+
+[dependencies]
+docxtor-core.workspace = true
+serde.workspace = true
+serde_json.workspace = true

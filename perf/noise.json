@@ -1,0 +1,2258 @@
+{
+  "native.100.open.allocs": {
+    "min": 25860,
+    "max": 25860,
+    "median": 25860,
+    "runs": 5
+  },
+  "native.100.open.bytes": {
+    "min": 6342470,
+    "max": 6342470,
+    "median": 6342470,
+    "runs": 5
+  },
+  "native.100.open.clones": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "native.100.open.peak": {
+    "min": 4471506,
+    "max": 4471506,
+    "median": 4471506,
+    "runs": 5
+  },
+  "native.100.key.allocs": {
+    "min": 998,
+    "max": 998,
+    "median": 998,
+    "runs": 5
+  },
+  "native.100.key.bytes": {
+    "min": 81987,
+    "max": 81987,
+    "median": 81987,
+    "runs": 5
+  },
+  "native.100.key.clones": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "native.100.key.peak": {
+    "min": 51882,
+    "max": 51882,
+    "median": 51882,
+    "runs": 5
+  },
+  "native.100.split.allocs": {
+    "min": 467,
+    "max": 467,
+    "median": 467,
+    "runs": 5
+  },
+  "native.100.split.bytes": {
+    "min": 47799,
+    "max": 47799,
+    "median": 47799,
+    "runs": 5
+  },
+  "native.100.split.clones": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "native.100.split.peak": {
+    "min": 26126,
+    "max": 26126,
+    "median": 26126,
+    "runs": 5
+  },
+  "native.100.undo.allocs": {
+    "min": 348,
+    "max": 348,
+    "median": 348,
+    "runs": 5
+  },
+  "native.100.undo.bytes": {
+    "min": 75225,
+    "max": 75225,
+    "median": 75225,
+    "runs": 5
+  },
+  "native.100.undo.clones": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "native.100.undo.peak": {
+    "min": 26240,
+    "max": 26240,
+    "median": 26240,
+    "runs": 5
+  },
+  "native.100.save.allocs": {
+    "min": 3858,
+    "max": 3858,
+    "median": 3858,
+    "runs": 5
+  },
+  "native.100.save.bytes": {
+    "min": 4420946,
+    "max": 4420946,
+    "median": 4420946,
+    "runs": 5
+  },
+  "native.100.save.clones": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "native.100.save.peak": {
+    "min": 427461,
+    "max": 427461,
+    "median": 427461,
+    "runs": 5
+  },
+  "native.1000.open.allocs": {
+    "min": 210751,
+    "max": 210751,
+    "median": 210751,
+    "runs": 5
+  },
+  "native.1000.open.bytes": {
+    "min": 55304210,
+    "max": 55304210,
+    "median": 55304210,
+    "runs": 5
+  },
+  "native.1000.open.clones": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "native.1000.open.peak": {
+    "min": 43690546,
+    "max": 43690546,
+    "median": 43690546,
+    "runs": 5
+  },
+  "native.1000.key.allocs": {
+    "min": 998,
+    "max": 998,
+    "median": 998,
+    "runs": 5
+  },
+  "native.1000.key.bytes": {
+    "min": 96389,
+    "max": 96389,
+    "median": 96389,
+    "runs": 5
+  },
+  "native.1000.key.clones": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "native.1000.key.peak": {
+    "min": 59089,
+    "max": 59089,
+    "median": 59089,
+    "runs": 5
+  },
+  "native.1000.split.allocs": {
+    "min": 475,
+    "max": 475,
+    "median": 475,
+    "runs": 5
+  },
+  "native.1000.split.bytes": {
+    "min": 71322,
+    "max": 71322,
+    "median": 71322,
+    "runs": 5
+  },
+  "native.1000.split.clones": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "native.1000.split.peak": {
+    "min": 40520,
+    "max": 40520,
+    "median": 40520,
+    "runs": 5
+  },
+  "native.1000.undo.allocs": {
+    "min": 356,
+    "max": 356,
+    "median": 356,
+    "runs": 5
+  },
+  "native.1000.undo.bytes": {
+    "min": 564828,
+    "max": 564828,
+    "median": 564828,
+    "runs": 5
+  },
+  "native.1000.undo.clones": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "native.1000.undo.peak": {
+    "min": 343333,
+    "max": 343333,
+    "median": 343333,
+    "runs": 5
+  },
+  "native.1000.save.allocs": {
+    "min": 37375,
+    "max": 37375,
+    "median": 37375,
+    "runs": 5
+  },
+  "native.1000.save.bytes": {
+    "min": 6922018,
+    "max": 6922018,
+    "median": 6922018,
+    "runs": 5
+  },
+  "native.1000.save.clones": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "native.1000.save.peak": {
+    "min": 488425,
+    "max": 488425,
+    "median": 488425,
+    "runs": 5
+  },
+  "native.5000.open.allocs": {
+    "min": 1032300,
+    "max": 1032300,
+    "median": 1032300,
+    "runs": 5
+  },
+  "native.5000.open.bytes": {
+    "min": 272903682,
+    "max": 272903682,
+    "median": 272903682,
+    "runs": 5
+  },
+  "native.5000.open.clones": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "native.5000.open.peak": {
+    "min": 218469682,
+    "max": 218469682,
+    "median": 218469682,
+    "runs": 5
+  },
+  "native.5000.key.allocs": {
+    "min": 998,
+    "max": 998,
+    "median": 998,
+    "runs": 5
+  },
+  "native.5000.key.bytes": {
+    "min": 160391,
+    "max": 160391,
+    "median": 160391,
+    "runs": 5
+  },
+  "native.5000.key.clones": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "native.5000.key.peak": {
+    "min": 91096,
+    "max": 91096,
+    "median": 91096,
+    "runs": 5
+  },
+  "native.5000.split.allocs": {
+    "min": 479,
+    "max": 479,
+    "median": 479,
+    "runs": 5
+  },
+  "native.5000.split.bytes": {
+    "min": 173469,
+    "max": 173469,
+    "median": 173469,
+    "runs": 5
+  },
+  "native.5000.split.clones": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "native.5000.split.peak": {
+    "min": 104514,
+    "max": 104514,
+    "median": 104514,
+    "runs": 5
+  },
+  "native.5000.undo.allocs": {
+    "min": 360,
+    "max": 360,
+    "median": 360,
+    "runs": 5
+  },
+  "native.5000.undo.bytes": {
+    "min": 2310751,
+    "max": 2310751,
+    "median": 2310751,
+    "runs": 5
+  },
+  "native.5000.undo.clones": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "native.5000.undo.peak": {
+    "min": 1234722,
+    "max": 1234722,
+    "median": 1234722,
+    "runs": 5
+  },
+  "native.5000.save.allocs": {
+    "min": 186336,
+    "max": 186336,
+    "median": 186336,
+    "runs": 5
+  },
+  "native.5000.save.bytes": {
+    "min": 18043844,
+    "max": 18043844,
+    "median": 18043844,
+    "runs": 5
+  },
+  "native.5000.save.clones": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "native.5000.save.peak": {
+    "min": 1399010,
+    "max": 1399010,
+    "median": 1399010,
+    "runs": 5
+  },
+  "node.series-100.open.jsonOutChars": {
+    "min": 45074,
+    "max": 45074,
+    "median": 45074,
+    "runs": 5
+  },
+  "node.series-100.keyMiddle.bodyClones": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "node.series-100.keyMiddle.jsonInChars": {
+    "min": 52,
+    "max": 52,
+    "median": 52,
+    "runs": 5
+  },
+  "node.series-100.keyMiddle.jsonOutChars": {
+    "min": 612,
+    "max": 612,
+    "median": 612,
+    "runs": 5
+  },
+  "node.series-100.keyMiddle.calls": {
+    "min": 2,
+    "max": 2,
+    "median": 2,
+    "runs": 5
+  },
+  "node.series-100.keyNearEnd.bodyClones": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "node.series-100.keyNearEnd.jsonInChars": {
+    "min": 52,
+    "max": 52,
+    "median": 52,
+    "runs": 5
+  },
+  "node.series-100.keyNearEnd.jsonOutChars": {
+    "min": 559,
+    "max": 559,
+    "median": 559,
+    "runs": 5
+  },
+  "node.series-100.keyNearEnd.calls": {
+    "min": 2,
+    "max": 2,
+    "median": 2,
+    "runs": 5
+  },
+  "node.series-100.wasmMemoryBytes": {
+    "min": 4784128,
+    "max": 4784128,
+    "median": 4784128,
+    "runs": 5
+  },
+  "node.series-1000.open.jsonOutChars": {
+    "min": 453488,
+    "max": 453488,
+    "median": 453488,
+    "runs": 5
+  },
+  "node.series-1000.keyMiddle.bodyClones": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "node.series-1000.keyMiddle.jsonInChars": {
+    "min": 53,
+    "max": 53,
+    "median": 53,
+    "runs": 5
+  },
+  "node.series-1000.keyMiddle.jsonOutChars": {
+    "min": 615,
+    "max": 615,
+    "median": 615,
+    "runs": 5
+  },
+  "node.series-1000.keyMiddle.calls": {
+    "min": 2,
+    "max": 2,
+    "median": 2,
+    "runs": 5
+  },
+  "node.series-1000.keyNearEnd.bodyClones": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "node.series-1000.keyNearEnd.jsonInChars": {
+    "min": 53,
+    "max": 53,
+    "median": 53,
+    "runs": 5
+  },
+  "node.series-1000.keyNearEnd.jsonOutChars": {
+    "min": 615,
+    "max": 615,
+    "median": 615,
+    "runs": 5
+  },
+  "node.series-1000.keyNearEnd.calls": {
+    "min": 2,
+    "max": 2,
+    "median": 2,
+    "runs": 5
+  },
+  "node.series-1000.wasmMemoryBytes": {
+    "min": 31850496,
+    "max": 31850496,
+    "median": 31850496,
+    "runs": 5
+  },
+  "node.series-5000.open.jsonOutChars": {
+    "min": 2281408,
+    "max": 2281408,
+    "median": 2281408,
+    "runs": 5
+  },
+  "node.series-5000.keyMiddle.bodyClones": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "node.series-5000.keyMiddle.jsonInChars": {
+    "min": 54,
+    "max": 54,
+    "median": 54,
+    "runs": 5
+  },
+  "node.series-5000.keyMiddle.jsonOutChars": {
+    "min": 618,
+    "max": 618,
+    "median": 618,
+    "runs": 5
+  },
+  "node.series-5000.keyMiddle.calls": {
+    "min": 2,
+    "max": 2,
+    "median": 2,
+    "runs": 5
+  },
+  "node.series-5000.keyNearEnd.bodyClones": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "node.series-5000.keyNearEnd.jsonInChars": {
+    "min": 54,
+    "max": 54,
+    "median": 54,
+    "runs": 5
+  },
+  "node.series-5000.keyNearEnd.jsonOutChars": {
+    "min": 618,
+    "max": 618,
+    "median": 618,
+    "runs": 5
+  },
+  "node.series-5000.keyNearEnd.calls": {
+    "min": 2,
+    "max": 2,
+    "median": 2,
+    "runs": 5
+  },
+  "node.series-5000.wasmMemoryBytes": {
+    "min": 151977984,
+    "max": 151977984,
+    "median": 151977984,
+    "runs": 5
+  },
+  "size.engine.raw": {
+    "min": 15597667,
+    "max": 15597667,
+    "median": 15597667,
+    "runs": 5
+  },
+  "size.engine.gzip": {
+    "min": 4655755,
+    "max": 4655755,
+    "median": 4655755,
+    "runs": 5
+  },
+  "size.engine.brotli": {
+    "min": 3017900,
+    "max": 3017900,
+    "median": 3017900,
+    "runs": 5
+  },
+  "browser.start.startupNodesAdded": {
+    "min": 1271,
+    "max": 1271,
+    "median": 1271,
+    "runs": 5
+  },
+  "size.visit.js.gzip": {
+    "min": 727588,
+    "max": 727588,
+    "median": 727588,
+    "runs": 5
+  },
+  "size.visit.js.brotli": {
+    "min": 560498,
+    "max": 560498,
+    "median": 560498,
+    "runs": 5
+  },
+  "size.visit.js.raw": {
+    "min": 2385041,
+    "max": 2385041,
+    "median": 2385041,
+    "runs": 5
+  },
+  "size.visit.js.files": {
+    "min": 1,
+    "max": 1,
+    "median": 1,
+    "runs": 5
+  },
+  "size.visit.firstVisit.gzip": {
+    "min": 5526470,
+    "max": 5526470,
+    "median": 5526470,
+    "runs": 5
+  },
+  "size.visit.firstVisit.brotli": {
+    "min": 3713545,
+    "max": 3713545,
+    "median": 3713545,
+    "runs": 5
+  },
+  "size.visit.firstVisit.raw": {
+    "min": 18335698,
+    "max": 18335698,
+    "median": 18335698,
+    "runs": 5
+  },
+  "size.visit.firstVisit.files": {
+    "min": 5,
+    "max": 5,
+    "median": 5,
+    "runs": 5
+  },
+  "size.visit.css.gzip": {
+    "min": 40016,
+    "max": 40016,
+    "median": 40016,
+    "runs": 5
+  },
+  "size.visit.css.brotli": {
+    "min": 32062,
+    "max": 32062,
+    "median": 32062,
+    "runs": 5
+  },
+  "size.visit.css.raw": {
+    "min": 249914,
+    "max": 249914,
+    "median": 249914,
+    "runs": 5
+  },
+  "size.visit.css.files": {
+    "min": 1,
+    "max": 1,
+    "median": 1,
+    "runs": 5
+  },
+  "size.visit.engine.gzip": {
+    "min": 4655755,
+    "max": 4655755,
+    "median": 4655755,
+    "runs": 5
+  },
+  "size.visit.engine.brotli": {
+    "min": 3017900,
+    "max": 3017900,
+    "median": 3017900,
+    "runs": 5
+  },
+  "size.visit.engine.raw": {
+    "min": 15597667,
+    "max": 15597667,
+    "median": 15597667,
+    "runs": 5
+  },
+  "size.visit.engine.files": {
+    "min": 1,
+    "max": 1,
+    "median": 1,
+    "runs": 5
+  },
+  "size.visit.fonts.gzip": {
+    "min": 103111,
+    "max": 103111,
+    "median": 103111,
+    "runs": 5
+  },
+  "size.visit.fonts.brotli": {
+    "min": 103085,
+    "max": 103085,
+    "median": 103085,
+    "runs": 5
+  },
+  "size.visit.fonts.raw": {
+    "min": 103076,
+    "max": 103076,
+    "median": 103076,
+    "runs": 5
+  },
+  "size.visit.fonts.files": {
+    "min": 2,
+    "max": 2,
+    "median": 2,
+    "runs": 5
+  },
+  "browser.blank.at50.layouts": {
+    "min": 2.017,
+    "max": 2.017,
+    "median": 2.017,
+    "runs": 5
+  },
+  "browser.blank.at50.styles": {
+    "min": 2.017,
+    "max": 2.017,
+    "median": 2.017,
+    "runs": 5
+  },
+  "browser.blank.at50.engineCalls": {
+    "min": 14,
+    "max": 14,
+    "median": 14,
+    "runs": 5
+  },
+  "browser.blank.at50.jsonIn": {
+    "min": 52.85,
+    "max": 52.85,
+    "median": 52.85,
+    "runs": 5
+  },
+  "browser.blank.at50.jsonOut": {
+    "min": 1405.233,
+    "max": 1405.233,
+    "median": 1405.233,
+    "runs": 5
+  },
+  "browser.blank.at95.layouts": {
+    "min": 2,
+    "max": 2,
+    "median": 2,
+    "runs": 5
+  },
+  "browser.blank.at95.styles": {
+    "min": 2,
+    "max": 2,
+    "median": 2,
+    "runs": 5
+  },
+  "browser.blank.at95.engineCalls": {
+    "min": 14,
+    "max": 14,
+    "median": 14,
+    "runs": 5
+  },
+  "browser.blank.at95.jsonIn": {
+    "min": 53.433,
+    "max": 53.433,
+    "median": 53.433,
+    "runs": 5
+  },
+  "browser.blank.at95.jsonOut": {
+    "min": 1471.4,
+    "max": 1471.4,
+    "median": 1471.4,
+    "runs": 5
+  },
+  "browser.series-1000.at50.layouts": {
+    "min": 1.033,
+    "max": 1.033,
+    "median": 1.033,
+    "runs": 5
+  },
+  "browser.series-1000.at50.styles": {
+    "min": 1.033,
+    "max": 1.033,
+    "median": 1.033,
+    "runs": 5
+  },
+  "browser.series-1000.at50.engineCalls": {
+    "min": 14,
+    "max": 14,
+    "median": 14,
+    "runs": 5
+  },
+  "browser.series-1000.at50.jsonIn": {
+    "min": 55,
+    "max": 55,
+    "median": 55,
+    "runs": 5
+  },
+  "browser.series-1000.at50.jsonOut": {
+    "min": 2451.5,
+    "max": 2451.5,
+    "median": 2451.5,
+    "runs": 5
+  },
+  "browser.series-1000.at95.layouts": {
+    "min": 1.017,
+    "max": 1.017,
+    "median": 1.017,
+    "runs": 5
+  },
+  "browser.series-1000.at95.styles": {
+    "min": 1.017,
+    "max": 1.017,
+    "median": 1.017,
+    "runs": 5
+  },
+  "browser.series-1000.at95.engineCalls": {
+    "min": 14,
+    "max": 14,
+    "median": 14,
+    "runs": 5
+  },
+  "browser.series-1000.at95.jsonIn": {
+    "min": 55,
+    "max": 55,
+    "median": 55,
+    "runs": 5
+  },
+  "browser.series-1000.at95.jsonOut": {
+    "min": 2451.5,
+    "max": 2451.5,
+    "median": 2451.5,
+    "runs": 5
+  },
+  "browser.war-and-peace.at50.layouts": {
+    "min": 1.1,
+    "max": 1.1,
+    "median": 1.1,
+    "runs": 5
+  },
+  "browser.war-and-peace.at50.styles": {
+    "min": 1.1,
+    "max": 1.1,
+    "median": 1.1,
+    "runs": 5
+  },
+  "browser.war-and-peace.at50.engineCalls": {
+    "min": 14,
+    "max": 14,
+    "median": 14,
+    "runs": 5
+  },
+  "browser.war-and-peace.at50.jsonIn": {
+    "min": 57,
+    "max": 57,
+    "median": 57,
+    "runs": 5
+  },
+  "browser.war-and-peace.at50.jsonOut": {
+    "min": 2653.5,
+    "max": 2653.5,
+    "median": 2653.5,
+    "runs": 5
+  },
+  "browser.war-and-peace.at95.layouts": {
+    "min": 1.1,
+    "max": 1.15,
+    "median": 1.125,
+    "runs": 5
+  },
+  "browser.war-and-peace.at95.styles": {
+    "min": 1.1,
+    "max": 1.15,
+    "median": 1.125,
+    "runs": 5
+  },
+  "browser.war-and-peace.at95.engineCalls": {
+    "min": 14,
+    "max": 14.025,
+    "median": 14.025,
+    "runs": 5
+  },
+  "browser.war-and-peace.at95.jsonIn": {
+    "min": 56.475,
+    "max": 56.475,
+    "median": 56.475,
+    "runs": 5
+  },
+  "browser.war-and-peace.at95.jsonOut": {
+    "min": 2430.5,
+    "max": 2570.925,
+    "median": 2570.925,
+    "runs": 5
+  },
+  "native.100.open.walked": {
+    "min": 808,
+    "max": 808,
+    "median": 808,
+    "runs": 5
+  },
+  "native.100.key.walked": {
+    "min": 4,
+    "max": 4,
+    "median": 4,
+    "runs": 5
+  },
+  "native.100.split.walked": {
+    "min": 8,
+    "max": 8,
+    "median": 8,
+    "runs": 5
+  },
+  "native.100.undo.walked": {
+    "min": 2,
+    "max": 2,
+    "median": 2,
+    "runs": 5
+  },
+  "native.100.save.walked": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "native.1000.open.walked": {
+    "min": 8008,
+    "max": 8008,
+    "median": 8008,
+    "runs": 5
+  },
+  "native.1000.key.walked": {
+    "min": 4,
+    "max": 4,
+    "median": 4,
+    "runs": 5
+  },
+  "native.1000.split.walked": {
+    "min": 8,
+    "max": 8,
+    "median": 8,
+    "runs": 5
+  },
+  "native.1000.undo.walked": {
+    "min": 2,
+    "max": 2,
+    "median": 2,
+    "runs": 5
+  },
+  "native.1000.save.walked": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "native.5000.open.walked": {
+    "min": 40008,
+    "max": 40008,
+    "median": 40008,
+    "runs": 5
+  },
+  "native.5000.key.walked": {
+    "min": 4,
+    "max": 4,
+    "median": 4,
+    "runs": 5
+  },
+  "native.5000.split.walked": {
+    "min": 8,
+    "max": 8,
+    "median": 8,
+    "runs": 5
+  },
+  "native.5000.undo.walked": {
+    "min": 2,
+    "max": 2,
+    "median": 2,
+    "runs": 5
+  },
+  "native.5000.save.walked": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "node.series-100.keyMiddle.paragraphsWalked": {
+    "min": 4,
+    "max": 4,
+    "median": 4,
+    "runs": 5
+  },
+  "node.series-100.keyMiddle.wordCountWalked": {
+    "min": 1,
+    "max": 1,
+    "median": 1,
+    "runs": 5
+  },
+  "node.series-100.keyMiddle.stampWalked": {
+    "min": 1,
+    "max": 1,
+    "median": 1,
+    "runs": 5
+  },
+  "node.series-100.keyMiddle.blocksWritten": {
+    "min": 1,
+    "max": 1,
+    "median": 1,
+    "runs": 5
+  },
+  "node.series-100.keyNearEnd.paragraphsWalked": {
+    "min": 4,
+    "max": 4,
+    "median": 4,
+    "runs": 5
+  },
+  "node.series-100.keyNearEnd.wordCountWalked": {
+    "min": 1,
+    "max": 1,
+    "median": 1,
+    "runs": 5
+  },
+  "node.series-100.keyNearEnd.stampWalked": {
+    "min": 1,
+    "max": 1,
+    "median": 1,
+    "runs": 5
+  },
+  "node.series-100.keyNearEnd.blocksWritten": {
+    "min": 1,
+    "max": 1,
+    "median": 1,
+    "runs": 5
+  },
+  "node.series-1000.keyMiddle.paragraphsWalked": {
+    "min": 4,
+    "max": 4,
+    "median": 4,
+    "runs": 5
+  },
+  "node.series-1000.keyMiddle.wordCountWalked": {
+    "min": 1,
+    "max": 1,
+    "median": 1,
+    "runs": 5
+  },
+  "node.series-1000.keyMiddle.stampWalked": {
+    "min": 1,
+    "max": 1,
+    "median": 1,
+    "runs": 5
+  },
+  "node.series-1000.keyMiddle.blocksWritten": {
+    "min": 1,
+    "max": 1,
+    "median": 1,
+    "runs": 5
+  },
+  "node.series-1000.keyNearEnd.paragraphsWalked": {
+    "min": 4,
+    "max": 4,
+    "median": 4,
+    "runs": 5
+  },
+  "node.series-1000.keyNearEnd.wordCountWalked": {
+    "min": 1,
+    "max": 1,
+    "median": 1,
+    "runs": 5
+  },
+  "node.series-1000.keyNearEnd.stampWalked": {
+    "min": 1,
+    "max": 1,
+    "median": 1,
+    "runs": 5
+  },
+  "node.series-1000.keyNearEnd.blocksWritten": {
+    "min": 1,
+    "max": 1,
+    "median": 1,
+    "runs": 5
+  },
+  "node.series-5000.keyMiddle.paragraphsWalked": {
+    "min": 4,
+    "max": 4,
+    "median": 4,
+    "runs": 5
+  },
+  "node.series-5000.keyMiddle.wordCountWalked": {
+    "min": 1,
+    "max": 1,
+    "median": 1,
+    "runs": 5
+  },
+  "node.series-5000.keyMiddle.stampWalked": {
+    "min": 1,
+    "max": 1,
+    "median": 1,
+    "runs": 5
+  },
+  "node.series-5000.keyMiddle.blocksWritten": {
+    "min": 1,
+    "max": 1,
+    "median": 1,
+    "runs": 5
+  },
+  "node.series-5000.keyNearEnd.paragraphsWalked": {
+    "min": 4,
+    "max": 4,
+    "median": 4,
+    "runs": 5
+  },
+  "node.series-5000.keyNearEnd.wordCountWalked": {
+    "min": 1,
+    "max": 1,
+    "median": 1,
+    "runs": 5
+  },
+  "node.series-5000.keyNearEnd.stampWalked": {
+    "min": 1,
+    "max": 1,
+    "median": 1,
+    "runs": 5
+  },
+  "node.series-5000.keyNearEnd.blocksWritten": {
+    "min": 1,
+    "max": 1,
+    "median": 1,
+    "runs": 5
+  },
+  "browser.blank.undo.farVisits": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.blank.undo.farLong": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.blank.undoLocal.farVisits": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.blank.undoLocal.farLong": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.blank.at50.layoutBlocks": {
+    "min": 1,
+    "max": 1,
+    "median": 1,
+    "runs": 5
+  },
+  "browser.blank.at50.farBlocks": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.blank.at50.farVisits": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.blank.at50.farLong": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.blank.at95.layoutBlocks": {
+    "min": 1,
+    "max": 1,
+    "median": 1,
+    "runs": 5
+  },
+  "browser.blank.at95.farBlocks": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.blank.at95.farVisits": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.blank.at95.farLong": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.blank.at50.fullPasses": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.blank.at95.fullPasses": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.blank.open.fullPasses": {
+    "min": 1,
+    "max": 1,
+    "median": 1,
+    "runs": 5
+  },
+  "browser.blank.open.incPasses": {
+    "min": 1,
+    "max": 1,
+    "median": 1,
+    "runs": 5
+  },
+  "browser.blank.open.measured": {
+    "min": 2,
+    "max": 2,
+    "median": 2,
+    "runs": 5
+  },
+  "browser.blank.pause.measured": {
+    "min": 1,
+    "max": 1,
+    "median": 1,
+    "runs": 5
+  },
+  "browser.blank.pause.maxMeasured": {
+    "min": 1,
+    "max": 1,
+    "median": 1,
+    "runs": 5
+  },
+  "browser.blank.pause.fullPasses": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.blank.pause.incrementalKeys": {
+    "min": 5,
+    "max": 5,
+    "median": 5,
+    "runs": 5
+  },
+  "browser.series-1000.undo.farVisits": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.series-1000.undo.farLong": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.series-1000.undoLocal.farVisits": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.series-1000.undoLocal.farLong": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.series-1000.at50.layoutBlocks": {
+    "min": 1000,
+    "max": 1000,
+    "median": 1000,
+    "runs": 5
+  },
+  "browser.series-1000.at50.farBlocks": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.series-1000.at50.farVisits": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.series-1000.at50.farLong": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.series-1000.at95.layoutBlocks": {
+    "min": 1000,
+    "max": 1000,
+    "median": 1000,
+    "runs": 5
+  },
+  "browser.series-1000.at95.farBlocks": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.series-1000.at95.farVisits": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.series-1000.at95.farLong": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.series-1000.at50.fullPasses": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.series-1000.at95.fullPasses": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.series-1000.open.fullPasses": {
+    "min": 1,
+    "max": 1,
+    "median": 1,
+    "runs": 5
+  },
+  "browser.series-1000.open.incPasses": {
+    "min": 1,
+    "max": 1,
+    "median": 1,
+    "runs": 5
+  },
+  "browser.series-1000.open.measured": {
+    "min": 1004,
+    "max": 1004,
+    "median": 1004,
+    "runs": 5
+  },
+  "browser.series-1000.pause.measured": {
+    "min": 4,
+    "max": 4,
+    "median": 4,
+    "runs": 5
+  },
+  "browser.series-1000.pause.maxMeasured": {
+    "min": 124,
+    "max": 124,
+    "median": 124,
+    "runs": 5
+  },
+  "browser.series-1000.pause.fullPasses": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.series-1000.pause.incrementalKeys": {
+    "min": 5,
+    "max": 5,
+    "median": 5,
+    "runs": 5
+  },
+  "browser.series-5000.undo.farVisits": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.series-5000.undo.farLong": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.series-5000.undoLocal.farVisits": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.series-5000.undoLocal.farLong": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.series-5000.at50.layouts": {
+    "min": 1.05,
+    "max": 1.05,
+    "median": 1.05,
+    "runs": 5
+  },
+  "browser.series-5000.at50.layoutBlocks": {
+    "min": 5000,
+    "max": 5000,
+    "median": 5000,
+    "runs": 5
+  },
+  "browser.series-5000.at50.farBlocks": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.series-5000.at50.styles": {
+    "min": 1.05,
+    "max": 1.05,
+    "median": 1.05,
+    "runs": 5
+  },
+  "browser.series-5000.at50.farVisits": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.series-5000.at50.farLong": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.series-5000.at50.engineCalls": {
+    "min": 14,
+    "max": 14,
+    "median": 14,
+    "runs": 5
+  },
+  "browser.series-5000.at50.jsonIn": {
+    "min": 56,
+    "max": 56,
+    "median": 56,
+    "runs": 5
+  },
+  "browser.series-5000.at50.jsonOut": {
+    "min": 2444.5,
+    "max": 2444.5,
+    "median": 2444.5,
+    "runs": 5
+  },
+  "browser.series-5000.at95.layouts": {
+    "min": 1.05,
+    "max": 1.075,
+    "median": 1.075,
+    "runs": 5
+  },
+  "browser.series-5000.at95.layoutBlocks": {
+    "min": 5000,
+    "max": 5000,
+    "median": 5000,
+    "runs": 5
+  },
+  "browser.series-5000.at95.farBlocks": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.series-5000.at95.styles": {
+    "min": 1.05,
+    "max": 1.075,
+    "median": 1.075,
+    "runs": 5
+  },
+  "browser.series-5000.at95.farVisits": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.series-5000.at95.farLong": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.series-5000.at95.engineCalls": {
+    "min": 14.025,
+    "max": 14.15,
+    "median": 14.15,
+    "runs": 5
+  },
+  "browser.series-5000.at95.jsonIn": {
+    "min": 56,
+    "max": 56.5,
+    "median": 56.5,
+    "runs": 5
+  },
+  "browser.series-5000.at95.jsonOut": {
+    "min": 2444.5,
+    "max": 2570.925,
+    "median": 2471.2,
+    "runs": 5
+  },
+  "browser.series-5000.at50.fullPasses": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.series-5000.at95.fullPasses": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.series-5000.open.fullPasses": {
+    "min": 1,
+    "max": 1,
+    "median": 1,
+    "runs": 5
+  },
+  "browser.series-5000.open.incPasses": {
+    "min": 1,
+    "max": 1,
+    "median": 1,
+    "runs": 5
+  },
+  "browser.series-5000.open.measured": {
+    "min": 5004,
+    "max": 5004,
+    "median": 5004,
+    "runs": 5
+  },
+  "browser.series-5000.pause.measured": {
+    "min": 4,
+    "max": 4,
+    "median": 4,
+    "runs": 5
+  },
+  "browser.series-5000.pause.maxMeasured": {
+    "min": 4,
+    "max": 4,
+    "median": 4,
+    "runs": 5
+  },
+  "browser.series-5000.pause.fullPasses": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.series-5000.pause.incrementalKeys": {
+    "min": 5,
+    "max": 5,
+    "median": 5,
+    "runs": 5
+  },
+  "browser.war-and-peace.undo.farVisits": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.war-and-peace.undo.farLong": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.war-and-peace.undoLocal.farVisits": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.war-and-peace.undoLocal.farLong": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.war-and-peace.at50.layoutBlocks": {
+    "min": 9051,
+    "max": 9051,
+    "median": 9051,
+    "runs": 5
+  },
+  "browser.war-and-peace.at50.farBlocks": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.war-and-peace.at50.farVisits": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.war-and-peace.at50.farLong": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.war-and-peace.at95.layoutBlocks": {
+    "min": 9051,
+    "max": 9051,
+    "median": 9051,
+    "runs": 5
+  },
+  "browser.war-and-peace.at95.farBlocks": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.war-and-peace.at95.farVisits": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.war-and-peace.at95.farLong": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.war-and-peace.at50.fullPasses": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.war-and-peace.at95.fullPasses": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.war-and-peace.open.fullPasses": {
+    "min": 3,
+    "max": 3,
+    "median": 3,
+    "runs": 5
+  },
+  "browser.war-and-peace.open.incPasses": {
+    "min": 2,
+    "max": 2,
+    "median": 2,
+    "runs": 5
+  },
+  "browser.war-and-peace.open.measured": {
+    "min": 27217,
+    "max": 27217,
+    "median": 27217,
+    "runs": 5
+  },
+  "browser.war-and-peace.zoom.fullPasses": {
+    "min": 3,
+    "max": 3,
+    "median": 3,
+    "runs": 5
+  },
+  "browser.war-and-peace.zoom.incPasses": {
+    "min": 2,
+    "max": 2,
+    "median": 2,
+    "runs": 5
+  },
+  "browser.war-and-peace.zoom.measured": {
+    "min": 27289,
+    "max": 27289,
+    "median": 27289,
+    "runs": 5
+  },
+  "browser.war-and-peace.pause.measured": {
+    "min": 4,
+    "max": 4,
+    "median": 4,
+    "runs": 5
+  },
+  "browser.war-and-peace.pause.maxMeasured": {
+    "min": 4,
+    "max": 4,
+    "median": 4,
+    "runs": 5
+  },
+  "browser.war-and-peace.pause.fullPasses": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.war-and-peace.pause.incrementalKeys": {
+    "min": 5,
+    "max": 5,
+    "median": 5,
+    "runs": 5
+  },
+  "browser.series-1000-far.undo.farVisits": {
+    "min": 7,
+    "max": 7,
+    "median": 7,
+    "runs": 5
+  },
+  "browser.series-1000-far.undo.farLong": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.series-1000-far.undoLocal.farVisits": {
+    "min": 441,
+    "max": 441,
+    "median": 441,
+    "runs": 5
+  },
+  "browser.series-1000-far.undoLocal.farLong": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.series-1000-far.at50.layouts": {
+    "min": 1.033,
+    "max": 1.033,
+    "median": 1.033,
+    "runs": 5
+  },
+  "browser.series-1000-far.at50.layoutBlocks": {
+    "min": 167,
+    "max": 167,
+    "median": 167,
+    "runs": 5
+  },
+  "browser.series-1000-far.at50.farBlocks": {
+    "min": 833,
+    "max": 833,
+    "median": 833,
+    "runs": 5
+  },
+  "browser.series-1000-far.at50.styles": {
+    "min": 1.033,
+    "max": 1.033,
+    "median": 1.033,
+    "runs": 5
+  },
+  "browser.series-1000-far.at50.farVisits": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.series-1000-far.at50.farLong": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.series-1000-far.at50.engineCalls": {
+    "min": 14,
+    "max": 14,
+    "median": 14,
+    "runs": 5
+  },
+  "browser.series-1000-far.at50.jsonIn": {
+    "min": 55,
+    "max": 55,
+    "median": 55,
+    "runs": 5
+  },
+  "browser.series-1000-far.at50.jsonOut": {
+    "min": 2451.5,
+    "max": 2451.5,
+    "median": 2451.5,
+    "runs": 5
+  },
+  "browser.series-1000-far.at95.layouts": {
+    "min": 1.017,
+    "max": 1.017,
+    "median": 1.017,
+    "runs": 5
+  },
+  "browser.series-1000-far.at95.layoutBlocks": {
+    "min": 127,
+    "max": 127,
+    "median": 127,
+    "runs": 5
+  },
+  "browser.series-1000-far.at95.farBlocks": {
+    "min": 873,
+    "max": 873,
+    "median": 873,
+    "runs": 5
+  },
+  "browser.series-1000-far.at95.styles": {
+    "min": 1.017,
+    "max": 1.017,
+    "median": 1.017,
+    "runs": 5
+  },
+  "browser.series-1000-far.at95.farVisits": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.series-1000-far.at95.farLong": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.series-1000-far.at95.engineCalls": {
+    "min": 14,
+    "max": 14,
+    "median": 14,
+    "runs": 5
+  },
+  "browser.series-1000-far.at95.jsonIn": {
+    "min": 55,
+    "max": 55,
+    "median": 55,
+    "runs": 5
+  },
+  "browser.series-1000-far.at95.jsonOut": {
+    "min": 2451.5,
+    "max": 2451.5,
+    "median": 2451.5,
+    "runs": 5
+  },
+  "browser.series-1000-far.at50.fullPasses": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.series-1000-far.at95.fullPasses": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.series-1000-far.open.fullPasses": {
+    "min": 1,
+    "max": 1,
+    "median": 1,
+    "runs": 5
+  },
+  "browser.series-1000-far.open.incPasses": {
+    "min": 1,
+    "max": 1,
+    "median": 1,
+    "runs": 5
+  },
+  "browser.series-1000-far.open.measured": {
+    "min": 1004,
+    "max": 1004,
+    "median": 1004,
+    "runs": 5
+  },
+  "browser.series-1000-far.pause.measured": {
+    "min": 4,
+    "max": 4,
+    "median": 4,
+    "runs": 5
+  },
+  "browser.series-1000-far.pause.maxMeasured": {
+    "min": 124,
+    "max": 124,
+    "median": 124,
+    "runs": 5
+  },
+  "browser.series-1000-far.pause.fullPasses": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.series-1000-far.pause.incrementalKeys": {
+    "min": 5,
+    "max": 5,
+    "median": 5,
+    "runs": 5
+  },
+  "browser.series-5000-far.undo.farVisits": {
+    "min": 443,
+    "max": 443,
+    "median": 443,
+    "runs": 5
+  },
+  "browser.series-5000-far.undo.farLong": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.series-5000-far.undoLocal.farVisits": {
+    "min": 528,
+    "max": 528,
+    "median": 528,
+    "runs": 5
+  },
+  "browser.series-5000-far.undoLocal.farLong": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.series-5000-far.at50.layouts": {
+    "min": 1.05,
+    "max": 1.05,
+    "median": 1.05,
+    "runs": 5
+  },
+  "browser.series-5000-far.at50.layoutBlocks": {
+    "min": 166,
+    "max": 166,
+    "median": 166,
+    "runs": 5
+  },
+  "browser.series-5000-far.at50.farBlocks": {
+    "min": 4834,
+    "max": 4834,
+    "median": 4834,
+    "runs": 5
+  },
+  "browser.series-5000-far.at50.styles": {
+    "min": 1.05,
+    "max": 1.05,
+    "median": 1.05,
+    "runs": 5
+  },
+  "browser.series-5000-far.at50.farVisits": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.series-5000-far.at50.farLong": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.series-5000-far.at50.engineCalls": {
+    "min": 14,
+    "max": 14,
+    "median": 14,
+    "runs": 5
+  },
+  "browser.series-5000-far.at50.jsonIn": {
+    "min": 56,
+    "max": 56,
+    "median": 56,
+    "runs": 5
+  },
+  "browser.series-5000-far.at50.jsonOut": {
+    "min": 2444.5,
+    "max": 2444.5,
+    "median": 2444.5,
+    "runs": 5
+  },
+  "browser.series-5000-far.at95.layouts": {
+    "min": 1.05,
+    "max": 1.075,
+    "median": 1.05,
+    "runs": 5
+  },
+  "browser.series-5000-far.at95.layoutBlocks": {
+    "min": 165,
+    "max": 165,
+    "median": 165,
+    "runs": 5
+  },
+  "browser.series-5000-far.at95.farBlocks": {
+    "min": 4835,
+    "max": 4835,
+    "median": 4835,
+    "runs": 5
+  },
+  "browser.series-5000-far.at95.styles": {
+    "min": 1.05,
+    "max": 1.075,
+    "median": 1.05,
+    "runs": 5
+  },
+  "browser.series-5000-far.at95.farVisits": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.series-5000-far.at95.farLong": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.series-5000-far.at95.engineCalls": {
+    "min": 14,
+    "max": 14.025,
+    "median": 14,
+    "runs": 5
+  },
+  "browser.series-5000-far.at95.jsonIn": {
+    "min": 56,
+    "max": 56,
+    "median": 56,
+    "runs": 5
+  },
+  "browser.series-5000-far.at95.jsonOut": {
+    "min": 2444.5,
+    "max": 2471.2,
+    "median": 2444.5,
+    "runs": 5
+  },
+  "browser.series-5000-far.at50.fullPasses": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.series-5000-far.at95.fullPasses": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.series-5000-far.open.fullPasses": {
+    "min": 1,
+    "max": 1,
+    "median": 1,
+    "runs": 5
+  },
+  "browser.series-5000-far.open.incPasses": {
+    "min": 1,
+    "max": 1,
+    "median": 1,
+    "runs": 5
+  },
+  "browser.series-5000-far.open.measured": {
+    "min": 5004,
+    "max": 5004,
+    "median": 5004,
+    "runs": 5
+  },
+  "browser.series-5000-far.pause.measured": {
+    "min": 4,
+    "max": 4,
+    "median": 4,
+    "runs": 5
+  },
+  "browser.series-5000-far.pause.maxMeasured": {
+    "min": 4,
+    "max": 4,
+    "median": 4,
+    "runs": 5
+  },
+  "browser.series-5000-far.pause.fullPasses": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.series-5000-far.pause.incrementalKeys": {
+    "min": 5,
+    "max": 5,
+    "median": 5,
+    "runs": 5
+  },
+  "browser.war-and-peace-far.undo.farVisits": {
+    "min": 156,
+    "max": 156,
+    "median": 156,
+    "runs": 5
+  },
+  "browser.war-and-peace-far.undo.farLong": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.war-and-peace-far.undoLocal.farVisits": {
+    "min": 156,
+    "max": 156,
+    "median": 156,
+    "runs": 5
+  },
+  "browser.war-and-peace-far.undoLocal.farLong": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.war-and-peace-far.at50.layouts": {
+    "min": 1.1,
+    "max": 1.1,
+    "median": 1.1,
+    "runs": 5
+  },
+  "browser.war-and-peace-far.at50.layoutBlocks": {
+    "min": 52,
+    "max": 52,
+    "median": 52,
+    "runs": 5
+  },
+  "browser.war-and-peace-far.at50.farBlocks": {
+    "min": 8999,
+    "max": 8999,
+    "median": 8999,
+    "runs": 5
+  },
+  "browser.war-and-peace-far.at50.styles": {
+    "min": 1.1,
+    "max": 1.1,
+    "median": 1.1,
+    "runs": 5
+  },
+  "browser.war-and-peace-far.at50.farVisits": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.war-and-peace-far.at50.farLong": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.war-and-peace-far.at50.engineCalls": {
+    "min": 14,
+    "max": 14,
+    "median": 14,
+    "runs": 5
+  },
+  "browser.war-and-peace-far.at50.jsonIn": {
+    "min": 57,
+    "max": 57,
+    "median": 57,
+    "runs": 5
+  },
+  "browser.war-and-peace-far.at50.jsonOut": {
+    "min": 2653.5,
+    "max": 2653.5,
+    "median": 2653.5,
+    "runs": 5
+  },
+  "browser.war-and-peace-far.at95.layouts": {
+    "min": 1.15,
+    "max": 1.15,
+    "median": 1.15,
+    "runs": 5
+  },
+  "browser.war-and-peace-far.at95.layoutBlocks": {
+    "min": 50,
+    "max": 50,
+    "median": 50,
+    "runs": 5
+  },
+  "browser.war-and-peace-far.at95.farBlocks": {
+    "min": 9001,
+    "max": 9001,
+    "median": 9001,
+    "runs": 5
+  },
+  "browser.war-and-peace-far.at95.styles": {
+    "min": 1.15,
+    "max": 1.15,
+    "median": 1.15,
+    "runs": 5
+  },
+  "browser.war-and-peace-far.at95.farVisits": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.war-and-peace-far.at95.farLong": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.war-and-peace-far.at95.engineCalls": {
+    "min": 13.925,
+    "max": 13.95,
+    "median": 13.95,
+    "runs": 5
+  },
+  "browser.war-and-peace-far.at95.jsonIn": {
+    "min": 56.475,
+    "max": 56.475,
+    "median": 56.475,
+    "runs": 5
+  },
+  "browser.war-and-peace-far.at95.jsonOut": {
+    "min": 2570.925,
+    "max": 2570.925,
+    "median": 2570.925,
+    "runs": 5
+  },
+  "browser.war-and-peace-far.at50.fullPasses": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.war-and-peace-far.at95.fullPasses": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.war-and-peace-far.open.fullPasses": {
+    "min": 3,
+    "max": 3,
+    "median": 3,
+    "runs": 5
+  },
+  "browser.war-and-peace-far.open.incPasses": {
+    "min": 2,
+    "max": 2,
+    "median": 2,
+    "runs": 5
+  },
+  "browser.war-and-peace-far.open.measured": {
+    "min": 27217,
+    "max": 27217,
+    "median": 27217,
+    "runs": 5
+  },
+  "browser.war-and-peace-far.zoom.fullPasses": {
+    "min": 3,
+    "max": 3,
+    "median": 3,
+    "runs": 5
+  },
+  "browser.war-and-peace-far.zoom.incPasses": {
+    "min": 2,
+    "max": 2,
+    "median": 2,
+    "runs": 5
+  },
+  "browser.war-and-peace-far.zoom.measured": {
+    "min": 27289,
+    "max": 27289,
+    "median": 27289,
+    "runs": 5
+  },
+  "browser.war-and-peace-far.pause.measured": {
+    "min": 4,
+    "max": 4,
+    "median": 4,
+    "runs": 5
+  },
+  "browser.war-and-peace-far.pause.maxMeasured": {
+    "min": 4,
+    "max": 4,
+    "median": 4,
+    "runs": 5
+  },
+  "browser.war-and-peace-far.pause.fullPasses": {
+    "min": 0,
+    "max": 0,
+    "median": 0,
+    "runs": 5
+  },
+  "browser.war-and-peace-far.pause.incrementalKeys": {
+    "min": 5,
+    "max": 5,
+    "median": 5,
+    "runs": 5
+  }
+}

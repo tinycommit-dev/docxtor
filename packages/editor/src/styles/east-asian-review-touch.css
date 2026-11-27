@@ -1,0 +1,264 @@
+/* East Asian typography, the review panels and touch screens. */
+/* ---------- East Asian typography ---------- */
+/* A phonetic guide is one unit in the text, like an equation: the base with the guide above it. */
+.docxtor .fp ruby.atom.ruby {
+  ruby-position: over;
+  ruby-align: center;
+  border-radius: 2px;
+  cursor: default;
+  text-indent: 0;
+}
+.docxtor .fp ruby.atom.ruby:hover {
+  background: var(--paper-hover);
+}
+.docxtor .fp ruby.atom.ruby rt {
+  font-size: 50%;
+  line-height: 1.1;
+}
+.docxtor .fp ruby.atom.ruby[data-align="distributeLetter"] {
+  ruby-align: space-between;
+}
+.docxtor .fp ruby.atom.ruby[data-align="distributeSpace"] {
+  ruby-align: space-around;
+}
+.docxtor .fp ruby.atom.ruby[data-align="left"] {
+  ruby-align: start;
+}
+/* The strict level of the document's line breaking rules (set on the flow by the editor). */
+.docxtor .fp {
+  line-break: var(--ea-line-break, auto);
+}
+/* The document grid's character pitch (set on the paragraph by the layout) applies to East Asian text. */
+.docxtor .fp .ea-t {
+  letter-spacing: var(--ea-ls, normal);
+}
+/* Two lines in one: half-size text wrapped into two lines inside one character box, with its brackets outside the box. */
+.docxtor .fp .ea-comb,
+.docxtor .tl-preview .ea-comb {
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 1;
+  white-space: normal;
+  line-break: anywhere;
+  word-break: break-all;
+  text-align: justify;
+  text-indent: 0;
+}
+.docxtor .fp .ea-comb-br {
+  position: relative;
+  margin: 0 0.8em;
+}
+.docxtor .fp .ea-comb-br::before,
+.docxtor .fp .ea-comb-br::after {
+  position: absolute;
+  top: 50%;
+  font-size: 2em;
+  line-height: 1;
+  transform: translateY(-50%);
+}
+.docxtor .fp .ea-comb-br::before {
+  content: attr(data-bl);
+  right: 100%;
+}
+.docxtor .fp .ea-comb-br::after {
+  content: attr(data-brt);
+  left: 100%;
+}
+/* Horizontal in vertical: across the line, inside vertical text. */
+.docxtor [style*="writing-mode"] .ea-vert {
+  display: inline-block;
+  writing-mode: horizontal-tb;
+}
+/* The Asian layout boxes' previews. */
+.docxtor .pg-preview,
+.docxtor .en-preview,
+.docxtor .tl-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 72px;
+  padding: var(--space-md);
+  border-radius: var(--r-sm);
+  background: var(--paper);
+  color: var(--paper-ink);
+  box-shadow: inset 0 0 0 1px var(--rule-2);
+  font-size: 28px;
+}
+.docxtor .pg-preview ruby {
+  ruby-position: over;
+}
+.docxtor .en-preview {
+  position: relative;
+}
+.docxtor .en-preview .en-shape {
+  font-size: 40px;
+  line-height: 1;
+}
+.docxtor .en-preview .en-text {
+  position: absolute;
+  font-size: 22px;
+  line-height: 1;
+}
+.docxtor .tl-preview .tl-br {
+  font-size: 32px;
+  line-height: 1;
+}
+.docxtor .pg-dialog .field input[readonly] {
+  background: var(--canvas-soft);
+}
+.docxtor .pg-row {
+  display: flex;
+  gap: var(--space-sm);
+}
+.docxtor .pg-row input {
+  flex: 1;
+  min-width: 0;
+}
+.docxtor .pg-hint {
+  margin: 0;
+  min-height: 1.4em;
+}
+/* ---------- review: thesaurus, proofing options, inspect document ---------- */
+.docxtor .th-panel {
+  max-height: calc(100% - 60px);
+}
+.docxtor .th-results {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  max-height: 300px;
+  overflow: auto;
+}
+.docxtor .th-source {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 650;
+  color: var(--ink-2);
+}
+.docxtor .th-sense {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+.docxtor .th-caption {
+  margin: 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+.docxtor .th-opposites {
+  margin-top: var(--space-xs);
+}
+.docxtor .th-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+}
+.docxtor .th-word {
+  padding: 3px var(--space-sm);
+}
+.docxtor .pref-group {
+  margin: var(--space-md) 0 var(--space-xs);
+  font-size: 12px;
+  font-weight: 650;
+  color: var(--ink-2);
+}
+.docxtor .pref-group:first-child {
+  margin-top: 0;
+}
+.docxtor .pref-flush {
+  margin-inline-start: 0;
+}
+.docxtor .dialog-actions .spacer {
+  flex: 1;
+}
+.docxtor .wc-extras {
+  margin-top: var(--space-md);
+}
+.docxtor .insp-dialog {
+  width: min(var(--dialog-m), 100%);
+}
+.docxtor .insp-list {
+  display: flex;
+  flex-direction: column;
+  max-height: 52vh;
+  overflow: auto;
+}
+.docxtor .insp-row {
+  display: flex;
+  gap: var(--space-md);
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: var(--space-sm) 0;
+  border-bottom: 1px solid var(--rule);
+}
+.docxtor .insp-row:last-child {
+  border-bottom: 0;
+}
+.docxtor .insp-label {
+  margin: 0;
+  font-weight: 650;
+}
+.docxtor .insp-desc,
+.docxtor .insp-status,
+.docxtor .insp-keep,
+.docxtor .insp-note {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+.docxtor .insp-row.found .insp-status {
+  color: var(--ink);
+  font-weight: 500;
+}
+.docxtor .insp-detail {
+  margin: var(--space-xs) 0 0;
+  padding-inline-start: 18px;
+  color: var(--ink-2);
+  font-size: 12px;
+}
+.docxtor .insp-text {
+  flex: 1;
+  min-width: 0;
+}
+.docxtor .insp-row .btn,
+.docxtor .insp-keep {
+  flex: none;
+}
+.docxtor .insp-list {
+  padding-inline-end: var(--space-xs);
+}
+
+/* ---------- touch screens ---------- */
+/* Fingers need bigger targets than a mouse: buttons, menu lines and list rows at least 40 px. */
+@media (pointer: coarse) {
+  .docxtor .tb,
+  .docxtor .btn {
+    min-height: 40px;
+    min-width: 40px;
+  }
+  .docxtor .menu-item,
+  .docxtor [role="menuitem"],
+  .docxtor [role="menuitemcheckbox"],
+  .docxtor [role="menuitemradio"],
+  .docxtor [role="option"],
+  .docxtor [role="treeitem"] {
+    min-height: 44px;
+  }
+  .docxtor .menubar-items > button {
+    min-height: 40px;
+    padding-inline: 12px;
+  }
+  .docxtor input[type="checkbox"],
+  .docxtor input[type="radio"] {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+
+/* Pages far from the view are out of the layout (Editor.updateFar); the block after them keeps their height in its margin. A run of them is
+   kept in one hidden box (far.ts); while the paginator looks at one of them for a moment the box is `display: contents`, and the others stay hidden. */
+.docxtor .flow > [data-far],
+.docxtor .far-box > [data-far] {
+  display: none;
+}

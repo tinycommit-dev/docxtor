@@ -1,0 +1,39 @@
+# Cloudflare Pages headers for the Docxtor web app (copied into web/dist by `npm run deploy`; `npm run preview:dist` applies them locally).
+# Built files have a hash in their name, so they never change: cache them for a year. The page, the service worker and the
+# manifest are looked at again on every visit, so a new version reaches people at once.
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: SAMEORIGIN
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; worker-src 'self' blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: blob: https://fonts.gstatic.com; img-src 'self' data: blob: https: http:; media-src 'self' data: blob: https:; connect-src 'self' data: blob: https: http://localhost:* http://127.0.0.1:*; object-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'self'
+
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/index.html
+  Cache-Control: no-cache
+
+/
+  Cache-Control: no-cache
+
+/sw.js
+  Cache-Control: no-cache
+
+/manifest.webmanifest
+  Cache-Control: no-cache
+
+# The documentation site (docs/, built by `npm run docs:build`) is served at /docs/. Every rule that matches a path adds its headers, and two
+# values for one name are joined (two policies, both enforced), so the docs say `! Name` first to drop what /* set, then their own value.
+# The docs policy has no 'wasm-unsafe-eval', no outside host and no inline script except the two small ones VitePress writes into every page
+# (the theme switch and the Mac key labels), allowed by their hash: scripts/docs-site.test.mjs hashes every inline script of every built
+# page and fails when this list and the pages differ. Styles stay 'unsafe-inline' because the code highlighter writes style attributes.
+# Pages are looked at again on every visit; the hashed files under /docs/assets/ never change.
+/docs/*
+  ! Content-Security-Policy
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'sha256-CUFLjg0/PrsMf8xbok429Fq66aDGe3lUN/QY4rcXnT8=' 'sha256-ng8W1FnGVqbzCCV1hV2EGXSMN/WlYnkoQZy8x1kkcsM='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'self'
+  Cache-Control: no-cache
+
+/docs/assets/*
+  ! Cache-Control
+  Cache-Control: public, max-age=31536000, immutable

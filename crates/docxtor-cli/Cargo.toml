@@ -1,0 +1,16 @@
+[package]
+name = "docxtor-cli"
+description = "Command-line tools for inspecting, converting and editing DOCX files with Docxtor"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+
+[[bin]]
+name = "docxtor"
+path = "src/main.rs"
+
+[dependencies]
+docxtor-core.workspace = true
+serde_json.workspace = true

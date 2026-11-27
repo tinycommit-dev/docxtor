@@ -1,0 +1,107 @@
+{
+ "why": "E14: a bookmark made and cut in one batch left its end",
+ "found": "2026-11-22",
+ "start": "built:rich",
+ "steps": [
+  {
+   "kind": "table_edit",
+   "merge": false,
+   "ops": [
+    {
+     "action": "row_above",
+     "at": 9,
+     "op": "table_edit"
+    }
+   ],
+   "step": "apply",
+   "strict": false
+  },
+  {
+   "kind": "set_link",
+   "merge": false,
+   "ops": [
+    {
+     "from": {
+      "o": 0,
+      "p": 19
+     },
+     "op": "set_link",
+     "to": {
+      "o": 0,
+      "p": 19
+     },
+     "url": "#Target"
+    },
+    {
+     "design": "docxtor.centered",
+     "op": "insert_cover_page"
+    }
+   ],
+   "step": "apply",
+   "strict": false
+  },
+  {
+   "kind": "set_watermark",
+   "merge": false,
+   "ops": [
+    {
+     "op": "set_watermark",
+     "text": "e\u0301\u0301 combining"
+    }
+   ],
+   "step": "apply",
+   "strict": false
+  },
+  {
+   "kind": "tab_add",
+   "merge": false,
+   "ops": [
+    {
+     "action": "add",
+     "first_name": "Name with space",
+     "name": "1abc",
+     "op": "tab",
+     "open": true
+    }
+   ],
+   "step": "apply",
+   "strict": false
+  },
+  {
+   "kind": "table_edit",
+   "merge": true,
+   "ops": [
+    {
+     "action": "row_below",
+     "at": 30,
+     "op": "table_edit"
+    }
+   ],
+   "step": "apply",
+   "strict": false
+  },
+  {
+   "kind": "r:insert_bookmark",
+   "merge": false,
+   "ops": [
+    {
+     "from": {
+      "o": 4,
+      "p": 38
+     },
+     "name": "Top",
+     "op": "insert_bookmark",
+     "to": {
+      "o": 0,
+      "p": 48
+     }
+    },
+    {
+     "op": "remove_cover_page"
+    }
+   ],
+   "step": "apply",
+   "strict": false
+  }
+ ]
+}

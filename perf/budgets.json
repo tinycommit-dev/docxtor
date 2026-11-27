@@ -1,0 +1,486 @@
+{
+  "browser.series-1000.at50.layouts": {
+    "max": 1.5,
+    "why": "layouts per key, 1,000 paragraphs: the forced one for the caret, nothing after it"
+  },
+  "browser.series-1000.at50.styles": {
+    "max": 1.5,
+    "why": "style recalculations per key, 1,000 paragraphs"
+  },
+  "browser.series-1000.at95.layouts": {
+    "max": 1.5,
+    "why": "layouts per key, 1,000 paragraphs"
+  },
+  "browser.series-1000.at95.styles": {
+    "max": 1.5,
+    "why": "style recalculations per key, 1,000 paragraphs"
+  },
+  "browser.series-5000.at50.layouts": {
+    "max": 1.5,
+    "why": "layouts per key, 5,000 paragraphs"
+  },
+  "browser.series-5000.at50.styles": {
+    "max": 1.5,
+    "why": "style recalculations per key, 5,000 paragraphs"
+  },
+  "browser.series-5000.at95.layouts": {
+    "max": 1.5,
+    "why": "layouts per key, 5,000 paragraphs"
+  },
+  "browser.series-5000.at95.styles": {
+    "max": 1.5,
+    "why": "style recalculations per key, 5,000 paragraphs"
+  },
+  "browser.war-and-peace.at50.layouts": {
+    "max": 2.6,
+    "why": "layouts per key in the novel: the forced one for the caret and the one that draws the new underlines (about 1.9 measured; the room is for the pagination that a long pause between keys brings in)"
+  },
+  "browser.war-and-peace.at50.styles": {
+    "max": 2.6,
+    "why": "style recalculations per key in the novel (about 1.9 measured; the room is for the pagination that a long pause between keys brings in)"
+  },
+  "browser.war-and-peace.at95.layouts": {
+    "max": 2.6,
+    "why": "layouts per key in the novel (about 1.9 measured; the room is for the pagination that a long pause between keys brings in)"
+  },
+  "browser.war-and-peace.at95.styles": {
+    "max": 2.6,
+    "why": "style recalculations per key in the novel (about 1.9 measured; the room is for the pagination that a long pause between keys brings in)"
+  },
+  "browser.war-and-peace.at95.jsonOut": {
+    "max": 4000,
+    "why": "JSON characters out of the engine per key in the novel"
+  },
+  "browser.series-5000.at50.jsonOut": {
+    "max": 4000,
+    "why": "JSON characters out of the engine per key, 5,000 paragraphs"
+  },
+  "browser.series-1000.at50.jsonOut": {
+    "max": 4000,
+    "why": "JSON characters out of the engine per key, 1,000 paragraphs"
+  },
+  "browser.series-1000.pause.maxMeasured": {
+    "max": 256,
+    "why": "most blocks any of 5 keys' passes measures: 4 for a key that adds no line; one that adds a line runs on until the text realigns (a few pages, batches of 4 to 256), the same at every length"
+  },
+  "browser.series-1000.pause.fullPasses": {
+    "max": 0,
+    "why": "a key and a pause lays out from the changed block, never the whole text"
+  },
+  "browser.series-1000.at50.fullPasses": {
+    "max": 0,
+    "why": "no full pagination while typing"
+  },
+  "browser.series-1000.at95.fullPasses": {
+    "max": 0,
+    "why": "no full pagination while typing"
+  },
+  "browser.series-5000.pause.maxMeasured": {
+    "max": 256,
+    "why": "most blocks any of 5 keys' passes measures: 4 for a key that adds no line; one that adds a line runs on until the text realigns (a few pages, batches of 4 to 256), the same at every length"
+  },
+  "browser.series-5000.pause.fullPasses": {
+    "max": 0,
+    "why": "a key and a pause lays out from the changed block, never the whole text"
+  },
+  "browser.series-5000.at50.fullPasses": {
+    "max": 0,
+    "why": "no full pagination while typing"
+  },
+  "browser.series-5000.at95.fullPasses": {
+    "max": 0,
+    "why": "no full pagination while typing"
+  },
+  "browser.war-and-peace.pause.maxMeasured": {
+    "max": 256,
+    "why": "most blocks any of 5 keys' passes measures: 4 for a key that adds no line; one that adds a line runs on until the text realigns (a few pages, batches of 4 to 256), the same at every length"
+  },
+  "browser.war-and-peace.pause.fullPasses": {
+    "max": 0,
+    "why": "a key and a pause lays out from the changed block, never the whole text"
+  },
+  "browser.war-and-peace.at50.fullPasses": {
+    "max": 0,
+    "why": "no full pagination while typing"
+  },
+  "browser.war-and-peace.at95.fullPasses": {
+    "max": 0,
+    "why": "no full pagination while typing"
+  },
+  "browser.series-1000-far.at50.layoutBlocks": {
+    "max": 200,
+    "why": "top-level blocks with a layout box after typing, with far pages left out (two pages either side of the view): the same at 1,000 paragraphs, 5,000 and the novel (167, 166 and 52 at the first run), never the length of the document"
+  },
+  "browser.series-1000-far.at50.layouts": {
+    "max": 1.5,
+    "why": "layouts per key with far pages left out"
+  },
+  "browser.series-1000-far.at50.styles": {
+    "max": 1.5,
+    "why": "style recalculations per key with far pages left out"
+  },
+  "browser.series-1000-far.at50.fullPasses": {
+    "max": 0,
+    "why": "no full pagination while typing, with far pages left out"
+  },
+  "browser.series-1000-far.at95.layoutBlocks": {
+    "max": 200,
+    "why": "top-level blocks with a layout box after typing, with far pages left out (two pages either side of the view): the same at 1,000 paragraphs, 5,000 and the novel (167, 166 and 52 at the first run), never the length of the document"
+  },
+  "browser.series-1000-far.at95.layouts": {
+    "max": 1.5,
+    "why": "layouts per key with far pages left out"
+  },
+  "browser.series-1000-far.at95.styles": {
+    "max": 1.5,
+    "why": "style recalculations per key with far pages left out"
+  },
+  "browser.series-1000-far.at95.fullPasses": {
+    "max": 0,
+    "why": "no full pagination while typing, with far pages left out"
+  },
+  "browser.series-1000-far.pause.fullPasses": {
+    "max": 0,
+    "why": "a key and a pause lays out from the changed block, never the whole text, with far pages left out"
+  },
+  "browser.series-1000-far.pause.maxMeasured": {
+    "max": 256,
+    "why": "most blocks any of 5 keys' passes measures, with far pages left out (a pass that reaches a far block draws it first, so this does not grow either)"
+  },
+  "browser.series-5000-far.at50.layoutBlocks": {
+    "max": 200,
+    "why": "top-level blocks with a layout box after typing, with far pages left out (two pages either side of the view): the same at 1,000 paragraphs, 5,000 and the novel (167, 166 and 52 at the first run), never the length of the document"
+  },
+  "browser.series-5000-far.at50.layouts": {
+    "max": 1.5,
+    "why": "layouts per key with far pages left out"
+  },
+  "browser.series-5000-far.at50.styles": {
+    "max": 1.5,
+    "why": "style recalculations per key with far pages left out"
+  },
+  "browser.series-5000-far.at50.fullPasses": {
+    "max": 0,
+    "why": "no full pagination while typing, with far pages left out"
+  },
+  "browser.series-5000-far.at95.layoutBlocks": {
+    "max": 200,
+    "why": "top-level blocks with a layout box after typing, with far pages left out (two pages either side of the view): the same at 1,000 paragraphs, 5,000 and the novel (167, 166 and 52 at the first run), never the length of the document"
+  },
+  "browser.series-5000-far.at95.layouts": {
+    "max": 1.5,
+    "why": "layouts per key with far pages left out"
+  },
+  "browser.series-5000-far.at95.styles": {
+    "max": 1.5,
+    "why": "style recalculations per key with far pages left out"
+  },
+  "browser.series-5000-far.at95.fullPasses": {
+    "max": 0,
+    "why": "no full pagination while typing, with far pages left out"
+  },
+  "browser.series-5000-far.pause.fullPasses": {
+    "max": 0,
+    "why": "a key and a pause lays out from the changed block, never the whole text, with far pages left out"
+  },
+  "browser.series-5000-far.pause.maxMeasured": {
+    "max": 256,
+    "why": "most blocks any of 5 keys' passes measures, with far pages left out (a pass that reaches a far block draws it first, so this does not grow either)"
+  },
+  "browser.war-and-peace-far.at50.layoutBlocks": {
+    "max": 200,
+    "why": "top-level blocks with a layout box after typing, with far pages left out (two pages either side of the view): the same at 1,000 paragraphs, 5,000 and the novel (167, 166 and 52 at the first run), never the length of the document"
+  },
+  "browser.war-and-peace-far.at50.layouts": {
+    "max": 2.6,
+    "why": "layouts per key with far pages left out"
+  },
+  "browser.war-and-peace-far.at50.styles": {
+    "max": 2.6,
+    "why": "style recalculations per key with far pages left out"
+  },
+  "browser.war-and-peace-far.at50.fullPasses": {
+    "max": 0,
+    "why": "no full pagination while typing, with far pages left out"
+  },
+  "browser.war-and-peace-far.at95.layoutBlocks": {
+    "max": 200,
+    "why": "top-level blocks with a layout box after typing, with far pages left out (two pages either side of the view): the same at 1,000 paragraphs, 5,000 and the novel (167, 166 and 52 at the first run), never the length of the document"
+  },
+  "browser.war-and-peace-far.at95.layouts": {
+    "max": 2.6,
+    "why": "layouts per key with far pages left out"
+  },
+  "browser.war-and-peace-far.at95.styles": {
+    "max": 2.6,
+    "why": "style recalculations per key with far pages left out"
+  },
+  "browser.war-and-peace-far.at95.fullPasses": {
+    "max": 0,
+    "why": "no full pagination while typing, with far pages left out"
+  },
+  "browser.war-and-peace-far.pause.fullPasses": {
+    "max": 0,
+    "why": "a key and a pause lays out from the changed block, never the whole text, with far pages left out"
+  },
+  "browser.war-and-peace-far.pause.maxMeasured": {
+    "max": 256,
+    "why": "most blocks any of 5 keys' passes measures, with far pages left out (a pass that reaches a far block draws it first, so this does not grow either)"
+  },
+  "browser.war-and-peace.open.fullPasses": {
+    "max": 4,
+    "why": "full passes over the novel from open until the fonts have arrived: two full layouts, one pass each plus the passes the footnote room needs (was 8: four for each layout)"
+  },
+  "browser.war-and-peace.open.measured": {
+    "max": 40000,
+    "why": "blocks measured from open until settled (9,051 blocks: 72,408 before the footnote room started from the last layout's and its retries from where the room changed, 36,268 after)"
+  },
+  "browser.war-and-peace.zoom.measured": {
+    "max": 32000,
+    "why": "blocks measured by the layout after one zoom to 87% (36,204 before, 29,197 after); notes whose room swings between two pages at this zoom keep their three rounds"
+  },
+  "browser.war-and-peace.zoom.fullPasses": {
+    "max": 3,
+    "why": "full passes for one zoom (4 before)"
+  },
+  "browser.war-and-peace-far.open.fullPasses": {
+    "max": 4,
+    "why": "full passes over the novel from open until the fonts have arrived: two full layouts, one pass each plus the passes the footnote room needs (was 8: four for each layout)"
+  },
+  "browser.war-and-peace-far.open.measured": {
+    "max": 40000,
+    "why": "blocks measured from open until settled (9,051 blocks: 72,408 before the footnote room started from the last layout's and its retries from where the room changed, 36,268 after)"
+  },
+  "browser.war-and-peace-far.zoom.measured": {
+    "max": 32000,
+    "why": "blocks measured by the layout after one zoom to 87% (36,204 before, 29,197 after); notes whose room swings between two pages at this zoom keep their three rounds"
+  },
+  "browser.war-and-peace-far.zoom.fullPasses": {
+    "max": 3,
+    "why": "full passes for one zoom (4 before)"
+  },
+  "node.series-100.keyMiddle.wordCountWalked": {
+    "max": 1.5,
+    "why": "paragraphs the status bar's word count walks after a key: the one typed in (kept per block, counted again only for blocks that changed); the same at 100, 1,000 and 5,000 paragraphs, never the length of the text (it walked every paragraph: 12 ms in the novel)"
+  },
+  "node.series-100.keyMiddle.blocksWritten": {
+    "max": 2,
+    "why": "top-level blocks the save writes again after a key: the one typed in (the others are copied from the last document.xml); the same at 100, 1,000 and 5,000 paragraphs, never the length of the document"
+  },
+  "node.series-100.keyMiddle.stampWalked": {
+    "max": 2,
+    "why": "paragraphs the save's first step counts for the statistics after a key: the one typed in (kept per block, shared with the status bar's word count); the same at every length"
+  },
+  "node.series-100.keyNearEnd.wordCountWalked": {
+    "max": 1.5,
+    "why": "paragraphs the status bar's word count walks after a key: the one typed in (kept per block, counted again only for blocks that changed); the same at 100, 1,000 and 5,000 paragraphs, never the length of the text (it walked every paragraph: 12 ms in the novel)"
+  },
+  "node.series-100.keyNearEnd.blocksWritten": {
+    "max": 2,
+    "why": "top-level blocks the save writes again after a key: the one typed in (the others are copied from the last document.xml); the same at 100, 1,000 and 5,000 paragraphs, never the length of the document"
+  },
+  "node.series-100.keyNearEnd.stampWalked": {
+    "max": 2,
+    "why": "paragraphs the save's first step counts for the statistics after a key: the one typed in (kept per block, shared with the status bar's word count); the same at every length"
+  },
+  "node.series-1000.keyMiddle.wordCountWalked": {
+    "max": 1.5,
+    "why": "paragraphs the status bar's word count walks after a key: the one typed in (kept per block, counted again only for blocks that changed); the same at 100, 1,000 and 5,000 paragraphs, never the length of the text (it walked every paragraph: 12 ms in the novel)"
+  },
+  "node.series-1000.keyMiddle.blocksWritten": {
+    "max": 2,
+    "why": "top-level blocks the save writes again after a key: the one typed in (the others are copied from the last document.xml); the same at 100, 1,000 and 5,000 paragraphs, never the length of the document"
+  },
+  "node.series-1000.keyMiddle.stampWalked": {
+    "max": 2,
+    "why": "paragraphs the save's first step counts for the statistics after a key: the one typed in (kept per block, shared with the status bar's word count); the same at every length"
+  },
+  "node.series-1000.keyNearEnd.wordCountWalked": {
+    "max": 1.5,
+    "why": "paragraphs the status bar's word count walks after a key: the one typed in (kept per block, counted again only for blocks that changed); the same at 100, 1,000 and 5,000 paragraphs, never the length of the text (it walked every paragraph: 12 ms in the novel)"
+  },
+  "node.series-1000.keyNearEnd.blocksWritten": {
+    "max": 2,
+    "why": "top-level blocks the save writes again after a key: the one typed in (the others are copied from the last document.xml); the same at 100, 1,000 and 5,000 paragraphs, never the length of the document"
+  },
+  "node.series-1000.keyNearEnd.stampWalked": {
+    "max": 2,
+    "why": "paragraphs the save's first step counts for the statistics after a key: the one typed in (kept per block, shared with the status bar's word count); the same at every length"
+  },
+  "node.series-5000.keyMiddle.wordCountWalked": {
+    "max": 1.5,
+    "why": "paragraphs the status bar's word count walks after a key: the one typed in (kept per block, counted again only for blocks that changed); the same at 100, 1,000 and 5,000 paragraphs, never the length of the text (it walked every paragraph: 12 ms in the novel)"
+  },
+  "node.series-5000.keyMiddle.blocksWritten": {
+    "max": 2,
+    "why": "top-level blocks the save writes again after a key: the one typed in (the others are copied from the last document.xml); the same at 100, 1,000 and 5,000 paragraphs, never the length of the document"
+  },
+  "node.series-5000.keyMiddle.stampWalked": {
+    "max": 2,
+    "why": "paragraphs the save's first step counts for the statistics after a key: the one typed in (kept per block, shared with the status bar's word count); the same at every length"
+  },
+  "node.series-5000.keyNearEnd.wordCountWalked": {
+    "max": 1.5,
+    "why": "paragraphs the status bar's word count walks after a key: the one typed in (kept per block, counted again only for blocks that changed); the same at 100, 1,000 and 5,000 paragraphs, never the length of the text (it walked every paragraph: 12 ms in the novel)"
+  },
+  "node.series-5000.keyNearEnd.blocksWritten": {
+    "max": 2,
+    "why": "top-level blocks the save writes again after a key: the one typed in (the others are copied from the last document.xml); the same at 100, 1,000 and 5,000 paragraphs, never the length of the document"
+  },
+  "node.series-5000.keyNearEnd.stampWalked": {
+    "max": 2,
+    "why": "paragraphs the save's first step counts for the statistics after a key: the one typed in (kept per block, shared with the status bar's word count); the same at every length"
+  },
+  "browser.series-1000.autosave.longestMs": {
+    "max": 100,
+    "why": "longest stall of the main thread while typing across an autosave, 1,000 paragraphs: about 60 ms measured in the novel (the save is steps of 40 and 35 ms and the compressing is in a worker), 175 ms before; the goal is no task over 50 ms, the room is for the frame that is drawn between two turns and a busy machine"
+  },
+  "browser.series-1000.autosave.keyDelayMs": {
+    "max": 50,
+    "why": "how long a key typed while the autosave runs waits before the page looks at it, 1,000 paragraphs: under 3 ms measured, 80 ms before; 50 ms is Chrome's long task"
+  },
+  "browser.series-1000-far.autosave.longestMs": {
+    "max": 100,
+    "why": "longest stall of the main thread while typing across an autosave, 1,000 paragraphs, far pages left out: about 60 ms measured in the novel (the save is steps of 40 and 35 ms and the compressing is in a worker), 175 ms before; the goal is no task over 50 ms, the room is for the frame that is drawn between two turns and a busy machine"
+  },
+  "browser.series-1000-far.autosave.keyDelayMs": {
+    "max": 50,
+    "why": "how long a key typed while the autosave runs waits before the page looks at it, 1,000 paragraphs, far pages left out: under 3 ms measured, 80 ms before; 50 ms is Chrome's long task"
+  },
+  "browser.war-and-peace.autosave.longestMs": {
+    "max": 100,
+    "why": "longest stall of the main thread while typing across an autosave, the novel: about 60 ms measured in the novel (the save is steps of 40 and 35 ms and the compressing is in a worker), 175 ms before; the goal is no task over 50 ms, the room is for the frame that is drawn between two turns and a busy machine"
+  },
+  "browser.war-and-peace.autosave.keyDelayMs": {
+    "max": 50,
+    "why": "how long a key typed while the autosave runs waits before the page looks at it, the novel: under 3 ms measured, 80 ms before; 50 ms is Chrome's long task"
+  },
+  "browser.war-and-peace-far.autosave.longestMs": {
+    "max": 100,
+    "why": "longest stall of the main thread while typing across an autosave, the novel, far pages left out: about 60 ms measured in the novel (the save is steps of 40 and 35 ms and the compressing is in a worker), 175 ms before; the goal is no task over 50 ms, the room is for the frame that is drawn between two turns and a busy machine"
+  },
+  "browser.war-and-peace-far.autosave.keyDelayMs": {
+    "max": 50,
+    "why": "how long a key typed while the autosave runs waits before the page looks at it, the novel, far pages left out: under 3 ms measured, 80 ms before; 50 ms is Chrome's long task"
+  },
+  "browser.series-1000-far.at50.farVisits": {
+    "max": 5,
+    "why": "blocks the far-pages bookkeeping looks at per key (exact): none while typing in the drawn stretch, at every length of document"
+  },
+  "browser.series-1000-far.at50.farLong": {
+    "max": 0,
+    "why": "times a key makes the far-pages bookkeeping go over every block"
+  },
+  "browser.series-1000-far.at95.farVisits": {
+    "max": 5,
+    "why": "blocks the far-pages bookkeeping looks at per key (exact): none while typing in the drawn stretch, at every length of document"
+  },
+  "browser.series-1000-far.at95.farLong": {
+    "max": 0,
+    "why": "times a key makes the far-pages bookkeeping go over every block"
+  },
+  "browser.series-1000-far.undoLocal.farVisits": {
+    "max": 800,
+    "why": "blocks the far-pages bookkeeping looks at for an undo of typing in one place (449, 528 and 156 at the first run at 1,000 paragraphs, 5,000 and the novel): the same at every length, never the length of the document"
+  },
+  "browser.series-1000-far.undoLocal.farLong": {
+    "max": 0,
+    "why": "an undo of typing in one place never goes over every block to find the stretches"
+  },
+  "browser.series-5000-far.at50.farVisits": {
+    "max": 5,
+    "why": "blocks the far-pages bookkeeping looks at per key (exact): none while typing in the drawn stretch, at every length of document"
+  },
+  "browser.series-5000-far.at50.farLong": {
+    "max": 0,
+    "why": "times a key makes the far-pages bookkeeping go over every block"
+  },
+  "browser.series-5000-far.at95.farVisits": {
+    "max": 5,
+    "why": "blocks the far-pages bookkeeping looks at per key (exact): none while typing in the drawn stretch, at every length of document"
+  },
+  "browser.series-5000-far.at95.farLong": {
+    "max": 0,
+    "why": "times a key makes the far-pages bookkeeping go over every block"
+  },
+  "browser.series-5000-far.undoLocal.farVisits": {
+    "max": 800,
+    "why": "blocks the far-pages bookkeeping looks at for an undo of typing in one place (449, 528 and 156 at the first run at 1,000 paragraphs, 5,000 and the novel): the same at every length, never the length of the document"
+  },
+  "browser.series-5000-far.undoLocal.farLong": {
+    "max": 0,
+    "why": "an undo of typing in one place never goes over every block to find the stretches"
+  },
+  "browser.war-and-peace-far.at50.farVisits": {
+    "max": 5,
+    "why": "blocks the far-pages bookkeeping looks at per key (exact): none while typing in the drawn stretch, at every length of document"
+  },
+  "browser.war-and-peace-far.at50.farLong": {
+    "max": 0,
+    "why": "times a key makes the far-pages bookkeeping go over every block"
+  },
+  "browser.war-and-peace-far.at95.farVisits": {
+    "max": 5,
+    "why": "blocks the far-pages bookkeeping looks at per key (exact): none while typing in the drawn stretch, at every length of document"
+  },
+  "browser.war-and-peace-far.at95.farLong": {
+    "max": 0,
+    "why": "times a key makes the far-pages bookkeeping go over every block"
+  },
+  "browser.war-and-peace-far.undoLocal.farVisits": {
+    "max": 800,
+    "why": "blocks the far-pages bookkeeping looks at for an undo of typing in one place (449, 528 and 156 at the first run at 1,000 paragraphs, 5,000 and the novel): the same at every length, never the length of the document"
+  },
+  "browser.war-and-peace-far.undoLocal.farLong": {
+    "max": 0,
+    "why": "an undo of typing in one place never goes over every block to find the stretches"
+  },
+  "browser.mem-thesis-10.mem.restMB": {
+    "max": 258,
+    "why": "tab footprint after opening thesis-10: today's number plus a margin for when the browser collects (docs/performance/index.md, Memory of a tab)"
+  },
+  "browser.mem-thesis-10.mem.scrollPeakMB": {
+    "max": 420,
+    "why": "tab peak while scrolling thesis-10: same"
+  },
+  "browser.mem-thesis-10.mem.afterGcMB": {
+    "max": 211,
+    "why": "what the tab keeps after a forced collection, thesis-10: the part that is not garbage"
+  },
+  "browser.mem-thesis-100.mem.restMB": {
+    "max": 387,
+    "why": "tab footprint after opening thesis-100: today's number plus a margin for when the browser collects (docs/performance/index.md, Memory of a tab)"
+  },
+  "browser.mem-thesis-100.mem.scrollPeakMB": {
+    "max": 591,
+    "why": "tab peak while scrolling thesis-100: same"
+  },
+  "browser.mem-thesis-100.mem.afterGcMB": {
+    "max": 285,
+    "why": "what the tab keeps after a forced collection, thesis-100: the part that is not garbage"
+  },
+  "browser.mem-thesis-1000.mem.restMB": {
+    "max": 1920,
+    "why": "tab footprint after opening thesis-1000: today's number plus a margin for when the browser collects (docs/performance/index.md, Memory of a tab)"
+  },
+  "browser.mem-thesis-1000.mem.scrollPeakMB": {
+    "max": 2177,
+    "why": "tab peak while scrolling thesis-1000: same"
+  },
+  "browser.mem-thesis-1000.mem.afterGcMB": {
+    "max": 493,
+    "why": "what the tab keeps after a forced collection, thesis-1000: the part that is not garbage"
+  },
+  "browser.mem-war-and-peace.mem.restMB": {
+    "max": 610,
+    "why": "tab footprint after opening war-and-peace: today's number plus a margin for when the browser collects (docs/performance/index.md, Memory of a tab)"
+  },
+  "browser.mem-war-and-peace.mem.scrollPeakMB": {
+    "max": 716,
+    "why": "tab peak while scrolling war-and-peace: same"
+  },
+  "browser.mem-war-and-peace.mem.afterGcMB": {
+    "max": 308,
+    "why": "what the tab keeps after a forced collection, war-and-peace: the part that is not garbage"
+  }
+}

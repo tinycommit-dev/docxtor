@@ -1,0 +1,408 @@
+/* Smart chips, the @ menu, the cards that open from a chip, the building blocks gallery and the link card. Imported by
+   editor.css; every rule is scoped under .docxtor and uses the tokens defined there. The chip colours are drawn on the
+   white page, so they are the same in both themes; the menu and the cards float over the page and follow the theme. */
+
+/* ---------- chips on the page ---------- */
+/* A chip is the text of a content control (its segments are direct children of the paragraph), drawn as a pill. */
+.docxtor .fp .chip {
+  --chip-bg: var(--chip-gray-bg);
+  --chip-fg: var(--chip-gray-fg);
+  background: var(--chip-bg);
+  color: var(--chip-fg) !important;
+  text-decoration: none !important;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--chip-fg) 25%, transparent);
+  border-radius: 0;
+  padding-block: 0.06em;
+  cursor: pointer;
+}
+.docxtor .fp .chip[data-chip-color="blue"] {
+  --chip-bg: var(--chip-blue-bg);
+  --chip-fg: var(--chip-blue-fg);
+}
+.docxtor .fp .chip[data-chip-color="green"] {
+  --chip-bg: var(--chip-green-bg);
+  --chip-fg: var(--chip-green-fg);
+}
+.docxtor .fp .chip[data-chip-color="yellow"] {
+  --chip-bg: var(--chip-yellow-bg);
+  --chip-fg: var(--chip-yellow-fg);
+}
+.docxtor .fp .chip[data-chip-color="red"] {
+  --chip-bg: var(--chip-red-bg);
+  --chip-fg: var(--chip-red-fg);
+}
+.docxtor .fp .chip[data-chip-color="purple"] {
+  --chip-bg: var(--chip-purple-bg);
+  --chip-fg: var(--chip-purple-fg);
+}
+.docxtor .fp .chip.ctl-start {
+  border-top-left-radius: 999px;
+  border-bottom-left-radius: 999px;
+  padding-left: 0.3em;
+}
+.docxtor .fp .chip.ctl-end {
+  border-top-right-radius: 999px;
+  border-bottom-right-radius: 999px;
+  padding-right: 0.55em;
+}
+/* Only the first segment of a chip carries the icon, drawn from a mask so it takes the chip's text colour. */
+.docxtor .fp .chip.ctl-start::before {
+  content: "";
+  display: inline-block;
+  width: 0.95em;
+  height: 0.95em;
+  margin-right: 0.3em;
+  vertical-align: -0.12em;
+  background: currentColor;
+  -webkit-mask: var(--chip-icon) center / contain no-repeat;
+  mask: var(--chip-icon) center / contain no-repeat;
+}
+.docxtor .fp .chip[data-chip="person"] {
+  --chip-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='8.5' r='3.5'/%3E%3Cpath d='M5 20c.6-3.6 3.4-5.5 7-5.5s6.4 1.9 7 5.5'/%3E%3C/svg%3E");
+}
+.docxtor .fp .chip[data-chip="date"] {
+  --chip-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3.5' y='5' width='17' height='15.5' rx='2.5'/%3E%3Cpath d='M3.5 10h17M8 3v4M16 3v4'/%3E%3C/svg%3E");
+}
+.docxtor .fp .chip[data-chip="file"] {
+  --chip-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6.5 3h7l4.5 4.5V19a2 2 0 0 1-2 2h-9.5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z'/%3E%3Cpath d='M13.5 3v4.5H18'/%3E%3C/svg%3E");
+}
+.docxtor .fp .chip[data-chip="place"] {
+  --chip-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 21s-6.5-5.7-6.5-11a6.5 6.5 0 0 1 13 0c0 5.3-6.5 11-6.5 11z'/%3E%3Ccircle cx='12' cy='10' r='2.3'/%3E%3C/svg%3E");
+}
+.docxtor .fp .chip[data-chip="dropdown"] {
+  --chip-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+}
+.docxtor .fp .chip:not([data-chip="person"]):not([data-chip="date"]):not([data-chip="file"]):not([data-chip="place"]):not([data-chip="dropdown"]) {
+  --chip-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='2.5' y='7' width='19' height='10' rx='5'/%3E%3C/svg%3E");
+}
+/* A chip that still shows its prompt ("Choose a status") is outlined with a dash. */
+.docxtor .fp .chip.chip-empty {
+  box-shadow: none;
+  outline: 1px dashed color-mix(in srgb, var(--chip-fg) 55%, transparent);
+  outline-offset: -1px;
+}
+/* The pointer or the caret in a chip turns its ring to the document's hover ring, as a content control's outline does. */
+.docxtor .fp .chip.ctl:hover,
+.docxtor .fp .chip.ctl.ctl-on {
+  background: var(--chip-bg);
+  box-shadow: 0 0 0 1px var(--paper-cite);
+  border-radius: 0;
+}
+.docxtor .fp .chip.ctl-start:hover,
+.docxtor .fp .chip.ctl-start.ctl-on {
+  border-top-left-radius: 999px;
+  border-bottom-left-radius: 999px;
+}
+.docxtor .fp .chip.ctl-end:hover,
+.docxtor .fp .chip.ctl-end.ctl-on {
+  border-top-right-radius: 999px;
+  border-bottom-right-radius: 999px;
+}
+.docxtor .flow[contenteditable="false"] .fp .chip.ctl:hover {
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--chip-fg) 25%, transparent);
+}
+
+/* ---------- the @ menu ---------- */
+.docxtor .at-menu {
+  position: fixed;
+  z-index: 55;
+  width: 320px;
+  max-height: min(380px, 60vh);
+  overflow: auto;
+  padding: var(--space-xs);
+  background: var(--panel-hi);
+  border-radius: var(--r-md);
+  box-shadow: var(--panel-shadow);
+  color: var(--ink);
+  font: 13px/1.45 var(--font-ui);
+}
+.docxtor .at-head {
+  padding: 6px var(--space-sm) 2px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+}
+.docxtor .at-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 5px var(--space-sm);
+  border-radius: var(--r-sm);
+  cursor: pointer;
+}
+.docxtor .at-item[aria-selected="true"] {
+  background: var(--selected);
+}
+.docxtor .at-item:hover {
+  background: var(--hover);
+}
+.docxtor .at-item[aria-selected="true"]:hover {
+  background: var(--selected-hover);
+}
+.docxtor .at-icon {
+  display: inline-flex;
+  flex: none;
+  width: 18px;
+  height: 18px;
+  color: var(--muted);
+}
+.docxtor .at-icon svg {
+  width: 18px;
+  height: 18px;
+}
+.docxtor .at-label {
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.docxtor .at-detail {
+  flex: 1 1 0;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: end;
+  font-size: 12px;
+  color: var(--faint);
+}
+.docxtor .at-empty {
+  padding: 8px var(--space-sm);
+  color: var(--muted);
+}
+
+/* ---------- the cards that open from a chip, and the link card ---------- */
+.docxtor .chip-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  width: 280px;
+  padding: var(--space-sm);
+}
+.docxtor .chip-card.wide {
+  width: 300px;
+}
+.docxtor .card-head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+.docxtor .card-avatar {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  background: var(--chip-gray-bg);
+  color: var(--chip-gray-fg);
+  font-weight: 600;
+  overflow: hidden;
+}
+.docxtor .card-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.docxtor .card-avatar svg {
+  width: 18px;
+  height: 18px;
+}
+.docxtor .card-text {
+  min-width: 0;
+}
+.docxtor .card-title {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.docxtor .card-sub {
+  font-size: 12px;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+.docxtor .card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+.docxtor .card-actions .btn {
+  height: 30px;
+  padding: 0 10px;
+}
+.docxtor .card-rule {
+  height: 1px;
+  background: var(--rule);
+}
+.docxtor .card-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.docxtor .card-field label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+}
+.docxtor .card-field select,
+.docxtor .card-field input {
+  height: 30px;
+  border: 1px solid var(--rule-2);
+  border-radius: var(--r-sm);
+  background: var(--panel-hi);
+  color: var(--ink);
+  padding: 0 8px;
+  font: inherit;
+}
+.docxtor .card-desc {
+  font-size: 12px;
+  color: var(--ink-2);
+  overflow-wrap: anywhere;
+}
+.docxtor .card-url {
+  font-size: 12px;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+.docxtor .card-sending {
+  font-size: 12px;
+  color: var(--faint);
+}
+/* A drop-down chip's choices, each drawn as the chip it gives. */
+.docxtor .choice-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.docxtor .choice {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  width: 100%;
+  padding: 5px var(--space-sm);
+  border: none;
+  background: none;
+  border-radius: var(--r-sm);
+  text-align: start;
+  cursor: pointer;
+  color: var(--ink);
+  font: inherit;
+}
+.docxtor .choice:hover,
+.docxtor .choice:focus-visible {
+  background: var(--hover);
+  outline: none;
+}
+.docxtor .choice:focus-visible {
+  box-shadow: inset 0 0 0 2px var(--ink);
+}
+.docxtor .choice-check {
+  display: inline-flex;
+  flex: none;
+  width: 15px;
+}
+.docxtor .choice-check svg {
+  width: 15px;
+  height: 15px;
+}
+.docxtor .choice-pill {
+  --chip-bg: var(--chip-gray-bg);
+  --chip-fg: var(--chip-gray-fg);
+  padding: 1px 10px;
+  border-radius: 999px;
+  background: var(--chip-bg);
+  color: var(--chip-fg);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--chip-fg) 25%, transparent);
+}
+.docxtor .choice-pill[data-color="blue"] {
+  --chip-bg: var(--chip-blue-bg);
+  --chip-fg: var(--chip-blue-fg);
+}
+.docxtor .choice-pill[data-color="green"] {
+  --chip-bg: var(--chip-green-bg);
+  --chip-fg: var(--chip-green-fg);
+}
+.docxtor .choice-pill[data-color="yellow"] {
+  --chip-bg: var(--chip-yellow-bg);
+  --chip-fg: var(--chip-yellow-fg);
+}
+.docxtor .choice-pill[data-color="red"] {
+  --chip-bg: var(--chip-red-bg);
+  --chip-fg: var(--chip-red-fg);
+}
+.docxtor .choice-pill[data-color="purple"] {
+  --chip-bg: var(--chip-purple-bg);
+  --chip-fg: var(--chip-purple-fg);
+}
+
+/* ---------- dialogs: add a person, a custom drop-down ---------- */
+.docxtor .opt-rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  margin-top: var(--space-xs);
+}
+.docxtor .opt-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+.docxtor .opt-row input {
+  flex: 1;
+  min-width: 0;
+}
+.docxtor .opt-row select {
+  width: 110px;
+}
+
+/* ---------- the building blocks gallery ---------- */
+.docxtor .blocks-gallery {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-sm);
+  max-height: 60vh;
+  overflow: auto;
+  padding: 2px;
+}
+.docxtor .block-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-start;
+  padding: var(--space-md);
+  border: none;
+  border-radius: var(--r-md);
+  background: var(--panel);
+  box-shadow: inset 0 0 0 1px var(--rule-2);
+  color: var(--ink);
+  text-align: start;
+  cursor: pointer;
+  font: inherit;
+}
+.docxtor .block-tile:hover {
+  background: var(--hover);
+}
+.docxtor .block-tile:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 1px;
+}
+.docxtor .block-tile svg {
+  width: 18px;
+  height: 18px;
+  color: var(--muted);
+}
+.docxtor .block-name {
+  font-weight: 600;
+}
+.docxtor .block-desc {
+  font-size: 12px;
+  color: var(--muted);
+}
+.docxtor .block-cat {
+  grid-column: 1 / -1;
+  margin-top: var(--space-xs);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+}

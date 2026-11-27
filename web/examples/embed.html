@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Docxtor embed example</title>
+    <style>
+      /* A host page with its own opinions: these must not leak into Docxtor, and Docxtor's must not leak out. */
+      body { margin: 0; font: 16px Georgia, serif; background: #e8eef5; color: #123; }
+      .btn { background: crimson; color: white; border: 3px solid black; padding: 6px 14px; border-radius: 0; }
+      .toolbar { background: navy; }
+      button { text-transform: uppercase; }
+      header { padding: 16px 24px; display: flex; gap: 12px; align-items: center; }
+      main { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 0 24px 24px; }
+      .pane { display: flex; flex-direction: column; gap: 8px; }
+      .pane h2 { margin: 0; font-size: 15px; }
+      docxtor-editor, #api-editor { height: 70vh; border: 1px solid #9ab; }
+      #log { padding: 0 24px; font: 12px ui-monospace, monospace; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <strong>Acme Contracts</strong>
+      <button class="btn" id="save-a">Save left</button>
+      <button class="btn" id="save-b">Save right</button>
+      <button class="btn" id="ro">Toggle read-only (right)</button>
+      <div class="toolbar" style="color: white; padding: 4px 8px">host .toolbar</div>
+    </header>
+    <main>
+      <section class="pane">
+        <h2>&lt;docxtor-editor&gt; element (light)</h2>
+        <docxtor-editor id="el-editor" theme="light"></docxtor-editor>
+      </section>
+      <section class="pane">
+        <h2>DocxtorEditor API (dark)</h2>
+        <div id="api-editor"></div>
+      </section>
+    </main>
+    <pre id="log"></pre>
+    <script type="module">
+      import "@docxtor/editor/style.css";
+      import { DocxtorEditor } from "@docxtor/editor";
+      import titleCase from "./extensions/title-case.ts";
+
+      const log = (m) => (document.getElementById("log").textContent += m + "\n");
+      const fixture = `/@fs${import.meta.env.VITE_FIXTURES ?? ""}/rich.docx`;
+
+      // 1. The element: give it a URL, listen for events, read bytes back.
+      const el = document.getElementById("el-editor");
+      el.addEventListener("docxtor-ready", () => log("left: opened"));
+      el.addEventListener("docxtor-change", () => log("left: changed"));
+      el.addEventListener("docxtor-save", (e) => log(`left: ⌘S, ${e.detail.bytes.length} bytes`));
+      el.setAttribute("src", fixture);
+      // Extensions work in embedded editors too: a toolbar button and ⌘⌥T.
+      void el.editor.use(titleCase);
+      document.getElementById("save-a").onclick = () => log(`left: save() → ${el.save().length} bytes`);
+
+      // 2. The API: the host owns layout and storage.
+      const editor = new DocxtorEditor({ onSave: (bytes) => log(`right: ⌘S, ${bytes.length} bytes`), extensions: [titleCase] }).mount(document.getElementById("api-editor"), { theme: "dark" });
+      editor.on("change", () => log("right: changed"));
+      const doc = await editor.create("Draft agreement.docx");
+      editor.exec({ op: "insert_markdown", markdown: "# Services agreement\n\nThis agreement is made between **Acme** and the client.\n\n- Term: 12 months\n- Notice: 30 days" });
+      document.getElementById("save-b").onclick = () => log(`right: save() → ${editor.save().length} bytes`);
+      document.getElementById("ro").onclick = () => {
+        editor.setReadOnly(!editor.readOnly);
+        log(`right: read-only ${editor.readOnly}`);
+      };
+      window.demo = { el, editor, doc };
+    </script>
+  </body>
+</html>

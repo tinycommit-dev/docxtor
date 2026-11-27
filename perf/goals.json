@@ -1,0 +1,17 @@
+[
+  {"id": "proust", "headline": true, "text": "A Proust-length novel (20,000 paragraphs, about 3,000 pages) opens, scrolls and types without lag: typing in the middle, own work per key", "metric": "browser.proust.at50.ownMs", "max": 4, "unit": "ms"},
+  {"id": "proust-open", "text": "Proust-length novel: time until it accepts a keystroke", "metric": "browser.proust.readyMs", "max": 5000, "unit": "ms"},
+  {"id": "blank-memory", "text": "Blank document, full app: physical footprint", "metric": "browser.blank.footprintMB", "max": 150, "unit": "MB"},
+  {"id": "own-work", "text": "Own work per key in a 1,000-paragraph document", "metric": "browser.series-1000.at50.ownMs", "max": 4, "unit": "ms"},
+  {"id": "flat-engine", "text": "Engine cost per key grows with document size: slope over paragraphs (flat is 0)", "metric": "slope.node.keyMs.perThousandParagraphs", "max": 0.1, "unit": "ms per 1,000 paragraphs"},
+  {"id": "flat-json", "text": "JSON crossing the boundary per key grows with document size: slope (flat is 0)", "metric": "slope.node.jsonOutChars.perThousandParagraphs", "max": 100, "unit": "characters per 1,000 paragraphs"},
+  {"id": "wop", "text": "War and Peace (about 1,400 pages): time until it accepts a keystroke", "metric": "browser.war-and-peace.readyMs", "max": 3000, "unit": "ms"},
+  {"id": "first-editable", "text": "Time from navigation until a blank document accepts a keystroke", "metric": "browser.firstEditableBlankMs", "max": 1500, "unit": "ms"},
+  {"id": "mem-100-rest", "text": "100-page document: tab footprint after opening", "metric": "browser.mem-thesis-100.mem.restMB", "max": 200, "unit": "MB"},
+  {"id": "mem-100-type", "text": "100-page document: tab peak while typing 300 keys", "metric": "browser.mem-thesis-100.mem.typePeakMB", "max": 200, "unit": "MB"},
+  {"id": "mem-100-scroll", "text": "100-page document: tab peak while scrolling down and back", "metric": "browser.mem-thesis-100.mem.scrollPeakMB", "max": 200, "unit": "MB"},
+  {"id": "mem-wop-scroll", "text": "War and Peace (1,166 pages): tab peak while scrolling down and back", "metric": "browser.mem-war-and-peace.mem.scrollPeakMB", "max": 600, "unit": "MB"},
+  {"id": "mem-wop-rest", "text": "War and Peace: tab footprint after opening", "metric": "browser.mem-war-and-peace.mem.restMB", "max": 600, "unit": "MB"},
+  {"id": "mem-1000-scroll", "text": "979-page thesis with tables, pictures and 3,400 footnotes: tab peak while scrolling", "metric": "browser.mem-thesis-1000.mem.scrollPeakMB", "max": 1000, "unit": "MB"},
+  {"id": "mem-3000-scroll", "text": "2,900-page thesis (perf:full only): tab peak while scrolling", "metric": "browser.mem-thesis-3000.mem.scrollPeakMB", "max": 2000, "unit": "MB"}
+]

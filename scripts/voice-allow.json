@@ -1,0 +1,136 @@
+[
+  {
+    "paths": [
+      "LICENSE-APACHE",
+      "web/public/licenses.txt"
+    ],
+    "reason": "Licence texts, copied as published: they say 'copyright owner' and carry the licence's own date."
+  },
+  {
+    "paths": [
+      ".gitignore"
+    ],
+    "texts": [
+      "/notes/"
+    ],
+    "reason": "The ignore rule for a folder some contributors keep for private notes; it names the folder and nothing else."
+  },
+  {
+    "paths": [
+      "crates/docxtor-core/src/alt_chunk/convert.rs",
+      "crates/docxtor-core/src/alt_chunk/mod.rs",
+      "crates/docxtor-core/src/document/alt_chunks.rs",
+      "crates/docxtor-core/src/document/inspect.rs",
+      "crates/docxtor-core/tests/all/charts.rs",
+      "crates/docxtor-core/tests/all/chartex.rs",
+      "crates/docxtor-core/tests/all/chart_options/helpers.rs",
+      "e2e/support/docx-core.ts",
+      "e2e/controls.spec.ts"
+    ],
+    "labels": [
+      "owner"
+    ],
+    "reason": "`owner` is the Open XML part that holds a relationship (the part a relationship file belongs to): an identifier, not a person."
+  },
+  {
+    "paths": [
+      "packages/editor/src/editor/folds.ts",
+      "packages/editor/src/editor/path-edit.ts",
+      "packages/editor/src/pdf/structure.ts",
+      "packages/editor/src/ui/story-bar.ts"
+    ],
+    "labels": [
+      "owner"
+    ],
+    "reason": "`owner` is a local variable: the heading, path point, list or table, or section that another item belongs to."
+  },
+  {
+    "paths": [
+      "packages/editor/src/editor/editor-render.ts"
+    ],
+    "texts": [
+      "const owner =",
+      "!owner ||",
+      "open = owner;"
+    ],
+    "reason": "`owner` is a local variable: the tab that holds the caret."
+  },
+  {
+    "paths": [
+      "packages/editor/src/builtins/smart-chips.ts",
+      "web/src/builtins.ts",
+      "locales/source.json",
+      "web/src/languages/es.json"
+    ],
+    "labels": [
+      "owner"
+    ],
+    "reason": "'Owner' is a column in the project, asset, decision and launch templates (a person who owns an item), and its interface text and translation."
+  },
+  {
+    "paths": [
+      "scripts/package-cli.mjs",
+      "scripts/package-web.mjs"
+    ],
+    "labels": [
+      "owner"
+    ],
+    "reason": "tar's `--owner` option and the comment about the file owner names it removes from an archive."
+  },
+  {
+    "paths": [
+      "web/src/csl/chicago-notes-bibliography.csl"
+    ],
+    "labels": [
+      "owner"
+    ],
+    "reason": "Comments in the Chicago style file: the style names the owner of a website."
+  },
+  {
+    "paths": [
+      "web/src/help.ts"
+    ],
+    "texts": [
+      "github.com/owner/name"
+    ],
+    "reason": "A placeholder GitHub address (owner/name)."
+  },
+  {
+    "paths": [
+      "crates/docxtor-core/src/bibtex.rs",
+      "crates/docxtor-core/src/cite_styles.rs",
+      "crates/docxtor-core/src/field_values.rs",
+      "crates/docxtor-core/src/sort.rs",
+      "crates/docxtor-core/tests/all/citations_csl.rs",
+      "crates/docxtor-core/tests/all/csl.rs",
+      "crates/docxtor-core/tests/all/fields.rs",
+      "crates/docxtor-core/tests/all/lists.rs",
+      "e2e/lists-define.spec.ts",
+      "crates/docxtor-core/src/cite_styles/tests.rs",
+      "crates/docxtor-core/src/cite_styles/text.rs"
+    ],
+    "labels": [
+      "date with day",
+      "month and year"
+    ],
+    "reason": "Dates a test feeds the code or expects back (citation dates, a sorted list of due dates, a DATE field picture), and examples of the formats the code reads."
+  },
+  {
+    "paths": [
+      "packages/editor/src/thesaurus/english-data.ts"
+    ],
+    "labels": [
+      "decided"
+    ],
+    "reason": "'decided' is a word in the English thesaurus data."
+  },
+  {
+    "paths": [
+      "README.md"
+    ],
+    "texts": [
+      "Claude Code"
+    ],
+    "reason": "A product name: Claude Code is one of the MCP clients the server works with."
+  }
+]

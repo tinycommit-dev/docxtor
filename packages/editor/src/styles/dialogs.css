@@ -1,0 +1,741 @@
+/* Dialogs and their parts, the quick pick, and printing. */
+/* ---------- dialogs ---------- */
+.docxtor .scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: rgb(32 21 21 / 0.36);
+  display: grid;
+  place-items: center;
+  padding: var(--space-lg);
+  animation: fade 0.14s var(--ease);
+}
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+.docxtor .dialog {
+  width: min(var(--dialog-m), 100%);
+  max-height: var(--dialog-h);
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  background: var(--panel-hi);
+  border-radius: var(--r-lg);
+  box-shadow: var(--panel-shadow);
+  padding: 0;
+  animation: pop-in 0.16s var(--ease);
+}
+.docxtor .dialog-head {
+  padding: var(--space-lg) var(--space-xl) var(--space-md);
+  border-bottom: 1px solid var(--rule);
+}
+.docxtor .dialog h2 {
+  margin: 0;
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: -0.005em;
+}
+.docxtor .dialog-head .sub {
+  color: var(--muted);
+  margin: 4px 0 0;
+  max-width: 52ch;
+}
+.docxtor .dialog-body {
+  padding: var(--space-lg) var(--space-xl) 0;
+}
+/* The title and the buttons stay in place; only the middle scrolls (also when they sit in a form). */
+.docxtor .dialog > form {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+.docxtor .dialog:has(.dialog-body) {
+  overflow: hidden;
+}
+.docxtor :is(.dialog, .dialog > form) > :is(.dialog-head, .dialog-actions) {
+  flex: none;
+}
+.docxtor :is(.dialog, .dialog > form) > .dialog-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+}
+.docxtor .dialog.xl {
+  max-height: var(--dialog-h-xl);
+}
+.docxtor .dialog-head + .dialog-actions {
+  border-top: 0;
+  margin-top: 0;
+}
+.docxtor .field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: var(--space-lg);
+}
+.docxtor .field input,
+.docxtor .field select,
+.docxtor .mf-row select {
+  height: 34px;
+  border: 0;
+  border-radius: var(--r-sm);
+  padding: 0 10px;
+  background: var(--key);
+  box-shadow: inset 0 0 0 1px var(--rule-2);
+}
+.docxtor .field input:focus,
+.docxtor .field select:focus,
+.docxtor .mf-row select:focus {
+  outline: 1px solid var(--signal);
+}
+.docxtor .field .help {
+  color: var(--muted);
+  font-size: 11.5px;
+}
+.docxtor .seg {
+  display: flex;
+  background: var(--panel);
+  border-radius: var(--r-sm);
+  padding: 2px;
+  gap: 2px;
+  box-shadow: inset 0 0 0 1px var(--rule);
+}
+.docxtor .seg button {
+  flex: 1;
+  border: none;
+  background: none;
+  border-radius: 2px;
+  height: 26px;
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 12px;
+}
+.docxtor .seg button.on {
+  background: var(--key);
+  box-shadow: var(--key-edge);
+  color: var(--ink);
+  font-weight: 600;
+}
+.docxtor .seg button:disabled {
+  cursor: default;
+  opacity: 0.55;
+}
+.docxtor .seg button:focus-visible,
+.docxtor .swatch:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 1px;
+}
+.docxtor .swatch.on {
+  outline: 2px solid var(--ink);
+  outline-offset: 1px;
+}
+.docxtor .check {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+  cursor: pointer;
+}
+.docxtor .check input {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: var(--ink);
+}
+.docxtor .bs-dialog {
+  width: min(var(--dialog-m), 100%);
+}
+/* a palette inside a dialog sits flush with the field it belongs to */
+.docxtor .dialog .palette .pal-title,
+.docxtor .dialog .palette .pal-theme,
+.docxtor .dialog .palette .pal-row {
+  padding-inline-start: 0;
+  padding-inline-end: 0;
+}
+.docxtor .dialog .palette .pal-line {
+  width: 100%;
+}
+/* the Paragraph dialog: two tabs, and groups of fields in a grid */
+.docxtor .para-dialog {
+  width: min(var(--dialog-m), 100%);
+}
+.docxtor .pd-tablist {
+  margin: var(--space-md) var(--space-xl) 0;
+}
+.docxtor .pd-tablist button {
+  white-space: nowrap;
+}
+.docxtor .pd-pane[hidden] {
+  display: none;
+}
+.docxtor .pd-group {
+  margin-bottom: var(--space-md);
+}
+.docxtor .pd-group h3 {
+  margin: 0 0 var(--space-sm);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+}
+.docxtor .pd-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 var(--space-lg);
+}
+.docxtor .pd-grid .field {
+  margin-bottom: var(--space-md);
+}
+.docxtor .pd-grid .check {
+  margin: 0;
+}
+.docxtor .pd-tabs {
+  margin-inline-end: auto;
+}
+.docxtor .para-dialog .check {
+  margin-bottom: var(--space-md);
+}
+@media (max-width: 480px) {
+  .docxtor .pd-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+/* the Tabs dialog: the stops on the left, how the chosen one looks on the right */
+.docxtor .tabs-dialog {
+  width: min(var(--dialog-m), 100%);
+}
+.docxtor .tabs-dialog .field select[size] {
+  height: auto;
+  padding: 4px 6px;
+}
+.docxtor .tabs-dialog .tb-actions {
+  margin-bottom: var(--space-lg);
+}
+.docxtor .tabs-dialog .tb-actions button {
+  white-space: nowrap;
+  padding: 0 var(--space-sm);
+  color: var(--ink);
+}
+.docxtor .tabs-dialog .tb-actions button:disabled {
+  color: var(--muted);
+}
+.docxtor .bs-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+.docxtor .bs-row > .seg:first-child {
+  flex: 1 1 220px;
+}
+.docxtor .bs-cols {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-lg);
+}
+.docxtor .bs-cols .swatches {
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  padding: 0;
+}
+.docxtor .bs-cols .swatch {
+  width: auto;
+  aspect-ratio: 1;
+  height: auto;
+}
+.docxtor .dialog .swatches {
+  padding: 0;
+}
+.docxtor .bs-cols .seg button {
+  white-space: nowrap;
+  padding: 0 2px;
+}
+.docxtor .bs-one {
+  align-self: flex-start;
+}
+.docxtor .bs-one button {
+  padding: 0 var(--space-md);
+}
+@media (max-width: 480px) {
+  .docxtor .bs-cols {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.docxtor .bs-preview {
+  display: grid;
+  place-items: center;
+  padding: var(--space-lg);
+  background: var(--paper);
+  border-radius: var(--r-sm);
+  box-shadow: inset 0 0 0 1px var(--rule-2);
+}
+.docxtor .bs-sample {
+  display: flex;
+  flex-direction: column;
+  width: 70%;
+  color: var(--paper-ink);
+  font-size: 12px;
+  line-height: 1.4;
+}
+.docxtor .seg button[hidden],
+.docxtor .bs-sample[hidden],
+.docxtor .bs-grid[hidden],
+.docxtor .bs-cell[hidden] {
+  display: none;
+}
+.docxtor .bs-edges {
+  flex-wrap: wrap;
+}
+.docxtor .bs-edges button {
+  white-space: nowrap;
+  padding: 0 var(--space-sm);
+}
+.docxtor .bs-row > .bs-edges.wide {
+  flex-basis: 100%;
+}
+/* the preview of a table or cell: a grid of cells with the chosen lines */
+.docxtor .bs-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  width: 70%;
+  color: var(--paper-ink);
+}
+.docxtor .bs-grid.one {
+  grid-template-columns: minmax(0, 1fr);
+}
+.docxtor .bs-cell {
+  box-sizing: border-box;
+  min-height: 34px;
+  border: 0 solid transparent;
+}
+/* the table dialogs: Table properties, Insert table, Split cells, Insert and Delete cells, Convert, Formula */
+.docxtor .tp-dialog {
+  width: min(var(--dialog-m), 100%);
+}
+.docxtor .td-dialog {
+  width: min(var(--dialog-s), 100%);
+}
+.docxtor .tp-pair {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--space-sm);
+}
+.docxtor .tp-note {
+  margin: 0 0 var(--space-md);
+  color: var(--muted);
+}
+.docxtor .tp-dialog textarea {
+  min-height: 84px;
+  padding: 8px 10px;
+  border: 0;
+  border-radius: var(--r-sm);
+  background: var(--key);
+  box-shadow: inset 0 0 0 1px var(--rule-2);
+  resize: vertical;
+}
+.docxtor .td-radios {
+  display: flex;
+  flex-direction: column;
+}
+.docxtor .td-radios .check {
+  margin-bottom: var(--space-sm);
+}
+.docxtor .td-inline {
+  margin-top: var(--space-sm);
+}
+.docxtor .td-inline input[hidden] {
+  display: none;
+}
+.docxtor .td-dialog .field label.off {
+  color: var(--muted);
+}
+/* the Columns dialog: a small page drawn with the chosen columns (it keeps its own paper and ink in both themes) */
+.docxtor .cp-row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-xl);
+}
+.docxtor .cp-fields {
+  flex: 1;
+  min-width: 0;
+}
+.docxtor .cp-preview {
+  flex: none;
+}
+.docxtor .cp-page {
+  box-sizing: border-box;
+  width: 112px;
+  height: 145px;
+  padding: 13px;
+  overflow: hidden;
+  background: var(--paper);
+  border-radius: var(--r-sm);
+  box-shadow: inset 0 0 0 1px var(--rule-2);
+}
+.docxtor .cp-text {
+  height: 100%;
+  overflow: hidden;
+  column-count: var(--cp-n, 1);
+  column-gap: var(--cp-gap, 0);
+  column-fill: auto;
+}
+.docxtor .cp-text.cp-rule {
+  column-rule: 1px solid var(--paper-ink);
+}
+.docxtor .cp-line {
+  display: block;
+  height: 3px;
+  margin-bottom: 5px;
+  border-radius: 2px;
+  background: var(--paper-line);
+  break-inside: avoid;
+}
+.docxtor .cp-line:nth-child(7n) {
+  width: 55%;
+  margin-bottom: 11px;
+}
+/* Define new bullet, number format and multilevel list, Set numbering value, Sort paragraphs */
+.docxtor .dl-dialog {
+  width: min(var(--dialog-l), 100%);
+}
+.docxtor .dl-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-xl);
+}
+.docxtor .dl-col {
+  min-width: 0;
+}
+.docxtor .dl-levels button {
+  min-width: 0;
+  padding: 0;
+}
+.docxtor .dl-bullets {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: var(--space-xs);
+}
+.docxtor .dl-bullet {
+  height: 30px;
+  border: 0;
+  border-radius: var(--r-sm);
+  background: var(--key);
+  box-shadow: var(--key-edge);
+  color: var(--ink);
+  font: inherit;
+  font-size: 15px;
+  cursor: pointer;
+}
+.docxtor .dl-bullet.on {
+  box-shadow: 0 0 0 2px var(--ink);
+}
+.docxtor .dl-bullet:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 1px;
+}
+.docxtor .dl-row-inputs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--space-sm);
+}
+.docxtor .dl-sub {
+  color: var(--muted);
+  font-size: 11.5px;
+}
+.docxtor .dl-checks {
+  display: flex;
+  gap: var(--space-xl);
+  margin-top: var(--space-xs);
+}
+.docxtor .dl-checks .check {
+  margin: 0;
+}
+.docxtor .dl-fontrow {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-xl);
+}
+.docxtor .dl-fontrow .swatches {
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+}
+.docxtor .dl-fontrow .swatch {
+  width: auto;
+  aspect-ratio: 1;
+  height: auto;
+}
+.docxtor .dl-two {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-md);
+}
+.docxtor .dl-preview {
+  position: relative;
+  height: 232px;
+  overflow: auto;
+  padding: var(--space-md);
+  background: var(--paper);
+  border-radius: var(--r-sm);
+  box-shadow: inset 0 0 0 1px var(--rule-2);
+  color: var(--paper-ink);
+  font-size: 12px;
+}
+.docxtor .dl-preview.dl-short {
+  height: 112px;
+}
+.docxtor .dl-line {
+  position: relative;
+  height: 22px;
+}
+.docxtor .dl-label,
+.docxtor .dl-sample {
+  position: absolute;
+  top: 2px;
+  white-space: pre;
+}
+.docxtor .dl-sample {
+  color: var(--paper-mark);
+}
+.docxtor .dl-label img {
+  display: block;
+  object-fit: contain;
+}
+.docxtor .dl-label.dl-current {
+  border-radius: 2px;
+  background: var(--signal-soft);
+}
+.docxtor .dl-error {
+  margin: 0 0 var(--space-lg);
+  color: var(--danger);
+}
+.docxtor .dl-picture-note {
+  display: block;
+}
+.docxtor .so-dialog,
+.docxtor .nv-dialog {
+  width: min(var(--dialog-m), 100%);
+}
+.docxtor .nv-dialog {
+  width: min(var(--dialog-s), 100%);
+}
+.docxtor .so-key {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: var(--space-md);
+}
+.docxtor .so-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+.docxtor .so-controls select {
+  flex: 1 1 140px;
+  min-width: 0;
+}
+.docxtor .so-controls .seg {
+  flex: 0 0 auto;
+}
+.docxtor .so-controls .seg button {
+  padding: 0 var(--space-sm);
+  white-space: nowrap;
+}
+@media (max-width: 640px) {
+  .docxtor .dl-grid,
+  .docxtor .dl-fontrow {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.docxtor .dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-xl) var(--space-lg);
+  margin-top: var(--space-sm);
+  border-top: 1px solid var(--rule);
+}
+/* ---------- quick pick (command palette, extension pickers) ---------- */
+.docxtor .qp-scrim {
+  place-items: start center;
+  padding-top: min(14vh, 120px);
+  background: rgb(32 21 21 / 0.18);
+}
+.docxtor .qp {
+  width: min(560px, 100%);
+  background: var(--panel-hi);
+  border-radius: var(--r-md);
+  box-shadow: var(--panel-shadow);
+  overflow: hidden;
+  animation: pop-in 0.14s var(--ease);
+}
+.docxtor .qp-input {
+  display: block;
+  width: 100%;
+  height: 46px;
+  border: 0;
+  border-bottom: 1px solid var(--rule);
+  padding: 0 var(--space-lg);
+  background: none;
+  font-size: 15px;
+  color: var(--ink);
+}
+.docxtor .qp-input:focus {
+  outline: none;
+}
+.docxtor .qp-input::placeholder {
+  color: var(--quiet);
+}
+.docxtor .qp-list {
+  max-height: min(380px, 60vh);
+  overflow: auto;
+  padding: var(--space-xs);
+}
+.docxtor .qp-item {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-sm);
+  padding: 7px var(--space-md);
+  border-radius: var(--r-sm);
+  cursor: pointer;
+}
+.docxtor .qp-item.on {
+  background: var(--selected);
+}
+.docxtor .qp-label {
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.docxtor .qp-detail {
+  color: var(--muted);
+  font-size: 12px;
+  white-space: nowrap;
+}
+.docxtor .qp-hint {
+  margin-inline-start: auto;
+  padding-inline-start: var(--space-md);
+  font-family: var(--font-readout);
+  font-variant-numeric: tabular-nums;
+  font-size: 12px;
+  color: var(--faint);
+  white-space: nowrap;
+}
+/* the highlighted row's tint lowers contrast: lift its secondary text a step */
+.docxtor .qp-item.on .qp-detail,
+.docxtor .qp-item.on .qp-hint {
+  color: var(--ink-2);
+}
+.docxtor .qp-empty {
+  padding: var(--space-md);
+  color: var(--muted);
+}
+
+.docxtor .privacy {
+  display: flex;
+  gap: var(--space-sm);
+  font-size: 11.5px;
+  color: var(--muted);
+  line-height: 1.5;
+  padding: 0 0 var(--space-md);
+}
+.docxtor .privacy svg {
+  width: 14px;
+  height: 14px;
+  flex: none;
+  margin-top: 2px;
+  color: var(--ok);
+}
+
+.docxtor .toast {
+  position: fixed;
+  left: 50%;
+  bottom: 44px;
+  transform: translateX(-50%);
+  z-index: 80;
+  background: var(--z-ink);
+  color: var(--z-canvas);
+  padding: 8px 14px;
+  border-radius: var(--r-md);
+  box-shadow: 0 10px 24px -12px rgb(32 21 21 / 0.45);
+  font-size: 12.5px;
+  animation: pop-in 0.14s var(--ease);
+  max-width: min(560px, calc(100vw - 32px));
+  white-space: pre-wrap;
+}
+.docxtor .toast-action {
+  margin-inline-start: var(--space-md);
+  padding: 2px 8px;
+  border: 0;
+  border-radius: var(--r-sm);
+  background: none;
+  color: var(--z-canvas);
+  font: inherit;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+.docxtor .toast-action:hover {
+  /* The toast is ink with canvas text in both themes: a wash of its own text colour. */
+  background: color-mix(in srgb, var(--z-canvas) 14%, transparent);
+}
+.docxtor .toast-action:focus-visible {
+  outline: 2px solid var(--z-canvas);
+}
+
+/* ---------- print ---------- */
+/* Printing shows only the copy of the pages print.ts builds. This is the one place Docxtor
+   reaches outside .docxtor: while printing, the rest of the host page is hidden. */
+.docxtor-print {
+  display: none;
+}
+/* the editor that lays out a selection to print: out of sight, but laid out like any other */
+.docxtor.docxtor-offscreen {
+  position: fixed;
+  left: -30000px;
+  top: 0;
+  width: 1400px;
+  height: 900px;
+  overflow: hidden;
+  visibility: hidden;
+  pointer-events: none;
+}
+@media print {
+  html.docxtor-printing body > :not(.docxtor-print) {
+    display: none !important;
+  }
+  html.docxtor-printing body {
+    margin: 0;
+    background: #fff;
+  }
+  .docxtor.docxtor-print {
+    display: block;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+  .docxtor-print .print-page {
+    position: relative;
+    overflow: hidden;
+    break-after: page;
+  }
+  /* two pages to a sheet: each half is a window onto its page */
+  .docxtor-print .print-sheet {
+    display: flex;
+  }
+  .docxtor-print .print-half {
+    position: relative;
+    flex: none;
+    overflow: hidden;
+  }
+  .docxtor-print .print-page:last-child {
+    break-after: auto;
+  }
+  .docxtor-print .stage {
+    position: absolute;
+    left: 0;
+  }
+  .docxtor-print .sheet {
+    box-shadow: none;
+  }
+}

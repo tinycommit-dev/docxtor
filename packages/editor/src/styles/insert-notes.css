@@ -1,0 +1,524 @@
+/* Special characters, bookmarks, watermarks, notes, captions, the index and paste. */
+/* ---------- special characters and emoji ---------- */
+.docxtor .sc-dialog {
+  width: min(var(--dialog-m), 100%);
+  display: flex;
+  flex-direction: column;
+}
+.docxtor .sc-top {
+  padding: var(--space-md) var(--space-xl) 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+.docxtor .sc-search {
+  height: 34px;
+  border: 0;
+  border-radius: var(--r-sm);
+  padding: 0 10px;
+  background: var(--key);
+  color: var(--ink);
+  font: inherit;
+  box-shadow: inset 0 0 0 1px var(--rule-2);
+}
+.docxtor .sc-search:focus {
+  outline: 1px solid var(--signal);
+}
+.docxtor .sc-search::placeholder {
+  color: var(--faint);
+}
+.docxtor .sc-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+}
+.docxtor .sc-tab {
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  font-size: 12px;
+  height: 26px;
+  padding: 0 10px;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+}
+.docxtor .sc-tab:hover {
+  background: var(--hover);
+  color: var(--ink);
+}
+.docxtor .sc-tab.on {
+  background: var(--selected);
+  color: var(--ink);
+  font-weight: 600;
+}
+.docxtor .sc-tab:focus-visible,
+.docxtor .sc-key:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: -2px;
+}
+.docxtor .sc-recent {
+  padding: var(--space-sm) var(--space-xl) 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+.docxtor .sc-recent {
+  min-height: 44px;
+}
+.docxtor .sc-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.docxtor .sc-results {
+  margin: var(--space-sm) var(--space-xl) 0;
+  height: 232px;
+  overflow: auto;
+  border-radius: var(--r-sm);
+  box-shadow: inset 0 0 0 1px var(--rule-2);
+  padding: var(--space-xs);
+  scrollbar-gutter: stable;
+}
+.docxtor .sc-keys {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+}
+.docxtor .sc-key {
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: var(--r-sm);
+  background: none;
+  color: var(--ink);
+  font-family: var(--font-ui), "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+  font-size: 19px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+}
+.docxtor .sc-key:hover {
+  background: var(--hover);
+}
+.docxtor .sc-key:focus-visible {
+  background: var(--selected);
+}
+.docxtor .sc-group {
+  margin: var(--space-sm) var(--space-xs) var(--space-xs);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+}
+.docxtor .sc-group:first-child {
+  margin-top: var(--space-xs);
+}
+.docxtor .sc-none {
+  margin: var(--space-xl) var(--space-sm);
+  color: var(--muted);
+  text-align: center;
+}
+.docxtor .sc-preview {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  min-height: 64px;
+  padding: var(--space-md) var(--space-xl) 0;
+}
+.docxtor .sc-big {
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  flex: none;
+  font-family: var(--font-ui), "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+  font-size: 36px;
+  line-height: 1;
+  border-radius: var(--r-sm);
+  background: var(--panel);
+}
+.docxtor .sc-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.docxtor .sc-name {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.docxtor .sc-code {
+  color: var(--muted);
+  font-size: 12px;
+}
+.docxtor .sc-hint {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+/* ---------- bookmarks and watermarks ---------- */
+.docxtor .bm-pop {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  width: 280px;
+  max-width: 100%;
+  padding: 0 var(--space-xs) var(--space-xs);
+}
+.docxtor .bm-input {
+  height: 34px;
+  border: 0;
+  border-radius: var(--r-sm);
+  padding: 0 10px;
+  background: var(--key);
+  color: var(--ink);
+  font: inherit;
+  box-shadow: inset 0 0 0 1px var(--rule-2);
+}
+.docxtor .bm-input:focus {
+  outline: 1px solid var(--signal);
+}
+.docxtor .bm-input[aria-invalid="true"] {
+  box-shadow: inset 0 0 0 1px var(--danger);
+}
+.docxtor .bm-error {
+  margin: 0;
+  color: var(--danger);
+  font-size: 12px;
+  line-height: 1.4;
+}
+.docxtor .bm-actions {
+  display: flex;
+  gap: var(--space-xs);
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+.docxtor .bm-actions .btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.docxtor .bm-dialog {
+  width: min(var(--dialog-m), 100%);
+}
+.docxtor .bm-list {
+  max-height: 50vh;
+  overflow: auto;
+  margin-bottom: var(--space-sm);
+}
+.docxtor .bm-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-sm) 0;
+  border-bottom: 1px solid var(--rule);
+}
+.docxtor .bm-row:last-child {
+  border-bottom: 0;
+}
+.docxtor .bm-info,
+.docxtor .bm-edit {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.docxtor .bm-head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-sm);
+  min-width: 0;
+}
+.docxtor .bm-name {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.docxtor .bm-where {
+  flex: none;
+  color: var(--muted);
+  font-size: 12px;
+}
+.docxtor .bm-text {
+  color: var(--muted);
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.docxtor .bm-empty {
+  margin: 0 0 var(--space-lg);
+  color: var(--muted);
+}
+/* ---------- notes, captions, cross-references, the index ---------- */
+.docxtor .note-dialog {
+  width: min(var(--dialog-m), 100%);
+}
+.docxtor .note-cols {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-xl);
+}
+.docxtor .note-col h3 {
+  margin: 0 0 var(--space-sm);
+  font-size: 13px;
+  font-weight: 700;
+}
+.docxtor .note-col .field input[type="number"] {
+  width: 100%;
+  min-width: 0;
+}
+.docxtor .note-convert {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+.docxtor .note-convert .btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.docxtor .cap-preview {
+  margin: 0;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--panel);
+  border-radius: var(--r-sm);
+  box-shadow: inset 0 0 0 1px var(--rule);
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.docxtor .dialog .field select {
+  height: 34px;
+  border: 0;
+  border-radius: var(--r-sm);
+  padding: 0 10px;
+  background: var(--key);
+  color: var(--ink);
+  font: inherit;
+  box-shadow: inset 0 0 0 1px var(--rule-2);
+}
+.docxtor .xr-dialog {
+  width: min(var(--dialog-m), 100%);
+}
+.docxtor .xr-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-lg);
+}
+.docxtor .xr-list {
+  height: 200px;
+  overflow: auto;
+  background: var(--key);
+  border-radius: var(--r-sm);
+  box-shadow: inset 0 0 0 1px var(--rule-2);
+  padding: var(--space-xs);
+}
+.docxtor .xr-item {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-md);
+  width: 100%;
+  padding: 6px 12px;
+  border: 0;
+  border-radius: var(--r-sm);
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+.docxtor .xr-item:hover {
+  background: var(--hover);
+}
+.docxtor .xr-item.on {
+  background: var(--selected);
+}
+.docxtor .xr-title {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.docxtor .xr-detail {
+  flex: none;
+  max-width: 45%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  /* The secondary ink, not the muted one: it stays 4.5:1 on a chosen or hovered row's shading in the dark theme (#c5c0b1 on #52504b is 4.42). */
+  color: var(--ink-2);
+  font-size: 12px;
+}
+.docxtor .xr-empty {
+  margin: var(--space-md);
+  color: var(--muted);
+}
+.docxtor .ix-checks {
+  display: flex;
+  gap: var(--space-xl);
+}
+.docxtor .ix-checks .check {
+  margin-bottom: 0;
+}
+.docxtor .link-targets {
+  width: 280px;
+  max-width: 100%;
+  max-height: 180px;
+  overflow: auto;
+}
+.docxtor .wm-dialog {
+  width: min(var(--dialog-m), 100%);
+}
+.docxtor .wm-body {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-xl);
+}
+.docxtor .wm-fields {
+  flex: 1;
+  min-width: 0;
+}
+.docxtor .wm-quick {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+.docxtor .wm-quick .btn {
+  height: 26px;
+  padding: 0 9px;
+  font-size: 12px;
+}
+.docxtor .wm-preview {
+  flex: none;
+}
+.docxtor .wm-page {
+  position: relative;
+  overflow: hidden;
+  background: var(--paper);
+  border-radius: var(--r-sm);
+  box-shadow: inset 0 0 0 1px var(--rule-2);
+}
+.docxtor .wm-sheet {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform-origin: 0 0;
+}
+.docxtor .wm-lines {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.docxtor .wm-lines i {
+  display: block;
+  flex: none;
+  height: 9px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+  background: var(--paper-line);
+}
+.docxtor .wm-lines i.short {
+  width: 55%;
+}
+.docxtor .wm-spacer {
+  flex: 1;
+}
+.docxtor .wm-pick {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  min-width: 0;
+}
+.docxtor .wm-file {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--ink-2);
+  font-size: 12px;
+}
+@media (max-width: 480px) {
+  .docxtor .wm-body {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .docxtor .wm-preview {
+    align-self: center;
+  }
+  .docxtor .bm-row {
+    flex-wrap: wrap;
+  }
+}
+
+/* ---------- paste: the options button, a drop caret, the format painter ---------- */
+/* A horizontal line from Word or Google Docs (a VML rule): drawn, in the middle of its line. */
+.docxtor .hrule {
+  display: inline-block;
+  vertical-align: middle;
+}
+.docxtor .paste-chip {
+  position: fixed;
+  z-index: 45;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  height: 26px;
+  padding: 0 6px;
+  border: 0;
+  border-radius: var(--r-sm);
+  background: var(--panel-hi);
+  color: var(--ink-2);
+  box-shadow: var(--panel-shadow);
+  cursor: pointer;
+  animation: pop-in 0.14s var(--ease);
+}
+/* The tint is see-through: it goes over the chip's own background, not the page under it. */
+.docxtor .paste-chip:hover {
+  background: linear-gradient(var(--selected), var(--selected)), var(--panel-hi);
+  color: var(--ink);
+}
+.docxtor .paste-chip:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 1px;
+}
+.docxtor .paste-chip[hidden] {
+  display: none;
+}
+.docxtor .paste-chip svg {
+  width: 16px;
+  height: 16px;
+}
+.docxtor .paste-chip svg:last-child {
+  width: 10px;
+  height: 10px;
+  opacity: 0.55;
+}
+.docxtor .drop-caret {
+  position: fixed;
+  z-index: 60;
+  width: 2px;
+  border-radius: 1px;
+  background: var(--signal);
+  pointer-events: none;
+}
+/* the format painter is on: the pointer is a brush */
+.docxtor .canvas.painting,
+.docxtor .canvas.painting .flow,
+.docxtor .canvas.painting .flow * {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23201515' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M18.5 3.5a2 2 0 0 1 2.8 2.8L13 14.5l-2.8-2.8z'/%3E%3Cpath d='M10 12c-2 0-3.5 1.5-3.5 3.5 0 1.5-1 2.5-3 3 2 1.5 6.5 1.5 8.5-.5 1-1 1.3-2.3.8-3.2'/%3E%3C/svg%3E") 4 20, copy;
+}
+.docxtor .ps-dialog {
+  width: min(var(--dialog-m), 100%);
+}
+.docxtor .ps-heading {
+  margin: 0 0 var(--space-sm);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+}
+.docxtor .ps-formats {
+  margin-top: var(--space-lg);
+}
+.docxtor .ps-formats.off {
+  opacity: 0.5;
+}

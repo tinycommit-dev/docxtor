@@ -1,0 +1,47 @@
+name: Bug report
+description: Something in Docxtor does not work, or a file opens or saves wrongly
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting. Please do not attach a document that holds private information. If the problem is a security problem, use the private route in [SECURITY.md](https://github.com/tinycommit-dev/docxtor/blob/main/SECURITY.md) instead.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened, and what did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: The clicks or keys, in order, starting from opening the app or the file.
+      placeholder: |
+        1. Open the attached file
+        2. Select the second table
+        3. ...
+    validations:
+      required: true
+  - type: textarea
+    id: file
+    attributes:
+      label: The file, or a minimal one
+      description: Drag in the .docx that shows it, or the smallest document you can make that still shows it (a few paragraphs is often enough). If you cannot share a file, say what is in it (tables, pictures, fields, a language, who made it).
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and version
+      placeholder: Chrome 140 on macOS
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Docxtor version or address
+      description: The address of the app you used, or the commit or package version.
+  - type: textarea
+    id: more
+    attributes:
+      label: Anything else
+      description: Screenshots, what Word shows for the same file, messages from the browser console.

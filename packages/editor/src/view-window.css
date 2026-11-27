@@ -1,0 +1,188 @@
+/* The Draft view, Line focus, page guides (gridlines and text boundaries) and the split window. Every rule is scoped under
+   .docxtor and uses the tokens of editor.css. Nothing here animates the document: the paginator measures it synchronously. */
+
+/* ---------- the Draft view: text only ---------- */
+/* Pictures and shapes that wrap the text sit in the line like text; the ones behind or in front of it are left out. */
+.docxtor .view-draft .flow .atom.wrap-behind,
+.docxtor .view-draft .flow .atom.wrap-front {
+  display: none;
+}
+.docxtor .view-draft .flow .atom.wrap-square,
+.docxtor .view-draft .flow .atom.wrap-tight,
+.docxtor .view-draft .flow .atom.wrap-through,
+.docxtor .view-draft .flow .atom.wrap-topBottom {
+  float: none !important;
+  position: static !important;
+  display: inline-block !important;
+  margin: 0 4px !important;
+  vertical-align: bottom;
+}
+.docxtor .view-draft .canvas {
+  padding-top: var(--space-md);
+}
+
+/* ---------- page guides (see editor/guides.ts) ---------- */
+.docxtor .pg-guides {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.docxtor .pg-guides[hidden] {
+  display: none;
+}
+.docxtor .pg-guides > div {
+  position: absolute;
+}
+.docxtor .pg-grid.both {
+  background-image: linear-gradient(to bottom, var(--paper-gridline) 1px, transparent 1px), linear-gradient(to right, var(--paper-gridline) 1px, transparent 1px);
+  background-size: var(--grid-x) var(--grid-y);
+}
+.docxtor .pg-grid.rows {
+  background-image: linear-gradient(to bottom, var(--paper-gridline) 1px, transparent 1px);
+  background-size: 100% var(--grid-y);
+}
+.docxtor .pg-text,
+.docxtor .pg-col {
+  border: 1px dotted var(--paper-mark);
+  box-sizing: border-box;
+}
+/* The cells of tables and the text boxes are already in the page; they only need their line. */
+.docxtor .canvas.show-boundaries .flow td,
+.docxtor .canvas.show-boundaries .flow th,
+.docxtor .canvas.show-boundaries .flow .atom.shape.textbox {
+  outline: 1px dotted var(--paper-mark);
+  outline-offset: -1px;
+}
+
+/* ---------- Line focus (see editor/line-focus.ts) ---------- */
+.docxtor .lf-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+}
+.docxtor .lf-veil {
+  position: absolute;
+  left: 0;
+  right: 0;
+  background: var(--focus-dim);
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .docxtor .lf-veil {
+    transition: top 0.12s var(--ease), height 0.12s var(--ease);
+  }
+}
+.docxtor .lf-live {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.docxtor .lf-bar {
+  position: absolute;
+  right: var(--space-lg);
+  bottom: var(--space-lg);
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs);
+  border-radius: var(--r-md);
+  background: var(--panel-hi);
+  box-shadow: var(--panel-shadow);
+  pointer-events: auto;
+}
+.docxtor .lf-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 28px;
+  padding: 0 var(--space-sm);
+  border: 0;
+  border-radius: var(--r-sm);
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+.docxtor .lf-btn svg {
+  width: 18px;
+  height: 18px;
+}
+.docxtor .lf-btn:hover {
+  background: var(--hover);
+}
+.docxtor .lf-btn:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 1px;
+}
+.docxtor .lf-btn.on {
+  background: var(--selected);
+  font-weight: 600;
+}
+.docxtor .lf-counts {
+  display: flex;
+  gap: 2px;
+  padding: 0 var(--space-xs);
+  border-left: 1px solid var(--rule-2);
+  border-right: 1px solid var(--rule-2);
+}
+.docxtor .lf-close {
+  font-weight: 600;
+}
+
+/* ---------- Focus: the page and nothing else ---------- */
+.docxtor.focus-mode .statusbar,
+.docxtor.focus-mode .topbar {
+  display: none;
+}
+
+/* ---------- the split window (see editor/split.ts) ---------- */
+.docxtor .split-root {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.docxtor .split-pane {
+  position: relative;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.docxtor .split-divider {
+  flex: none;
+  position: relative;
+  height: 8px;
+  background: var(--panel);
+  border-top: 1px solid var(--rule-2);
+  border-bottom: 1px solid var(--rule-2);
+  cursor: row-resize;
+  touch-action: none;
+}
+.docxtor .split-divider::after {
+  content: "";
+  position: absolute;
+  inset-inline-start: 50%;
+  top: 50%;
+  width: 36px;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--quiet);
+  transform: translate(-50%, -50%);
+}
+.docxtor .split-divider:hover,
+.docxtor .split-divider.dragging {
+  background: var(--selected);
+}
+.docxtor .split-divider:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: -2px;
+}

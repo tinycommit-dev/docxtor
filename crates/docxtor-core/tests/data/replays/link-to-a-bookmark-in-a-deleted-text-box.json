@@ -1,0 +1,97 @@
+{
+ "why": "E14: a link set in the batch that deleted the table holding a text box, whose bookmark went with the text box",
+ "found": "2026-11-22",
+ "start": "rich.docx",
+ "steps": [
+  {
+   "kind": "set_watermark",
+   "merge": false,
+   "ops": [
+    {
+     "op": "set_watermark",
+     "text": "{ DATE } { PAGE }"
+    }
+   ],
+   "step": "apply",
+   "strict": false
+  },
+  {
+   "kind": "r:create_style",
+   "merge": false,
+   "ops": [
+    {
+     "from": {
+      "o": 13,
+      "p": 11
+     },
+     "name": "Plain note",
+     "op": "create_style",
+     "to": {
+      "o": 1,
+      "p": 19
+     }
+    },
+    {
+     "at": {
+      "o": 1,
+      "p": 23
+     },
+     "floating": false,
+     "h": 40.0,
+     "op": "insert_text_box",
+     "text": "{ MERGEFIELD x \\* upper }",
+     "w": 100.0,
+     "x": 10.0,
+     "y": 10.0
+    }
+   ],
+   "step": "apply",
+   "strict": false
+  },
+  {
+   "kind": "insert_bookmark",
+   "merge": false,
+   "ops": [
+    {
+     "from": {
+      "o": 17,
+      "p": 37
+     },
+     "name": "Beta",
+     "op": "insert_bookmark",
+     "to": {
+      "o": 24,
+      "p": 37
+     }
+    }
+   ],
+   "step": "apply",
+   "strict": false
+  },
+  {
+   "kind": "table_edit",
+   "merge": false,
+   "ops": [
+    {
+     "action": "delete_table",
+     "at": 17,
+     "op": "table_edit"
+    },
+    {
+     "from": {
+      "o": 10,
+      "p": 6
+     },
+     "op": "set_link",
+     "to": {
+      "o": 18,
+      "p": 6
+     },
+     "url": "#Beta"
+    }
+   ],
+   "step": "apply",
+   "strict": false
+  }
+ ]
+}

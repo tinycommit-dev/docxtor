@@ -1,0 +1,4 @@
+{
+  "comment": "Files that may break a rule of scripts/lo-check.mjs. Empty: the sample has no exception (97 of 100 sample files have the same text and page count; the other 3 fail to convert as originals too, which is not a rule). An entry: {file (as the report names it), what (text-differs, pages-differ, docxtor-fails, feature-does-not-convert, feature-no-pages, feature-text-missing), reason, date}.",
+  "files": []
+}

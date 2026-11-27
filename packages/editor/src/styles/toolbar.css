@@ -1,0 +1,689 @@
+/* The toolbar, popovers and the galleries inside them. */
+/* ---------- toolbar: a labelled front panel ---------- */
+.docxtor .toolbar {
+  container-type: inline-size;
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  padding: 0 var(--space-xs);
+  background: var(--panel);
+  border-bottom: 1px solid var(--rule-2);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.docxtor .toolbar::-webkit-scrollbar {
+  display: none;
+}
+.docxtor .tgroup {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 7px var(--space-md);
+  flex: none;
+}
+/* short hairline between groups */
+.docxtor .tgroup + .tgroup::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  top: 13px;
+  bottom: 13px;
+  width: 1px;
+  background: var(--rule-2);
+}
+/* the Ask button, when the toolbar has one, sits apart at the far end */
+.docxtor .tgroup-assistant {
+  margin-inline-start: auto;
+}
+.docxtor .tgroup-assistant::before {
+  display: none;
+}
+.docxtor .tgroup-controls {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+@container (max-width: 1180px) {
+  .docxtor .tgroup {
+    padding: 7px var(--space-sm);
+  }
+}
+.docxtor .tb {
+  height: 28px;
+  min-width: 28px;
+  padding: 0 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  border: 0;
+  background: transparent;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  color: var(--ink-2);
+  flex: none;
+  position: relative;
+  transition: background 0.1s;
+}
+.docxtor .tb:hover {
+  background: var(--hover);
+  color: var(--ink);
+}
+.docxtor .tb:active {
+  background: var(--press);
+}
+/* active (bold on, current alignment, open list…): the whole key is filled, like a pressed key */
+.docxtor .tb.on {
+  background: var(--selected);
+  color: var(--ink);
+}
+.docxtor .tb.on:hover {
+  background: var(--selected-hover);
+}
+.docxtor .tb:disabled {
+  opacity: 0.32;
+  cursor: default;
+  background: none;
+}
+.docxtor .align-now {
+  display: inline-flex;
+}
+.docxtor .align-row {
+  display: flex;
+  gap: 2px;
+}
+.docxtor .pop:has(> .align-row) {
+  min-width: 0;
+}
+/* a thin rule between the alignments and the text directions in the same popover */
+.docxtor .align-sep {
+  width: 1px;
+  margin: 4px 3px;
+  background: var(--rule-2);
+}
+/* the undo list: the steps that can be taken back, newest first, with a line that says how many a click undoes */
+.docxtor .history-list {
+  display: flex;
+  flex-direction: column;
+  min-width: 200px;
+}
+.docxtor .history-items {
+  max-height: 264px;
+  overflow: auto;
+}
+.docxtor .history-items .menu-item {
+  white-space: nowrap;
+}
+.docxtor .history-foot {
+  margin-top: var(--space-xs);
+}
+/* the chevron beside a list key: a narrow key of its own, tucked against the one before it */
+.docxtor .tb.tb-more {
+  min-width: 14px;
+  width: 14px;
+  padding: 0;
+  margin-inline-start: -2px;
+}
+.docxtor .tb.tb-more[aria-expanded="true"] {
+  background: var(--selected);
+}
+.docxtor .tb .caret {
+  width: 10px;
+  height: 10px;
+  opacity: 0.55;
+}
+.docxtor .tb.glyph {
+  font-weight: 700;
+  font-size: 14px;
+  width: 28px;
+}
+.docxtor .tb.glyph.i {
+  font-style: italic;
+  font-weight: 500;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 15px;
+}
+.docxtor .tb.glyph.u {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-weight: 500;
+}
+.docxtor .tb.glyph.s {
+  text-decoration: line-through;
+  font-weight: 500;
+}
+.docxtor .sep {
+  width: 1px;
+  height: 16px;
+  background: var(--rule-2);
+  margin: 0 6px;
+  flex: none;
+}
+.docxtor .tb.style-pick {
+  width: 128px;
+  justify-content: space-between;
+  font-weight: 600;
+  color: var(--ink);
+  background: var(--key);
+  box-shadow: var(--key-edge);
+}
+.docxtor .tb.font-pick {
+  width: 116px;
+  justify-content: space-between;
+  background: var(--key);
+  box-shadow: var(--key-edge);
+}
+.docxtor .tb .label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.docxtor .size-box {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  margin-inline-start: 4px;
+}
+.docxtor .size-box input {
+  width: 40px;
+  height: 24px;
+  text-align: center;
+  border: 0;
+  border-radius: var(--r-sm);
+  background: var(--key);
+  box-shadow: inset 0 0 0 1px var(--rule-2);
+  font-family: var(--font-readout);
+  font-size: 11px;
+  color: var(--ink);
+}
+.docxtor .size-box input:focus {
+  outline: 1px solid var(--signal);
+}
+.docxtor .color-bar {
+  position: absolute;
+  inset-inline-start: 7px;
+  inset-inline-end: 7px;
+  bottom: 3px;
+  height: 3px;
+  border-radius: 1px;
+}
+.docxtor .tb.ask {
+  gap: 6px;
+  padding: 0 9px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.docxtor .tb.ask .lamp {
+  color: var(--signal);
+}
+
+/* ---------- popovers ---------- */
+/* a menu opened from a dialog (a colour palette) sits above the dialog's scrim */
+.docxtor .scrim ~ .pop {
+  z-index: 70;
+}
+.docxtor .pop {
+  position: fixed;
+  z-index: 50;
+  background: var(--panel-hi);
+  border-radius: var(--r-md);
+  box-shadow: var(--panel-shadow);
+  padding: var(--space-xs);
+  min-width: 180px;
+  max-height: 70vh;
+  overflow: auto;
+  animation: pop-in 0.14s var(--ease);
+}
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(-3px);
+  }
+}
+.docxtor .menu-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  width: 100%;
+  border: none;
+  background: none;
+  text-align: start;
+  padding: 6px var(--space-sm);
+  border-radius: var(--r-sm);
+  cursor: pointer;
+}
+.docxtor .menu-item:hover,
+.docxtor .menu-item.active {
+  background: var(--hover);
+}
+.docxtor .menu-item:disabled {
+  color: var(--quiet);
+  cursor: default;
+  background: none;
+}
+.docxtor .menu-item.active {
+  font-weight: 600;
+}
+.docxtor .menu-item .hint {
+  margin-inline-start: auto;
+  font-family: var(--font-readout);
+  font-size: 11.5px;
+  color: var(--faint);
+}
+/* On the shading of the current, hovered or focused line, the secondary ink: faint is 4.16:1 there in the dark theme */
+.docxtor .menu-item.active .hint,
+.docxtor .menu-item:hover .hint,
+.docxtor .menu-item:focus-visible .hint,
+.docxtor .menu-item[aria-expanded="true"] .hint {
+  color: var(--ink-2);
+}
+.docxtor .menu-item svg {
+  width: 15px;
+  height: 15px;
+  color: var(--muted);
+}
+.docxtor .menu-sep {
+  height: 1px;
+  background: var(--rule);
+  margin: var(--space-xs) var(--space-xs);
+}
+.docxtor .menu-title {
+  padding: 6px var(--space-sm) 4px;
+}
+.docxtor .ctx-menu {
+  min-width: 240px;
+}
+.docxtor .menu-item:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: -2px;
+}
+.docxtor .menu-note {
+  max-width: 260px;
+  padding: 6px var(--space-sm);
+  color: var(--ink-2);
+  overflow-wrap: anywhere;
+}
+.docxtor .menu-hint {
+  margin-top: var(--space-xs);
+  padding: var(--space-sm) var(--space-sm) var(--space-xs);
+  border-top: 1px solid var(--rule);
+  max-width: 260px;
+  font-size: 11.5px;
+  line-height: 1.4;
+  color: var(--faint);
+}
+/* the list style gallery: tiles drawn like a page, so they keep their own ink and paper in both themes */
+.docxtor .list-gallery {
+  display: grid;
+  grid-template-columns: repeat(3, 84px);
+  gap: var(--space-sm);
+  padding: var(--space-sm);
+}
+.docxtor .pop:has(> .list-gallery) {
+  min-width: 0;
+}
+.docxtor .list-tile {
+  display: block;
+  width: 84px;
+  height: 64px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--r-sm);
+  background: var(--paper);
+  box-shadow: inset 0 0 0 1px var(--rule-2);
+  color: var(--paper-ink);
+  cursor: pointer;
+}
+.docxtor .list-tile:hover {
+  box-shadow: inset 0 0 0 1px var(--rule-3);
+}
+/* The current style is ringed in ink, outside the tile (the tile itself is white in both themes);
+   the key focus sits one ring further out. */
+.docxtor .list-tile[aria-checked="true"] {
+  outline: 2px solid var(--ink);
+  outline-offset: 1px;
+}
+.docxtor .list-tile:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+.docxtor .lt-face {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  height: 100%;
+  padding: 0 var(--space-sm);
+}
+.docxtor .lt-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding-inline-start: calc(var(--lvl) * 8px);
+}
+.docxtor .lt-mark {
+  flex: none;
+  font-size: 11px;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: var(--paper-ink);
+}
+.docxtor .lt-line {
+  flex: 1;
+  min-width: 6px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--paper-line);
+}
+/* the table design gallery: tiles drawn like a page, so they keep their own paper in both themes */
+.docxtor .design-gallery {
+  width: 540px;
+  max-width: calc(100vw - 32px);
+  max-height: min(70vh, 560px);
+  overflow-y: auto;
+  padding: var(--space-sm);
+}
+.docxtor .pop:has(> .design-gallery) {
+  min-width: 0;
+}
+.docxtor .design-options {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-xs) var(--space-md);
+  padding: var(--space-xs) var(--space-xs) var(--space-sm);
+}
+.docxtor .design-option {
+  display: flex;
+  align-items: center;
+  min-height: 24px;
+  gap: 6px;
+  color: var(--ink);
+  font: 500 12px/1.3 var(--font-ui);
+  cursor: pointer;
+}
+.docxtor .design-option input {
+  accent-color: var(--ink);
+}
+.docxtor .design-gallery .menu-title {
+  padding-inline-start: var(--space-xs);
+}
+.docxtor .design-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 64px);
+  gap: var(--space-sm) var(--space-xs);
+  padding: var(--space-xs);
+}
+.docxtor .design-tile {
+  display: block;
+  width: 64px;
+  height: 50px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--r-sm);
+  background: var(--paper);
+  box-shadow: inset 0 0 0 1px var(--rule-2);
+  overflow: hidden;
+  cursor: pointer;
+}
+.docxtor .design-tile:hover {
+  box-shadow: inset 0 0 0 1px var(--rule-3);
+}
+.docxtor .design-tile[aria-checked="true"] {
+  outline: 2px solid var(--ink);
+  outline-offset: 1px;
+}
+.docxtor .design-tile:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+.docxtor .design-tile svg {
+  display: block;
+}
+/* Insert, Cover page and Header and Footer: each tile is a page of the design, shrunk */
+.docxtor .pg-dialog {
+  width: min(var(--dialog-l), 100%);
+}
+.docxtor .pg-dialog .dialog-body {
+  overflow-y: auto;
+}
+.docxtor .pg-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: var(--space-md);
+  padding: var(--space-xs);
+}
+.docxtor .pg-grid.pg-header,
+.docxtor .pg-grid.pg-footer {
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+}
+.docxtor .pg-group {
+  grid-column: 1 / -1;
+  margin: var(--space-sm) 0 0;
+  color: var(--muted);
+  font: 600 12px/1.3 var(--font-ui);
+}
+.docxtor .pg-tile {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font: 500 12.5px/1.3 var(--font-ui);
+  text-align: start;
+  cursor: pointer;
+}
+.docxtor .pg-page {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 8.5 / 11;
+  border-radius: var(--r-sm);
+  background: var(--paper);
+  box-shadow: inset 0 0 0 1px var(--rule-2);
+  overflow: hidden;
+}
+.docxtor .pg-header .pg-page,
+.docxtor .pg-footer .pg-page {
+  aspect-ratio: auto;
+  height: 64px;
+}
+.docxtor .pg-page.drawn {
+  aspect-ratio: auto;
+}
+.docxtor .pg-tile:hover .pg-page {
+  box-shadow: inset 0 0 0 1px var(--rule-3);
+}
+.docxtor .pg-tile:focus-visible {
+  outline: none;
+}
+.docxtor .pg-tile:focus-visible .pg-page {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+.docxtor .pg-stage {
+  position: absolute;
+  transform-origin: 0 0;
+  pointer-events: none;
+}
+.docxtor .pg-words {
+  display: block;
+  padding: var(--space-sm);
+  color: var(--paper-ink);
+  font-size: 11px;
+}
+/* Document tabs in the navigation pane */
+.docxtor .doc-tabs-pane {
+  padding: var(--space-sm) var(--space-sm) var(--space-xs);
+  border-bottom: 1px solid var(--rule);
+}
+.docxtor .doc-tabs-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-xs);
+}
+.docxtor .doc-tabs-title {
+  color: var(--muted);
+  font: 600 12px/1.3 var(--font-ui);
+}
+.docxtor .doc-tab-add span {
+  display: inline-flex;
+  width: 14px;
+  height: 14px;
+}
+.docxtor .doc-tabs-empty {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+.docxtor .doc-tab {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  min-height: 30px;
+  padding: 2px var(--space-xs) 2px calc(var(--space-xs) + var(--depth, 0) * 14px);
+  border-radius: var(--r-sm);
+  color: var(--ink);
+  font: 500 13px/1.3 var(--font-ui);
+  cursor: pointer;
+}
+.docxtor .doc-tab:hover {
+  background: var(--hover);
+}
+.docxtor .doc-tab.on {
+  background: var(--selected, var(--hover));
+  font-weight: 600;
+}
+.docxtor .doc-tab:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: -2px;
+}
+.docxtor .doc-tab-icon {
+  width: 18px;
+  text-align: center;
+}
+.docxtor .doc-tab-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.docxtor .doc-tab-more {
+  opacity: 0;
+}
+.docxtor .doc-tab:hover .doc-tab-more,
+.docxtor .doc-tab.on .doc-tab-more,
+.docxtor .doc-tab-more:focus-visible {
+  opacity: 1;
+}
+.docxtor .doc-tab-emoji {
+  display: grid;
+  grid-template-columns: repeat(6, 32px);
+  gap: 2px;
+  margin-bottom: var(--space-xs);
+}
+/* Document tabs: the blocks of the tabs that aren't open take no room */
+.docxtor .flow [data-tab-hidden] {
+  display: none;
+}
+.docxtor .dg-paper {
+  fill: var(--paper);
+}
+.docxtor .dg-ink {
+  fill: var(--paper-ink);
+}
+.docxtor .lt-pic {
+  display: block;
+  width: 9px;
+  height: 9px;
+  object-fit: contain;
+}
+/* below the gallery's tiles: lists in the document, and Define new ... */
+.docxtor .lg-title {
+  grid-column: 1 / -1;
+  padding: var(--space-xs) var(--space-xs) 0;
+  color: var(--muted);
+  font-size: 11.5px;
+}
+.docxtor .lg-sep {
+  grid-column: 1 / -1;
+  height: 1px;
+  margin: var(--space-xs) 0;
+  background: var(--rule);
+}
+.docxtor .lg-action {
+  grid-column: 1 / -1;
+  border: 0;
+  border-radius: var(--r-sm);
+  background: none;
+  padding: 6px var(--space-sm);
+  color: var(--ink);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+.docxtor .lg-action:hover {
+  background: var(--hover);
+}
+.docxtor .lg-action:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: -2px;
+}
+.docxtor .style-item {
+  padding: 6px var(--space-md);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 300px;
+}
+.docxtor .swatches {
+  display: grid;
+  grid-template-columns: repeat(8, 20px);
+  gap: 4px;
+  padding: var(--space-sm);
+}
+.docxtor .swatch {
+  width: 20px;
+  height: 20px;
+  border-radius: 2px;
+  border: 0;
+  box-shadow: inset 0 0 0 1px var(--rule-2);
+  cursor: pointer;
+  padding: 0;
+}
+.docxtor .swatch:hover {
+  outline: 2px solid var(--ink);
+  outline-offset: 1px;
+}
+.docxtor .grid-pick {
+  display: grid;
+  grid-template-columns: repeat(8, 18px);
+  gap: 3px;
+  padding: var(--space-sm);
+}
+.docxtor .grid-pick span {
+  width: 18px;
+  height: 18px;
+  box-shadow: inset 0 0 0 1px var(--rule-2);
+  border-radius: 2px;
+}
+.docxtor .grid-pick span.hl {
+  background: var(--signal-soft);
+  box-shadow: inset 0 0 0 1px var(--signal);
+}
+.docxtor .grid-label {
+  text-align: center;
+  padding-bottom: var(--space-xs);
+}
+
+.docxtor .editor-host {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}

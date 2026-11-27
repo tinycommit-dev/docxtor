@@ -1,0 +1,32 @@
+[
+  {
+    "rule": "color-contrast",
+    "where": ".style-sample",
+    "reason": "A style's name drawn in the style's own font and colour, as the Styles pane and Manage styles show every style (Word's style gallery does the same): a picture of the author's formatting, like the page itself, which the gate leaves out. DESIGN.md (Style, theme and style set tiles) decides that a style's look comes from the document, not the interface. Word's Heading 2 blue (#4F81BD) is 4.03:1 on white and its subtle emphasis grey (#808080) 3.94:1. The name is also the button's text, in the interface font, in the style's tooltip and in the Navigation pane. Darkening the samples until they pass would misstate the style's look, so they stay as they are.",
+    "date": "2026-11-24"
+  },
+  {
+    "rule": "label-content-name-mismatch",
+    "where": "popup insert.equation",
+    "reason": "False positive. The keys of the equation palette show a typeset sample of the structure (a fraction a over b, x squared, a sum) drawn as MathML; the letters in the drawing (a, b, x, i, n) are the picture, not a label. The key's name is the structure's name (Fraction, Superscript, Sum), which is what a person says and what a screen reader reads, so WCAG 2.5.3 (label in name) has no visible label to match. The same keys without a drawing show the name as text and pass.",
+    "date": "2026-11-24"
+  },
+  {
+    "rule": "color-contrast",
+    "where": ".set-page",
+    "reason": "The style set gallery draws each set on a sheet of paper in the set's own fonts and colours (Casual's title is Word's orange #E97132, 3.05:1 on white): a picture of what the set does to a document, aria-hidden, with the set's name as the button's text. DESIGN.md (Style, theme and style set tiles) decides that a style's look comes from the document, not the interface. Same reason as the style samples.",
+    "date": "2026-11-24"
+  },
+  {
+    "rule": "label-content-name-mismatch",
+    "where": "docs search results",
+    "reason": "VitePress's own local search box, not ours: each result is a link whose aria-label is the path (\"Embedding Docxtor > Living alongside your page\") and whose visible text is the heading and an excerpt, so axe finds the visible text outside the accessible name. The label names the page and the heading, which is what a screen reader should say. Only the search box's results are excepted, in the screen named; every other page of the site passes with none. Fixing it means replacing the component (VitePress offers no option for its markup).",
+    "date": "2026-11-25"
+  },
+  {
+    "rule": "nested-interactive",
+    "where": "docs search results",
+    "reason": "VitePress's own local search box, not ours: the dialog is a div with role button that holds the search field and the result links, and each result is an option that holds a link. The keyboard and a screen reader use it as a combobox with a list (the field keeps the focus, the arrows move through the options, Enter opens one), which e2e/a11y.spec.ts checks with Control+K. Only the search box's results are excepted, in the screen named. Fixing it means replacing the component.",
+    "date": "2026-11-25"
+  }
+]

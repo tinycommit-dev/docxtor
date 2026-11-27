@@ -1,0 +1,185 @@
+// Docxtor's icons: which icon each command uses, and the extension that registers the set.
+import { DEFAULT_ICON_PACK, defineExtension, msg, type Extension, type IconContribution } from "@docxtor/extensions";
+import { CHART_ICONS } from "../ui/chart-icons";
+import { CONTROL_ICONS } from "../ui/control-icons";
+import { I } from "../ui/icons";
+
+/** Each command's icon (ids in ui/icons.ts). Kept here so the whole set reads at a glance. */
+export const COMMAND_ICONS: Record<string, string> = {
+  "edit.undo": "undo",
+  "edit.redo": "redo",
+  "edit.cut": "cut",
+  "edit.copy": "copy",
+  "edit.paste": "paste",
+  "edit.pastePlain": "pastePlain",
+  "edit.copyMarkdown": "markdown",
+  "edit.pasteMarkdown": "markdown",
+  "edit.selectAll": "selectAll",
+  "edit.selectAllMatching": "selectMatching",
+  "edit.delete": "trash",
+  "find.open": "search",
+  "format.bold": "bold",
+  "format.italic": "italic",
+  "format.underline": "underline",
+  "format.strike": "strike",
+  "format.superscript": "superscript",
+  "format.subscript": "subscript",
+  "format.smallCaps": "smallCaps",
+  "format.allCaps": "allCaps",
+  "format.sizeUp": "sizeUp",
+  "format.sizeDown": "sizeDown",
+  "format.clear": "clear",
+  "format.copyFormat": "brush",
+  "format.pasteFormat": "roller",
+  "format.normal": "paragraph",
+  "format.title": "text",
+  "format.subtitle": "text",
+  "format.heading1": "heading",
+  "format.heading2": "heading",
+  "format.heading3": "heading",
+  "format.heading4": "heading",
+  "format.heading5": "heading",
+  "format.heading6": "heading",
+  "format.quote": "quote",
+  "format.alignLeft": "alignLeft",
+  "format.alignCenter": "alignCenter",
+  "format.alignRight": "alignRight",
+  "format.justify": "alignJustify",
+  "format.bullets": "bullets",
+  "format.numbers": "numbers",
+  "format.checklist": "checklist",
+  "format.indent": "indent",
+  "format.outdent": "outdent",
+  "format.portrait": "portrait",
+  "format.landscape": "landscape",
+  "format.replaceMissingFonts": "fontMissing",
+  "insert.link": "link",
+  "insert.image": "image",
+  "insert.specialCharacters": "omega",
+  "insert.emoji": "smile",
+  "insert.table": "table",
+  "insert.textBox": "textBox",
+  "insert.shape": "shape",
+  "shape.editText": "text",
+  "shape.fill": "shapeFill",
+  "shape.outline": "shapeOutline",
+  "shape.altText": "image",
+  "shape.delete": "trash",
+  "insert.horizontalLine": "horizontalLine",
+  "insert.equation": "equation",
+  "insert.dateTime": "calendar",
+  "insert.field": "fieldBraces",
+  "view.fieldCodes": "fieldBraces",
+  "insert.bookmark": "bookmark",
+  "insert.bookmarks": "bookmarks",
+  "insert.watermark": "watermark",
+  "insert.citation": "citation",
+  "insert.bibliography": "bibliography",
+  "citation.edit": "citation",
+  "insert.pageBreak": "pageBreak",
+  "insert.columnBreak": "columnBreak",
+  "insert.sectionNextPage": "sectionBreak",
+  "insert.sectionContinuous": "sectionBreak",
+  "insert.sectionEvenPage": "sectionBreak",
+  "insert.sectionOddPage": "sectionBreak",
+  "format.bordersShading": "borders",
+  "format.columns1": "columns1",
+  "format.columns2": "columns2",
+  "format.columns3": "columns3",
+  "tools.lineNumbers": "lineNumbers",
+  "tools.hyphenation": "hyphenation",
+  "tools.spellCheck": "spellcheck",
+  "insert.footnote": "footnote",
+  "insert.endnote": "endnote",
+  "insert.noteOptions": "footnote",
+  "insert.caption": "caption",
+  "insert.crossReference": "crossReference",
+  "insert.indexEntry": "indexEntry",
+  "insert.index": "index",
+  "insert.tableOfFigures": "tableOfFigures",
+  "edit.updateFields": "refresh",
+  "insert.pageNumbers": "hash",
+  "insert.toc": "toc",
+  "insert.tocOptions": "toc",
+  "insert.removeToc": "trash",
+  "insert.updateTocPages": "refresh",
+  "insert.tocEntry": "tocEntry",
+  "insert.indexOptions": "index",
+  "insert.autoMark": "autoMark",
+  "insert.autoCaption": "caption",
+  "insert.citationPlaceholder": "placeholder",
+  "quickParts.open": "quickParts",
+  "quickParts.save": "quickPartSave",
+  "quickParts.expandAutoText": "quickParts",
+  "insert.updateToc": "refresh",
+  "insert.header": "headerFooter",
+  "insert.footer": "headerFooter",
+  "insert.linkToPrevious": "link",
+  "table.rowAbove": "rowAbove",
+  "table.rowBelow": "rowBelow",
+  "table.columnLeft": "columnLeft",
+  "table.columnRight": "columnRight",
+  "table.deleteRow": "deleteRow",
+  "table.deleteColumn": "deleteColumn",
+  "table.deleteTable": "trash",
+  "table.merge": "merge",
+  "table.split": "split",
+  "table.distributeColumns": "distribute",
+  "table.headerRow": "headerRow",
+  "table.design": "tableDesign",
+  "image.altText": "altText",
+  "image.replace": "replace",
+  "view.zoomIn": "zoomIn",
+  "view.zoomOut": "zoomOut",
+  "view.zoomReset": "actualSize",
+  "view.fitWidth": "fitWidth",
+  "view.ruler": "ruler",
+  "view.nonPrinting": "marks",
+  "view.fullScreen": "fullScreen",
+  "view.editing": "pencil",
+  "view.viewing": "eye",
+  "file.pageSetup": "pageSetup",
+  "file.language": "language",
+  "file.print": "print",
+  "file.printSelection": "print",
+  "file.saveAsTemplate": "template",
+  "tools.wordCount": "hash",
+  "tools.preferences": "settings",
+  "palette.show": "search",
+  "help.shortcuts": "keyboard",
+};
+
+/** Docxtor's icons (the chart icons come with the charts extension) as a list of icons. */
+const docxtorIcons = (): IconContribution[] => Object.entries({ ...I, ...CONTROL_ICONS }).map(([id, svg]) => ({ id, svg }));
+
+/** Docxtor's icons, as the pack every other pack falls back to. */
+export function icons(): Extension {
+  return defineExtension({
+    id: "docxtor.icons",
+    name: msg("Docxtor icons"),
+    description: msg("Docxtor's own icons for the menus and the toolbar, the pack the others fall back to."),
+    activate(ctx) {
+      ctx.iconPacks.register({ id: DEFAULT_ICON_PACK, label: msg("Docxtor"), icons: docxtorIcons() });
+    },
+  });
+}
+
+/** The stroke of Docxtor's icons, and the lighter one of the light pack. */
+const STROKE = 'stroke-width="1.75"';
+const LIGHT_STROKE = 'stroke-width="1.25"';
+
+/**
+ * A second pack that ships with Docxtor: the same drawings with a lighter line. It shows the picker working
+ * and gives people a real choice; it is made from Docxtor's icons, so it has every one of them.
+ */
+export function lightIcons(): Extension {
+  return defineExtension({
+    id: "docxtor.icons.light",
+    name: msg("Docxtor light icons"),
+    description: msg("The same icons drawn with a lighter line. Choose them under View, Icons."),
+    activate(ctx) {
+      const all = [...docxtorIcons(), ...Object.entries(CHART_ICONS).map(([id, svg]) => ({ id, svg }))];
+      ctx.iconPacks.register({ id: "docxtor-light", label: msg("Docxtor light"), icons: all.map((i) => ({ id: i.id, svg: i.svg.replace(STROKE, LIGHT_STROKE) })) });
+    },
+  });
+}

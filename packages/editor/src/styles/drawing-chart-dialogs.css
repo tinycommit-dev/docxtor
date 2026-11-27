@@ -1,0 +1,446 @@
+/* Drawing tools, chart options, shape geometry and the Edit chart dialog. */
+/* ---------- drawing tools: pens, eraser, lasso ---------- */
+.docxtor .ink-strip {
+  z-index: 40; /* over the layer that takes the strokes (30), which covers the pages and the desk */
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-xs);
+}
+.docxtor .ink-strip [hidden] {
+  display: none;
+}
+.docxtor .ink-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+.docxtor .ink-tool {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.docxtor .ink-tool-icon {
+  display: inline-flex;
+}
+.docxtor .ink-swatches {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 0 var(--space-xs);
+}
+.docxtor .ink-swatches .swatch {
+  width: 18px;
+  height: 18px;
+  flex: none;
+}
+.docxtor .ink-layer[data-tool^="erase"] {
+  cursor: none;
+}
+.docxtor .ink-eraser {
+  position: absolute;
+  display: none;
+  box-sizing: border-box;
+  border: 1.5px solid var(--ink);
+  border-radius: 50%;
+  background: rgb(255 255 255 / 0.45);
+  pointer-events: none;
+}
+.docxtor .ink-sel {
+  fill: none;
+  stroke: var(--selection);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.docxtor .ink-sel-box {
+  fill: none;
+  stroke: var(--signal);
+  stroke-width: 1px;
+  stroke-dasharray: 5 4;
+  pointer-events: none;
+}
+.docxtor .ink-loop {
+  fill: var(--signal-soft);
+  stroke: var(--signal);
+  stroke-width: 1.5px;
+  stroke-dasharray: 5 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.docxtor .ink-layer[data-tool="lasso"] {
+  cursor: crosshair;
+}
+
+/* ---------- charts: options, trendlines, error bars, bubble, stock, surface (item 54) ---------- */
+.docxtor .chart-grid.minor {
+  stroke-width: 0.5;
+}
+.docxtor .chart-tick {
+  stroke: var(--paper-chart-axis);
+  stroke-width: 1;
+}
+.docxtor .chart-trend {
+  stroke-width: 1.75px;
+  stroke-dasharray: 3 3;
+  stroke-linecap: round;
+}
+.docxtor .chart-eq {
+  font-size: 11px;
+}
+.docxtor .chart-err {
+  stroke: var(--paper-chart-text);
+  stroke-width: 1px;
+}
+.docxtor .chart-bubble {
+  paint-order: stroke;
+}
+.docxtor .chart-hilow {
+  stroke: var(--paper-chart-text);
+  stroke-width: 1px;
+}
+.docxtor .chart-close {
+  stroke: var(--paper-chart-text);
+  stroke-width: 1.5px;
+}
+.docxtor .chart-up {
+  fill: var(--paper);
+  stroke: var(--paper-chart-text);
+  stroke-width: 1px;
+}
+.docxtor .chart-down {
+  fill: var(--paper-chart-text);
+  stroke: var(--paper-chart-text);
+  stroke-width: 1px;
+}
+.docxtor .chart-floor {
+  fill: none;
+  stroke: var(--paper-chart-axis);
+  stroke-width: 1px;
+}
+.docxtor .chart-facet {
+  stroke: var(--paper);
+  stroke-width: 0.5px;
+  stroke-linejoin: round;
+}
+.docxtor .chart-wire {
+  stroke-width: 1px;
+  stroke-linejoin: round;
+}
+.docxtor .chart-contour-line {
+  stroke-width: 1.25px;
+  stroke-linecap: round;
+}
+.docxtor .chart-contour-frame {
+  stroke: var(--paper-chart-axis);
+  stroke-width: 1px;
+}
+
+/* ---------- shape geometry: curves, freeforms, edit points, connectors ---------- */
+.docxtor .obj-frame.suspended {
+  display: none !important;
+}
+/* the layer that takes the pointer while a curve, freeform, scribble or connector is drawn is the pen's layer; its preview is the selection's colour */
+.docxtor .geo-layer .geo-path {
+  fill: none;
+  stroke: var(--signal);
+  stroke-width: 1.5px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.docxtor .geo-mark {
+  fill: var(--paper);
+  stroke: var(--signal);
+  stroke-width: 1.5px;
+}
+.docxtor .geo-mark.first {
+  fill: var(--signal);
+}
+.docxtor .geo-strip {
+  max-width: min(560px, calc(100vw - 16px));
+}
+.docxtor .geo-overlay,
+.docxtor .edit-points {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+.docxtor .geo-overlay {
+  z-index: 31;
+}
+.docxtor .edit-points {
+  z-index: 28;
+}
+.docxtor .geo-site {
+  fill: var(--paper);
+  stroke: var(--signal);
+  stroke-width: 1.5px;
+}
+.docxtor .geo-site.hot {
+  fill: var(--signal);
+}
+.docxtor .geo-route {
+  fill: none;
+  stroke: var(--signal);
+  stroke-width: 1.5px;
+  stroke-dasharray: 5 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.docxtor .ep-outline {
+  fill: none;
+  stroke: var(--signal);
+  stroke-width: 1px;
+}
+.docxtor .ep-hit {
+  fill: none;
+  stroke: transparent;
+  stroke-width: 12px;
+  pointer-events: stroke;
+  cursor: crosshair;
+}
+.docxtor .ep-stem {
+  stroke: var(--signal);
+  stroke-width: 1px;
+}
+.docxtor .ep-anchor,
+.docxtor .ep-handle {
+  fill: var(--paper);
+  stroke: var(--signal);
+  stroke-width: 1.5px;
+  pointer-events: all;
+  touch-action: none;
+}
+.docxtor .ep-anchor {
+  cursor: move;
+}
+.docxtor .ep-handle {
+  cursor: crosshair;
+}
+.docxtor .ep-anchor.selected {
+  fill: var(--signal);
+}
+.docxtor .ep-strip {
+  align-items: center;
+}
+.docxtor .ep-strip .tb.on {
+  background: var(--selected);
+}
+.docxtor .cxn-end {
+  position: fixed;
+  z-index: 27;
+  margin: -5px 0 0 -5px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  cursor: crosshair;
+  pointer-events: auto;
+  touch-action: none;
+  background: var(--paper);
+  box-shadow: 0 0 0 1.5px var(--signal);
+}
+.docxtor .cxn-end.glued {
+  background: var(--signal);
+}
+
+/* ---------- the Edit chart dialog: tabs, groups, colours, galleries (item 54) ---------- */
+.docxtor .dialog.chart-dialog {
+  width: min(var(--dialog-xl), 100%);
+  max-height: var(--dialog-h-xl);
+}
+.docxtor .chart-tablist {
+  margin-bottom: var(--space-md);
+}
+.docxtor .chart-tablist button {
+  white-space: nowrap;
+}
+.docxtor .chart-panel {
+  max-height: min(520px, calc(100vh - 220px));
+  overflow: auto;
+  padding: 2px 4px 2px 2px;
+}
+.docxtor .chart-panel[hidden] {
+  display: none;
+}
+.docxtor .chart-panel:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 1px;
+}
+.docxtor .chart-pane-body {
+  display: block;
+}
+.docxtor .chart-group {
+  margin: 0 0 var(--space-lg);
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+.docxtor .chart-group > legend {
+  padding: 0;
+  margin-bottom: var(--space-sm);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+}
+.docxtor .chart-two {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 var(--space-lg);
+  align-items: end;
+}
+.docxtor .chart-two .check {
+  margin-bottom: var(--space-lg);
+  min-height: 34px;
+}
+.docxtor .chart-checks {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 var(--space-lg);
+}
+.docxtor .chart-checks .check {
+  margin-bottom: var(--space-md);
+}
+.docxtor .chart-item {
+  padding: var(--space-md);
+  margin-bottom: var(--space-md);
+  border-radius: var(--r-sm);
+  background: var(--key);
+  box-shadow: inset 0 0 0 1px var(--rule-2);
+}
+.docxtor .chart-item .field {
+  margin-bottom: var(--space-md);
+}
+.docxtor .chart-sub {
+  margin: var(--space-md) 0 var(--space-xs);
+  font-size: 11.5px;
+  color: var(--muted);
+}
+.docxtor .chart-swatches {
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  gap: 3px;
+  margin-bottom: 3px;
+}
+.docxtor .chart-swatches .swatch {
+  width: auto;
+  height: auto;
+  aspect-ratio: 1;
+  max-height: 22px;
+}
+.docxtor .chart-hexrow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+}
+.docxtor .chart-hexrow input.chart-hex {
+  width: 96px;
+  height: 30px;
+  border: 0;
+  border-radius: var(--r-sm);
+  padding: 0 8px;
+  background: var(--key);
+  color: var(--ink);
+  font: inherit;
+  box-shadow: inset 0 0 0 1px var(--rule-2);
+}
+.docxtor .chart-hexrow input.chart-hex[aria-invalid] {
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+.docxtor .chart-hexrow .btn.on {
+  box-shadow: inset 0 0 0 1px var(--ink);
+}
+.docxtor .chart-chip {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border-radius: 3px;
+  box-shadow: inset 0 0 0 1px var(--rule-2);
+}
+.docxtor .chart-gallery {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-sm);
+}
+.docxtor .chart-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 4px;
+  border: 0;
+  border-radius: var(--r-sm);
+  background: var(--key);
+  box-shadow: inset 0 0 0 1px var(--rule-2);
+  color: var(--muted);
+  font-size: 11.5px;
+  cursor: pointer;
+}
+.docxtor .chart-tile:hover {
+  background: var(--hover);
+}
+.docxtor .chart-tile[aria-pressed="true"] {
+  background: var(--selected);
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1px var(--ink);
+  font-weight: 600;
+}
+.docxtor .chart-tile:focus-visible,
+.docxtor .chart-palette:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 1px;
+}
+.docxtor .chart-thumb {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 2px;
+  background: var(--paper);
+}
+.docxtor .chart-thumb .chart-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.docxtor .chart-palette-group {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+.docxtor .chart-palette-group .chart-sub {
+  grid-column: 1 / -1;
+  margin: 0;
+}
+.docxtor .chart-palette {
+  display: flex;
+  gap: 3px;
+  padding: 6px;
+  border: 0;
+  border-radius: var(--r-sm);
+  background: var(--key);
+  box-shadow: inset 0 0 0 1px var(--rule-2);
+  cursor: pointer;
+}
+.docxtor .chart-palette:hover {
+  background: var(--hover);
+}
+.docxtor .chart-palette[aria-pressed="true"] {
+  background: var(--selected);
+  box-shadow: inset 0 0 0 1px var(--ink);
+}
+.docxtor .chart-labels-editor .check {
+  margin-bottom: var(--space-md);
+}
+.docxtor .chart-pane-body > .seg {
+  margin-bottom: var(--space-lg);
+}
+.docxtor .chart-note {
+  margin: var(--space-sm) 0 0;
+  color: var(--danger);
+  font-size: 12px;
+}
+.docxtor .chart-note:empty {
+  display: none;
+}

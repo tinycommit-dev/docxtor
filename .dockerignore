@@ -1,0 +1,25 @@
+# The Docker build context for deploy/Dockerfile (docker build -f deploy/Dockerfile .): the sources of the app and the engine, nothing built.
+.git
+.github
+.claude
+target
+**/node_modules
+web/dist
+web/dist-test
+packages/*/dist
+packages/core/wasm
+packages/editor/src/spelling/wasm
+dist
+test-results
+playwright-report
+monkey-results
+perf
+e2e
+fixtures
+docs
+examples
+tools
+about
+locales
+*.docx
+.DS_Store

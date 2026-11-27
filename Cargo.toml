@@ -1,0 +1,69 @@
+[workspace]
+resolver = "2"
+members = ["crates/docxtor-core", "crates/docxtor-wasm", "crates/docxtor-cli", "crates/docxtor-mcp", "crates/docxtor-spell"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/tinycommit-dev/docxtor"
+homepage = "https://docxtor.tinycommit.dev"
+
+[workspace.dependencies]
+docxtor-core = { path = "crates/docxtor-core", version = "0.1.0" }
+quick-xml = "0.42"
+zip = { version = "9.0.5", default-features = false, features = ["deflate-flate2-zlib-rs"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "2"
+
+[profile.release]
+opt-level = 3
+lto = true
+
+# The Word checks (scripts/validate.mjs, scripts/lo-check.mjs, `word-quick` in ci.yml) make their files with an optimised
+# build of the engine, but without the link-time optimisation of `release`, which is most of its compile time and makes
+# no difference to what is written.
+[profile.gate]
+inherits = "release"
+lto = false
+
+[profile.release.package.docxtor-wasm]
+opt-level = "s"
+
+[profile.release.package.docxtor-spell]
+opt-level = "s"
+
+# Keep debug builds small: line numbers for Docxtor's own code (enough for panics and backtraces),
+# no debug info for dependencies. Full debug info made target/ grow past 30 GB.
+[profile.dev]
+debug = "line-tables-only"
+# On a Mac, "unpacked" (the default) leaves every build's object files in target/debug/deps for the line numbers, and
+# cargo never removes the old ones: 40,000 files and several GB after a day of work. "packed" puts the line numbers in
+# one .dSYM per program and drops the object files.
+split-debuginfo = "packed"
+
+[profile.dev.package."*"]
+debug = false
+
+# The password hash runs 100000 rounds; keep it quick in test builds.
+[profile.dev.package.sha2]
+opt-level = 3
+[profile.dev.package.sha1]
+opt-level = 3
+[profile.dev.package.aes]
+opt-level = 3
+[profile.dev.package.digest]
+opt-level = 3
+[profile.dev.package.hmac]
+opt-level = 3
+
+# The engine as it ships to browsers (`npm run wasm:ship`): one codegen unit makes it smaller (13.8 MB, 4.3 MB
+# compressed, from 15.6 and 4.6) at the same speed, but the build takes about 4 minutes instead of 2.5, so the everyday
+# `npm run wasm` doesn't use it. opt-level "s" would be smaller still but typing about 20% slower, so the engine favours speed.
+# Both builds skip wasm-opt (`--no-opt` in packages/core/package.json): its inlining made a few enormous functions that
+# Chrome's optimizing compiler needed hundreds of MB to compile while the person typed, for 8% less download (measured
+# with packages/core/test/bench-typing.mts and Chrome's memory dumps).
+[profile.wasm-ship]
+inherits = "release"
+codegen-units = 1

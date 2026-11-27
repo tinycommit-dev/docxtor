@@ -1,0 +1,203 @@
+{
+  "about": "Every address outside the app that Docxtor can call, with what calls it, when, and what is sent. e2e/privacy.spec.ts records the requests of the app and the embedded editor and fails when the hosts it sees are not exactly these; PRIVACY.md says the same list in words (scripts/check-privacy.mjs, in npm test, checks that every host here is in PRIVACY.md and no other is). `when` says what it takes before the request goes out: automatic (nothing: it happens as the app or the editor is used), when you ask (you look something up), after you set it up (you choose a provider and give a key, or a Zotero library), after you turn it on (an extension that is off until you turn it on). `onByDefault` says whether the feature is switched on in a fresh install.",
+  "own": ["docxtor.tinycommit.dev"],
+  "hosts": [
+    {
+      "host": "fonts.googleapis.com",
+      "what": "Google Fonts style sheets: Inter and the look-alikes of Word's fonts for the embedded editor, and the twenty families of the Google Fonts extension in the app",
+      "calledBy": "packages/editor/src/fonts.ts (ensureFonts, the embedded editor's `fonts` option), web/src/builtins.ts (the Google Fonts extension)",
+      "when": "automatic",
+      "onByDefault": true,
+      "sends": "the font family names in the address; Google also sees your IP address, your browser and the address of the page",
+      "documentText": false,
+      "seenIn": ["font menu", "a document with a Google font", "download as PDF", "embedded editor"]
+    },
+    {
+      "host": "fonts.gstatic.com",
+      "what": "The font files the Google Fonts style sheets name",
+      "calledBy": "the browser, for the style sheets above",
+      "when": "automatic",
+      "onByDefault": true,
+      "sends": "nothing but the request for a font file; Google also sees your IP address, your browser and the address of the page",
+      "documentText": false,
+      "seenIn": ["a document with a Google font", "download as PDF", "embedded editor"]
+    },
+    {
+      "host": "en.wiktionary.org",
+      "what": "Tools, Dictionary: definitions of a word",
+      "calledBy": "web/src/ui/dictionary.ts",
+      "when": "when you ask",
+      "onByDefault": true,
+      "sends": "the word you look up (the one at the caret or in the search box)",
+      "documentText": false,
+      "seenIn": ["the dictionary"]
+    },
+    {
+      "host": "api.datamuse.com",
+      "what": "More synonyms and opposites in the thesaurus",
+      "calledBy": "web/src/thesaurus-datamuse.ts",
+      "when": "after you turn it on",
+      "onByDefault": false,
+      "sends": "the word you look up in the thesaurus",
+      "documentText": false,
+      "seenIn": ["thesaurus with Datamuse on"]
+    },
+    {
+      "host": "doi.org",
+      "what": "Citations, From a DOI or URL: the details of a paper",
+      "calledBy": "web/src/ui/citations/lookup.ts",
+      "when": "when you ask",
+      "onByDefault": true,
+      "sends": "the DOI you type",
+      "documentText": false,
+      "seenIn": ["citations: a DOI"]
+    },
+    {
+      "host": "localhost:23119",
+      "what": "Zotero on this computer (its local interface), when you open Citations, From Zotero",
+      "calledBy": "web/src/zotero.ts",
+      "when": "when you ask",
+      "onByDefault": true,
+      "sends": "the words you search for; nothing leaves your computer",
+      "documentText": false,
+      "seenIn": ["citations: Zotero on this computer"]
+    },
+    {
+      "host": "api.zotero.org",
+      "what": "Your Zotero web library",
+      "calledBy": "web/src/zotero.ts",
+      "when": "after you set it up",
+      "onByDefault": true,
+      "sends": "the words you search for, your Zotero user ID in the address and your API key in a header",
+      "documentText": false,
+      "seenIn": ["citations: the Zotero web library"]
+    },
+    {
+      "host": "api.languagetool.org",
+      "what": "Grammar checking by LanguageTool (the server in its settings; this one unless you change it)",
+      "calledBy": "web/src/languagetool.ts",
+      "when": "after you turn it on",
+      "onByDefault": false,
+      "sends": "the text of your document (paragraph by paragraph, again after edits), its language, and your LanguageTool user name and key if you gave them",
+      "documentText": true,
+      "seenIn": ["grammar with LanguageTool"]
+    },
+    {
+      "host": "api.anthropic.com",
+      "what": "The assistant, with Anthropic as the provider",
+      "calledBy": "web/src/ai/providers.ts",
+      "when": "after you set it up",
+      "onByDefault": true,
+      "sends": "your message, the document (its name, its text and the part you selected) and what the assistant's tools read, with your API key in a header",
+      "documentText": true,
+      "seenIn": ["assistant: anthropic"]
+    },
+    {
+      "host": "api.openai.com",
+      "what": "The assistant, with OpenAI as the provider",
+      "calledBy": "web/src/ai/providers.ts",
+      "when": "after you set it up",
+      "onByDefault": true,
+      "sends": "your message, the document (its name, its text and the part you selected) and what the assistant's tools read, with your API key in a header",
+      "documentText": true,
+      "seenIn": ["assistant: openai"]
+    },
+    {
+      "host": "openrouter.ai",
+      "what": "The assistant, with OpenRouter as the provider",
+      "calledBy": "web/src/ai/providers.ts",
+      "when": "after you set it up",
+      "onByDefault": true,
+      "sends": "your message, the document (its name, its text and the part you selected) and what the assistant's tools read, with your API key in a header, and the address of the page (OpenRouter asks for it)",
+      "documentText": true,
+      "seenIn": ["assistant: openrouter"]
+    },
+    {
+      "host": "generativelanguage.googleapis.com",
+      "what": "The assistant, with Google Gemini as the provider",
+      "calledBy": "web/src/ai/providers.ts",
+      "when": "after you set it up",
+      "onByDefault": true,
+      "sends": "your message, the document (its name, its text and the part you selected) and what the assistant's tools read, with your API key in a header",
+      "documentText": true,
+      "seenIn": ["assistant: gemini"]
+    },
+    {
+      "host": "api.groq.com",
+      "what": "The assistant, with Groq as the provider",
+      "calledBy": "web/src/ai/providers.ts",
+      "when": "after you set it up",
+      "onByDefault": true,
+      "sends": "your message, the document (its name, its text and the part you selected) and what the assistant's tools read, with your API key in a header",
+      "documentText": true,
+      "seenIn": ["assistant: groq"]
+    },
+    {
+      "host": "api.mistral.ai",
+      "what": "The assistant, with Mistral as the provider",
+      "calledBy": "web/src/ai/providers.ts",
+      "when": "after you set it up",
+      "onByDefault": true,
+      "sends": "your message, the document (its name, its text and the part you selected) and what the assistant's tools read, with your API key in a header",
+      "documentText": true,
+      "seenIn": ["assistant: mistral"]
+    },
+    {
+      "host": "localhost:11434",
+      "what": "The assistant, with Ollama running on this computer as the provider",
+      "calledBy": "web/src/ai/providers.ts",
+      "when": "after you set it up",
+      "onByDefault": true,
+      "sends": "your message and the document, to a program on your own computer; nothing leaves it",
+      "documentText": true,
+      "seenIn": ["assistant: ollama"]
+    },
+    {
+      "host": "localhost:1234",
+      "what": "The assistant, with LM Studio running on this computer as the provider",
+      "calledBy": "web/src/ai/providers.ts",
+      "when": "after you set it up",
+      "onByDefault": true,
+      "sends": "your message and the document, to a program on your own computer; nothing leaves it",
+      "documentText": true,
+      "seenIn": ["assistant: lmstudio"]
+    }
+  ],
+  "anyAddress": [
+    {
+      "what": "A citation style from an address you type (Citations, Style, Add a style from a CSL file)",
+      "calledBy": "web/src/ui/citations/user-styles.ts",
+      "when": "when you ask",
+      "sends": "nothing but the request for that file",
+      "seenIn": ["a citation style from an address"]
+    },
+    {
+      "what": "A picture from an address you type (Insert, Image, From a URL)",
+      "calledBy": "packages/editor/src/ui/picture-url.ts",
+      "when": "when you ask",
+      "sends": "nothing but the request for that picture, with no cookies and no referrer",
+      "seenIn": ["a picture from a web address"]
+    },
+    {
+      "what": "A picture on the web in HTML you paste (the browser fetches it so it can be kept in the document)",
+      "calledBy": "packages/editor/src/editor/paste-convert.ts",
+      "when": "when you ask",
+      "sends": "nothing but the request for that picture, with no cookies",
+      "seenIn": ["a paste with a picture on the web"]
+    },
+    {
+      "what": "A picture a document links on the web: its placeholder shows a button, Show linked pictures, and only that fetches it",
+      "calledBy": "packages/editor/src/editor/picture.ts, packages/editor/src/editor/render.ts",
+      "when": "when you ask",
+      "sends": "nothing but the request for that picture; the site that holds it sees that you opened the document",
+      "seenIn": ["a picture the document links"]
+    },
+    {
+      "what": "The assistant, with the Custom provider or a base address you give for another provider (a gateway, a proxy of your own)",
+      "calledBy": "web/src/ai/providers.ts",
+      "when": "after you set it up",
+      "sends": "what the assistant sends to any provider, with your key in a header",
+      "seenIn": ["assistant: custom address"]
+    }
+  ]
+}

@@ -1,0 +1,99 @@
+{
+ "why": "E2: an undo put back a relationship to the numbering a save had taken out",
+ "found": "2026-11-22",
+ "start": "built:plain",
+ "steps": [
+  {
+   "kind": "delete",
+   "merge": false,
+   "ops": [
+    {
+     "from": {
+      "o": 4,
+      "p": 1
+     },
+     "op": "delete",
+     "to": {
+      "o": 19,
+      "p": 1
+     }
+    },
+    {
+     "ids": [
+      1,
+      3
+     ],
+     "kind": "bullet",
+     "op": "toggle_list"
+    }
+   ],
+   "step": "apply",
+   "strict": false
+  },
+  {
+   "kind": "insert_text_box",
+   "merge": false,
+   "ops": [
+    {
+     "at": {
+      "o": 1,
+      "p": 900624
+     },
+     "floating": true,
+     "h": 40.0,
+     "op": "insert_text_box",
+     "text": "Supercalifragilisticexpialidocious_Pneumonoultramicroscopicsilicovolcanoconiosis_Floccinaucinihilipilification",
+     "w": 100.0,
+     "x": 10.0,
+     "y": 10.0
+    }
+   ],
+   "step": "apply",
+   "strict": true
+  },
+  {
+   "n": 3,
+   "step": "undo_steps"
+  },
+  {
+   "kind": "control_insert",
+   "merge": false,
+   "ops": [
+    {
+     "action": "insert",
+     "at": {
+      "o": 0,
+      "p": 1
+     },
+     "kind": "text",
+     "op": "control"
+    }
+   ],
+   "step": "apply",
+   "strict": false
+  },
+  {
+   "kind": "r:insert_citation",
+   "merge": false,
+   "ops": [
+    {
+     "at": {
+      "o": 25,
+      "p": 10
+     },
+     "op": "insert_citation",
+     "page": "12",
+     "tags": [
+      "Smi20"
+     ]
+    }
+   ],
+   "step": "apply",
+   "strict": true
+  },
+  {
+   "n": 5,
+   "step": "undo_steps"
+  }
+ ]
+}

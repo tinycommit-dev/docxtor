@@ -1,0 +1,560 @@
+/* Views: the continuous layouts (Pageless, Reading, Outline), several pages side by side, the folding marks, the
+   Outline strip, the Navigation pane, the zoom control and compact mode. Every rule is scoped under .docxtor and
+   uses the tokens of editor.css. Nothing here animates the document: the paginator measures it synchronously. */
+
+/* ---------- a continuous layout is one long sheet ---------- */
+.docxtor .canvas.continuous {
+  scrollbar-gutter: stable;
+}
+.docxtor .canvas.continuous .ruler,
+.docxtor .canvas.continuous .vruler {
+  display: none;
+}
+.docxtor .stage.cont .page-num {
+  display: none;
+}
+/* Reading: the sheet is the column, and the desk around it is quiet. */
+.docxtor .view-reading .canvas {
+  padding-top: var(--space-xl);
+}
+
+/* ---------- several pages side by side ---------- */
+.docxtor .canvas.grid-on > .zoom {
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  pointer-events: none;
+}
+.docxtor .page-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: flex-start;
+  padding: var(--space-lg) 0 var(--space-2xl);
+}
+.docxtor .page-grid[hidden] {
+  display: none;
+}
+.docxtor .pg-cell {
+  position: relative;
+  flex: none;
+  overflow: hidden;
+  background: var(--paper);
+  box-shadow: var(--paper-edge);
+  cursor: pointer;
+}
+.docxtor .pg-cell:hover {
+  box-shadow: 0 0 0 2px var(--ink);
+}
+.docxtor .pg-cell:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+/* The copy of a page: inert, clipped to the sheet, in the page's own colours. */
+.docxtor .pg-snap {
+  position: relative;
+  overflow: hidden;
+  background: var(--paper);
+  pointer-events: none;
+  user-select: none;
+}
+.docxtor .pg-snap .sheet {
+  box-shadow: none;
+}
+.docxtor .pg-snap .page-num {
+  display: none;
+}
+.docxtor .flow.pg-flow {
+  position: absolute;
+  inset: 0;
+  width: auto;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* ---------- folded away: a heading's text, a level the outline hides ---------- */
+.docxtor .flow > [data-fold] {
+  display: none !important;
+}
+
+/* ---------- the folding marks ---------- */
+.docxtor .fm-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+}
+.docxtor .fm-btn {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  background: none;
+  color: var(--paper-mark);
+  opacity: 0;
+  cursor: pointer;
+  pointer-events: auto;
+}
+.docxtor .fm-btn svg {
+  width: 14px;
+  height: 14px;
+}
+.docxtor .view-outline .fm-btn,
+.docxtor .fm-btn.hot,
+.docxtor .fm-btn.on,
+.docxtor .fm-btn:hover,
+.docxtor .fm-btn:focus-visible {
+  opacity: 1;
+}
+.docxtor .fm-btn:hover {
+  background: var(--paper-hover);
+}
+.docxtor .fm-btn:focus-visible {
+  outline: 2px solid var(--paper-ink);
+}
+.docxtor .fm-btn.folded svg {
+  transform: rotate(-90deg);
+}
+/* The Outline view marks every block: a dash for a heading with nothing under it, a small square for body text. */
+.docxtor .fm-dot {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+}
+.docxtor .fm-dot::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  background: var(--paper-mark);
+  transform: translate(-50%, -50%);
+}
+.docxtor .fm-dot.dash::before {
+  width: 8px;
+  height: 2px;
+  border-radius: 1px;
+}
+.docxtor .fm-dot.dot::before {
+  width: 5px;
+  height: 5px;
+}
+
+/* ---------- the Outline view ---------- */
+.docxtor .view-outline .flow > [data-ol="2"] { margin-left: 28px !important; }
+.docxtor .view-outline .flow > [data-ol="3"] { margin-left: 56px !important; }
+.docxtor .view-outline .flow > [data-ol="4"] { margin-left: 84px !important; }
+.docxtor .view-outline .flow > [data-ol="5"] { margin-left: 112px !important; }
+.docxtor .view-outline .flow > [data-ol="6"] { margin-left: 140px !important; }
+.docxtor .view-outline .flow > [data-ol="7"] { margin-left: 168px !important; }
+.docxtor .view-outline .flow > [data-ol="8"] { margin-left: 196px !important; }
+.docxtor .view-outline .flow > [data-ol="9"] { margin-left: 224px !important; }
+.docxtor .view-outline .flow > [data-ob="1"] { margin-left: 28px !important; }
+.docxtor .view-outline .flow > [data-ob="2"] { margin-left: 56px !important; }
+.docxtor .view-outline .flow > [data-ob="3"] { margin-left: 84px !important; }
+.docxtor .view-outline .flow > [data-ob="4"] { margin-left: 112px !important; }
+.docxtor .view-outline .flow > [data-ob="5"] { margin-left: 140px !important; }
+.docxtor .view-outline .flow > [data-ob="6"] { margin-left: 168px !important; }
+.docxtor .view-outline .flow > [data-ob="7"] { margin-left: 196px !important; }
+.docxtor .view-outline .flow > [data-ob="8"] { margin-left: 224px !important; }
+.docxtor .view-outline .flow > [data-ob="9"] { margin-left: 252px !important; }
+/* First line only: body text is cut to one line with an ellipsis. */
+.docxtor .view-outline .flow > [data-ofl] {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.docxtor .outline-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  padding: 0 var(--space-sm);
+  min-height: 40px;
+  background: var(--panel);
+  border-bottom: 1px solid var(--rule-2);
+}
+.docxtor .ob-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 6px var(--space-sm);
+}
+.docxtor .ob-group + .ob-group::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  top: 10px;
+  bottom: 10px;
+  width: 1px;
+  background: var(--rule-2);
+}
+.docxtor .ob-label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: 12px;
+  color: var(--ink-2);
+}
+.docxtor .ob-level {
+  height: 28px;
+  padding: 0 var(--space-xs);
+  border: 1px solid var(--rule-2);
+  border-radius: var(--r-sm);
+  background: var(--key);
+  color: var(--ink);
+  font: inherit;
+  font-size: 12px;
+}
+.docxtor .ob-first span {
+  font-size: 12px;
+}
+.docxtor .outline-bar .grow {
+  flex: 1;
+}
+.docxtor .outline-bar .ob-close {
+  padding: 0 var(--space-md);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink);
+  background: var(--key);
+  box-shadow: var(--key-edge);
+}
+
+/* ---------- the Navigation pane ---------- */
+.docxtor .nav-pane {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
+}
+.docxtor .nav-tabs {
+  display: flex;
+  gap: 2px;
+  padding: 0 var(--space-xs) var(--space-xs);
+}
+.docxtor .nav-tab {
+  border: 0;
+  background: none;
+  padding: 4px var(--space-sm);
+  border-radius: var(--r-sm);
+  font: inherit;
+  font-size: 12px;
+  color: var(--muted);
+  cursor: pointer;
+}
+.docxtor .nav-tab:hover {
+  background: var(--hover);
+  color: var(--ink);
+}
+.docxtor .nav-tab.on {
+  background: var(--selected);
+  color: var(--ink);
+  font-weight: 600;
+}
+.docxtor .nav-tab:focus-visible,
+.docxtor .nav-label:focus-visible,
+.docxtor .nav-toggle:focus-visible,
+.docxtor .nav-page:focus-visible,
+.docxtor .nav-result:focus-visible,
+.docxtor .nav-link:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: -2px;
+}
+.docxtor .nav-body {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding-bottom: var(--space-3xl);
+}
+.docxtor .nav-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  border-radius: var(--r-sm);
+}
+.docxtor .nav-item[hidden] {
+  display: none;
+}
+.docxtor .nav-item:hover {
+  background: var(--hover);
+}
+.docxtor .nav-item.current {
+  background: var(--selected);
+}
+.docxtor .nav-item.dragging {
+  opacity: 0.5;
+}
+.docxtor .nav-item.drop-before::before,
+.docxtor .nav-item.drop-after::after {
+  content: "";
+  position: absolute;
+  inset-inline-start: 4px;
+  inset-inline-end: 4px;
+  height: 2px;
+  background: var(--ink);
+}
+.docxtor .nav-item.drop-before::before {
+  top: -1px;
+}
+.docxtor .nav-item.drop-after::after {
+  bottom: -1px;
+}
+.docxtor .nav-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 18px;
+  height: 22px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--r-sm);
+  background: none;
+  color: var(--faint);
+  cursor: pointer;
+}
+.docxtor .nav-toggle.none {
+  visibility: hidden;
+  pointer-events: none;
+}
+.docxtor .nav-toggle svg {
+  width: 14px;
+  height: 14px;
+}
+.docxtor .nav-toggle.folded svg {
+  transform: rotate(-90deg);
+}
+.docxtor .nav-label {
+  flex: 1;
+  min-width: 0;
+  padding: 4px var(--space-xs);
+  border: 0;
+  border-radius: var(--r-sm);
+  background: none;
+  color: var(--ink-2);
+  font: inherit;
+  line-height: 1.35;
+  text-align: start;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+.docxtor .nav-item[data-level="1"] .nav-label,
+.docxtor .nav-item.current .nav-label {
+  color: var(--ink);
+  font-weight: 600;
+}
+.docxtor .nav-empty {
+  margin: 0;
+  padding: var(--space-sm);
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+.docxtor .nav-pages {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-xs) 0;
+}
+.docxtor .nav-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs);
+  border: 0;
+  border-radius: var(--r-sm);
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  font-size: 11px;
+  cursor: pointer;
+}
+.docxtor .nav-page:hover {
+  background: var(--hover);
+}
+.docxtor .pg-thumb {
+  position: relative;
+  overflow: hidden;
+  background: var(--paper);
+  box-shadow: var(--paper-edge);
+}
+.docxtor .nav-page.current .pg-thumb {
+  box-shadow: 0 0 0 2px var(--ink);
+}
+.docxtor .nav-page.current .nav-page-num {
+  color: var(--ink);
+  font-weight: 600;
+}
+.docxtor .nav-searchbar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-sm) var(--space-sm);
+}
+.docxtor .nav-search {
+  height: 28px;
+  padding: 0 var(--space-sm);
+  border: 1px solid var(--rule-2);
+  border-radius: var(--r-sm);
+  background: var(--key);
+  color: var(--ink);
+  font: inherit;
+}
+.docxtor .nav-case {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.docxtor .nav-status {
+  padding: 0 var(--space-sm) var(--space-xs);
+  font-size: 12px;
+  color: var(--muted);
+}
+.docxtor .nav-result {
+  display: block;
+  width: 100%;
+  padding: 6px var(--space-sm);
+  border: 0;
+  border-radius: var(--r-sm);
+  background: none;
+  color: var(--ink-2);
+  font: inherit;
+  font-size: 12.5px;
+  line-height: 1.4;
+  text-align: start;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+.docxtor .nav-result:hover {
+  background: var(--hover);
+}
+.docxtor .nav-result mark {
+  background: var(--selected);
+  color: var(--ink);
+  font-weight: 700;
+  border-radius: 2px;
+}
+.docxtor .nav-link {
+  margin: var(--space-sm);
+  padding: 4px var(--space-sm);
+  border: 0;
+  border-radius: var(--r-sm);
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  font-size: 12px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* ---------- the zoom control ---------- */
+.docxtor .zoom-ctl {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 0 var(--space-sm);
+  border-left: 1px solid var(--rule);
+}
+.docxtor .zoom-ctl button {
+  border: none;
+  background: none;
+  width: 22px;
+  height: 20px;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  color: var(--muted);
+}
+.docxtor .zoom-ctl button:hover {
+  background: var(--hover);
+  color: var(--ink);
+}
+.docxtor .zoom-ctl button:focus-visible,
+.docxtor .zoom-slider:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 1px;
+}
+.docxtor .zoom-ctl .zoom-readout {
+  width: auto;
+  min-width: 46px;
+  padding: 2px var(--space-xs);
+  text-align: center;
+  font: inherit;
+  font-variant-numeric: tabular-nums;
+}
+.docxtor .zoom-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 96px;
+  height: 20px;
+  margin: 0 var(--space-xs);
+  background: transparent;
+  cursor: pointer;
+}
+.docxtor .zoom-slider::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--quiet);
+}
+.docxtor .zoom-slider::-moz-range-track {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--quiet);
+}
+.docxtor .zoom-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  margin-top: -4px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--ink);
+}
+.docxtor .zoom-slider::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--ink);
+}
+.docxtor .zoom-menu {
+  display: flex;
+  flex-direction: column;
+  min-width: 168px;
+}
+.docxtor .zoom-menu .menu-sep {
+  height: 1px;
+  margin: var(--space-xs) 0;
+  background: var(--rule-2);
+}
+
+/* ---------- compact mode: the menu bar folds into its Menu button, and the toolbar is tighter ---------- */
+.docxtor.compact .menubar-fold {
+  display: inline-flex;
+}
+.docxtor.compact .menubar-top:not(.menubar-fold) {
+  display: none;
+}
+.docxtor.compact .toolbar .tgroup {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+@media (max-width: 760px) {
+  .docxtor .zoom-slider {
+    display: none;
+  }
+}

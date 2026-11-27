@@ -1,0 +1,852 @@
+/* The selection bubble, the image tool, cropping, Format picture and charts. */
+/* ---------- selection bubble ---------- */
+.docxtor .bubble {
+  position: fixed;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  padding: 3px;
+  background: var(--z-ink);
+  color: var(--z-canvas);
+  border-radius: var(--r-md);
+  box-shadow: 0 10px 24px -12px rgb(32 21 21 / 0.45);
+  animation: pop-in 0.12s var(--ease);
+}
+.docxtor .bubble .tb {
+  color: #e6e0d4;
+  height: 26px;
+  min-width: 26px;
+}
+.docxtor .bubble .tb:hover {
+  background: rgb(255 254 251 / 0.1);
+}
+.docxtor .bubble .tb.on {
+  background: rgb(255 254 251 / 0.16);
+  box-shadow: none;
+  color: var(--z-canvas);
+}
+.docxtor .bubble .sep {
+  background: rgb(255 254 251 / 0.2);
+}
+.docxtor .bubble .tb.ask {
+  color: var(--z-canvas);
+}
+
+/* ---------- image tool ---------- */
+.docxtor .img-frame,
+.docxtor .obj-frame {
+  position: fixed;
+  z-index: 25;
+  pointer-events: none;
+  box-shadow: 0 0 0 1px var(--signal);
+}
+.docxtor .img-handle,
+.docxtor .obj-handle {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  margin: -4.5px 0 0 -4.5px;
+  background: var(--paper);
+  box-shadow: 0 0 0 1.5px var(--signal);
+  pointer-events: auto;
+  touch-action: none;
+}
+.docxtor .img-handle.nw,
+.docxtor .obj-handle.nw { left: 0; top: 0; cursor: nwse-resize; }
+.docxtor .img-handle.n,
+.docxtor .obj-handle.n { left: 50%; top: 0; cursor: ns-resize; }
+.docxtor .img-handle.ne,
+.docxtor .obj-handle.ne { left: 100%; top: 0; cursor: nesw-resize; }
+.docxtor .img-handle.e,
+.docxtor .obj-handle.e { left: 100%; top: 50%; cursor: ew-resize; }
+.docxtor .img-handle.se,
+.docxtor .obj-handle.se { left: 100%; top: 100%; cursor: nwse-resize; }
+.docxtor .img-handle.s,
+.docxtor .obj-handle.s { left: 50%; top: 100%; cursor: ns-resize; }
+.docxtor .img-handle.sw,
+.docxtor .obj-handle.sw { left: 0; top: 100%; cursor: nesw-resize; }
+.docxtor .img-handle.w,
+.docxtor .obj-handle.w { left: 0; top: 50%; cursor: ew-resize; }
+.docxtor .img-strip,
+.docxtor .obj-strip {
+  position: fixed;
+  z-index: 26;
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs);
+  background: var(--panel-hi);
+  border-radius: var(--r-md);
+  box-shadow: var(--panel-shadow);
+  animation: pop-in 0.12s var(--ease);
+}
+.docxtor .img-strip .seg button,
+.docxtor .obj-strip .seg button {
+  padding: 0 8px;
+  flex: none;
+  font-size: 11.5px;
+}
+.docxtor .img-strip .seg button svg,
+.docxtor .obj-strip .seg button svg {
+  width: 14px;
+  height: 14px;
+  vertical-align: -2px;
+}
+.docxtor .img-size,
+.docxtor .obj-size {
+  padding: 0 6px;
+  color: var(--muted);
+  font-size: 11.5px;
+}
+.docxtor .img-strip {
+  flex-wrap: wrap;
+  max-width: min(900px, calc(100vw - 16px));
+}
+/* a chart has no turn handle */
+.docxtor .img-frame.no-rot .obj-handle.rot,
+.docxtor .img-frame.no-rot .rot-stem {
+  display: none;
+}
+/* cropping on the picture: the whole picture dimmed, the part that stays plain, and handles on its frame */
+.docxtor .crop-layer {
+  position: fixed;
+  z-index: 25;
+  pointer-events: none;
+  transform-origin: 50% 50%;
+}
+.docxtor .crop-dim,
+.docxtor .crop-keep {
+  position: absolute;
+  max-width: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.docxtor .crop-dim {
+  opacity: 0.35;
+}
+.docxtor .crop-win {
+  position: absolute;
+  overflow: hidden;
+  box-shadow: 0 0 0 1px var(--ink);
+  cursor: move;
+  pointer-events: auto;
+  touch-action: none;
+}
+.docxtor .crop-handle {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  margin: -7px 0 0 -7px;
+  pointer-events: auto;
+  touch-action: none;
+}
+.docxtor .crop-handle::before {
+  content: "";
+  position: absolute;
+  background: var(--ink);
+  box-shadow: 0 0 0 1px var(--paper);
+}
+.docxtor .crop-handle.n::before,
+.docxtor .crop-handle.s::before { left: 2px; right: 2px; top: 5px; height: 4px; }
+.docxtor .crop-handle.e::before,
+.docxtor .crop-handle.w::before { top: 2px; bottom: 2px; left: 5px; width: 4px; }
+.docxtor .crop-handle.nw::before,
+.docxtor .crop-handle.ne::before,
+.docxtor .crop-handle.sw::before,
+.docxtor .crop-handle.se::before { inset: 3px; background: none; box-shadow: none; border: 4px solid var(--ink); outline: 1px solid var(--paper); }
+.docxtor .crop-handle.nw::before { border-inline-end-color: transparent; border-bottom-color: transparent; }
+.docxtor .crop-handle.ne::before { border-inline-start-color: transparent; border-bottom-color: transparent; }
+.docxtor .crop-handle.sw::before { border-inline-end-color: transparent; border-top-color: transparent; }
+.docxtor .crop-handle.se::before { border-inline-start-color: transparent; border-top-color: transparent; }
+.docxtor .crop-handle.nw, .docxtor .crop-handle.se { cursor: nwse-resize; }
+.docxtor .crop-handle.ne, .docxtor .crop-handle.sw { cursor: nesw-resize; }
+.docxtor .crop-handle.n, .docxtor .crop-handle.s { cursor: ns-resize; }
+.docxtor .crop-handle.e, .docxtor .crop-handle.w { cursor: ew-resize; }
+.docxtor .crop-strip {
+  z-index: 26;
+}
+.docxtor .crop-strip .btn {
+  height: 28px;
+  padding: 0 12px;
+}
+/* the shapes a picture can be cropped to */
+.docxtor .shape-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 36px);
+  gap: var(--space-2xs);
+  padding: var(--space-xs);
+}
+.docxtor .shape-cell {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  color: var(--ink);
+  background: none;
+  border: 0;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+}
+.docxtor .shape-cell:hover {
+  background: var(--hover);
+}
+.docxtor .shape-cell.on {
+  background: var(--selected);
+}
+.docxtor .shape-cell svg {
+  width: 22px;
+  height: 22px;
+}
+/* Format picture and Position and layout */
+.docxtor .dialog.pf-dialog {
+  width: min(var(--dialog-l), 100%);
+}
+.docxtor .pf-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 250px;
+  gap: var(--space-lg);
+  max-height: min(640px, 72vh);
+  overflow: auto;
+}
+.docxtor .pf-section {
+  margin: 0 0 var(--space-md);
+}
+.docxtor .pf-section h3 {
+  margin: 0 0 var(--space-sm);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+}
+.docxtor .pf-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+}
+.docxtor .pf-custom {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
+  color: var(--muted);
+  font-size: 12px;
+}
+.docxtor .pf-custom input[type="color"] {
+  width: 36px;
+  height: 24px;
+  padding: 0;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+.docxtor .pf-row .seg button {
+  white-space: nowrap;
+}
+.docxtor .pf-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-sm);
+}
+.docxtor .pf-side {
+  position: sticky;
+  top: 0;
+  align-self: start;
+}
+.docxtor .pf-preview {
+  display: grid;
+  place-items: center;
+  min-height: 200px;
+  padding: 24px;
+  background: var(--paper);
+  border-radius: var(--r-sm);
+  box-shadow: var(--paper-edge);
+}
+.docxtor .pf-preview .pic,
+.docxtor .pf-preview img {
+  vertical-align: bottom;
+}
+.docxtor .pf-preview .pic {
+  display: inline-block;
+  position: relative;
+}
+.docxtor .pf-preview .pic-clip {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+.docxtor .pf-preview .pic-img {
+  position: absolute;
+  max-width: none;
+}
+.docxtor .pf-preview .pic-ln {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.docxtor .pf-preview .pic-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+.docxtor .pf-slider {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+.docxtor .pf-slider input[type="range"] {
+  flex: 1;
+  accent-color: var(--ink);
+}
+.docxtor .pf-slider .pf-num {
+  width: 64px;
+  flex: none;
+}
+.docxtor .pf-unit,
+.docxtor .pp-unit,
+.docxtor .pp-word {
+  color: var(--muted);
+  font-size: 12px;
+}
+.docxtor .pf-recolors {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+.docxtor .pf-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  padding: 0 10px 0 6px;
+  font: inherit;
+  font-size: 12px;
+  color: var(--ink);
+  background: var(--key);
+  border: 0;
+  border-radius: var(--r-sm);
+  box-shadow: var(--key-edge);
+  cursor: pointer;
+}
+.docxtor .pf-chip:hover {
+  background: var(--hover);
+}
+.docxtor .pf-chip.on,
+.docxtor .pf-ramp.on {
+  box-shadow: 0 0 0 2px var(--ink);
+}
+.docxtor .pf-chip-sw {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  box-shadow: 0 0 0 1px var(--rule-3);
+}
+.docxtor .pf-ramps {
+  display: grid;
+  gap: var(--space-xs);
+  margin-top: var(--space-sm);
+}
+.docxtor .pf-ramp-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+.docxtor .pf-ramp-label {
+  width: 128px;
+  flex: none;
+  color: var(--muted);
+  font-size: 12px;
+}
+.docxtor .pf-ramp {
+  width: 30px;
+  height: 20px;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  box-shadow: 0 0 0 1px var(--rule-3);
+  cursor: pointer;
+}
+.docxtor .pf-error {
+  min-height: 1.2em;
+  margin: var(--space-sm) 0 0;
+  color: var(--danger);
+  font-size: 12px;
+}
+.docxtor .pf-spacer {
+  flex: 1;
+}
+.docxtor .dialog.pp-dialog {
+  width: min(var(--dialog-m), 100%);
+}
+.docxtor .pp-group {
+  margin: 0 0 var(--space-md);
+  padding: 0;
+  border: 0;
+}
+.docxtor .pp-group legend {
+  padding: 0 0 var(--space-xs);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+}
+.docxtor .pp-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
+}
+.docxtor .pp-row.off {
+  opacity: 0.45;
+}
+.docxtor .pp-row select {
+  min-width: 0;
+  flex: 1;
+}
+.docxtor .pp-num {
+  width: 90px;
+  flex: none;
+}
+.docxtor .pp-seg {
+  flex-wrap: wrap;
+}
+.docxtor .pp-check {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: 13px;
+}
+.docxtor .pp-options {
+  display: grid;
+  gap: var(--space-xs);
+}
+.docxtor .pp-dist {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-sm);
+}
+.docxtor .pp-panel {
+  margin-top: var(--space-md);
+}
+.docxtor .pu-status.error {
+  color: var(--danger);
+}
+
+/* ---------- charts ---------- */
+.docxtor .chart-svg {
+  display: inline-block;
+  overflow: visible;
+  max-width: none;
+}
+.docxtor .chart-bg {
+  fill: var(--paper);
+}
+.docxtor .chart-t {
+  fill: var(--paper-chart-text);
+  font-size: 12px;
+  font-weight: 400;
+  font-style: normal;
+  letter-spacing: 0;
+  text-decoration: none;
+  white-space: pre;
+}
+.docxtor .chart-title {
+  font-size: 18.67px;
+}
+.docxtor .chart-axis-title {
+  font-weight: 600;
+}
+.docxtor .chart-label {
+  paint-order: stroke;
+  stroke: var(--paper);
+  stroke-width: 2.5px;
+  stroke-linejoin: round;
+}
+.docxtor .chart-label.on-dark {
+  fill: var(--paper);
+  stroke: none;
+}
+.docxtor .chart-grid {
+  stroke: var(--paper-chart-grid);
+  stroke-width: 1;
+  fill: none;
+}
+.docxtor .chart-axis {
+  stroke: var(--paper-chart-axis);
+  stroke-width: 1;
+}
+.docxtor .chart-stroke {
+  stroke-width: 2.25px;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+.docxtor .chart-area {
+  fill-opacity: 0.7;
+}
+.docxtor .chart-slice {
+  stroke: var(--paper);
+  stroke-width: 1.5px;
+}
+.docxtor .chart-marker {
+  stroke: var(--paper);
+  stroke-width: 1px;
+}
+.docxtor .chart-hit {
+  fill: transparent;
+}
+.docxtor .chart-ph {
+  fill: var(--paper);
+  stroke: var(--paper-chart-axis);
+  stroke-dasharray: 4 3;
+}
+/* The same numbers as a table, for screen readers. */
+.docxtor .chart-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* The Edit chart dialog */
+.docxtor .dialog.chart-dialog {
+  width: min(var(--dialog-xl), 100%);
+  max-height: var(--dialog-h-xl);
+}
+.docxtor .chart-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: var(--space-xl);
+  align-items: start;
+}
+@media (max-width: 860px) {
+  .docxtor .chart-body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.docxtor .chart-types {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-xs);
+}
+.docxtor .chart-type {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 4px 6px;
+  border: 0;
+  border-radius: var(--r-sm);
+  background: var(--key);
+  box-shadow: inset 0 0 0 1px var(--rule-2);
+  color: var(--muted);
+  font-size: 12px;
+  cursor: pointer;
+}
+.docxtor .chart-type:hover {
+  background: var(--hover);
+}
+.docxtor .chart-type svg {
+  width: 22px;
+  height: 22px;
+}
+.docxtor .chart-type.on {
+  background: var(--selected);
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1px var(--ink);
+  font-weight: 600;
+}
+.docxtor .chart-type:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 1px;
+}
+.docxtor .chart-grid-wrap {
+  max-height: 232px;
+  overflow: auto;
+  border-radius: var(--r-sm);
+  background: var(--key);
+  box-shadow: inset 0 0 0 1px var(--rule-2);
+}
+.docxtor .chart-table {
+  border-collapse: collapse;
+  width: max-content;
+}
+.docxtor .chart-table td:first-child .chart-cell {
+  width: 132px;
+}
+.docxtor .chart-table td .chart-cell {
+  width: 112px;
+}
+.docxtor .chart-table td:first-child .chart-cell {
+  width: 132px;
+}
+.docxtor .chart-table th,
+.docxtor .chart-table td {
+  padding: 0;
+  font-weight: 400;
+  text-align: start;
+  vertical-align: middle;
+}
+.docxtor .chart-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--panel);
+  color: var(--muted);
+  font-size: 11.5px;
+  font-weight: 500;
+}
+.docxtor .chart-table thead tr.sub th {
+  top: 31px;
+  padding: 0 8px;
+}
+.docxtor .chart-table th.corner {
+  padding: 0 8px;
+}
+.docxtor .chart-table td.rownum {
+  padding: 0 8px;
+  color: var(--faint);
+  font-variant-numeric: tabular-nums;
+}
+.docxtor .chart-table .end {
+  width: 28px;
+}
+.docxtor .chart-table td.end {
+  background: transparent;
+}
+.docxtor .field input.chart-cell,
+.docxtor .chart-cell {
+  width: 100px;
+  height: 30px;
+  border: 0;
+  border-radius: 0;
+  padding: 0 8px;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-variant-numeric: tabular-nums;
+  box-shadow: inset 0 0 0 0.5px var(--rule-2);
+}
+.docxtor .chart-cell:focus {
+  outline: 2px solid var(--ink);
+  outline-offset: -2px;
+}
+.docxtor .chart-cell[aria-invalid] {
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+.docxtor .chart-name {
+  flex: 1;
+  width: 0;
+  min-width: 0;
+  font-weight: 600;
+}
+.docxtor .chart-name-row {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+.docxtor .chart-del {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  margin: 0 3px;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  background: none;
+  color: var(--muted);
+  cursor: pointer;
+  flex: none;
+}
+.docxtor .chart-del:hover:not(:disabled) {
+  background: var(--hover);
+  color: var(--ink);
+}
+.docxtor .chart-del:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+.docxtor .chart-del svg {
+  width: 13px;
+  height: 13px;
+}
+.docxtor .chart-grid-actions {
+  display: flex;
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
+}
+.docxtor .chart-problem {
+  margin: var(--space-xs) 0 0;
+  min-height: 0;
+  color: var(--danger);
+  font-size: 12px;
+}
+.docxtor .chart-problem:empty {
+  display: none;
+}
+.docxtor .chart-row {
+  display: flex;
+  gap: var(--space-xl);
+  align-items: end;
+}
+.docxtor .chart-row .field {
+  flex: 1;
+}
+.docxtor .chart-row .check {
+  flex: 1;
+  margin-bottom: var(--space-lg);
+  height: 34px;
+}
+.docxtor .chart-side {
+  position: sticky;
+  top: 0;
+}
+.docxtor .chart-preview {
+  overflow: hidden;
+  border-radius: var(--r-sm);
+  background: var(--paper);
+  box-shadow: var(--paper-edge);
+}
+.docxtor .chart-preview .chart-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.docxtor .chart-preview .chart-ph {
+  stroke-dasharray: none;
+}
+
+/* the frame of a shape also rotates; its strip adds colours and the outline */
+.docxtor .obj-frame .obj-handle.rot,
+.docxtor .img-frame .obj-handle.rot {
+  left: 50%;
+  top: -26px;
+  border-radius: 50%;
+  cursor: grab;
+}
+.docxtor .obj-frame .rot-stem,
+.docxtor .img-frame .rot-stem {
+  position: absolute;
+  left: 50%;
+  top: -22px;
+  width: 1px;
+  height: 22px;
+  background: var(--signal);
+  pointer-events: none;
+}
+.docxtor .obj-frame.no-handles .obj-handle,
+.docxtor .obj-frame.no-handles .rot-stem {
+  display: none;
+}
+.docxtor .shape-strip {
+  flex-wrap: wrap;
+  max-width: min(780px, calc(100vw - 16px));
+}
+/* the edges of a frame drag the object */
+.docxtor .obj-frame .obj-edge,
+.docxtor .img-frame .obj-edge {
+  position: absolute;
+  pointer-events: auto;
+  cursor: move;
+  touch-action: none;
+}
+.docxtor .obj-frame .obj-edge.n,
+.docxtor .img-frame .obj-edge.n,
+.docxtor .obj-frame .obj-edge.s,
+.docxtor .img-frame .obj-edge.s {
+  left: 0;
+  right: 0;
+  height: 8px;
+  margin: -4px 0;
+}
+.docxtor .obj-frame .obj-edge.n,
+.docxtor .img-frame .obj-edge.n { top: 0; }
+.docxtor .obj-frame .obj-edge.s,
+.docxtor .img-frame .obj-edge.s { top: 100%; }
+.docxtor .obj-frame .obj-edge.e,
+.docxtor .img-frame .obj-edge.e,
+.docxtor .obj-frame .obj-edge.w,
+.docxtor .img-frame .obj-edge.w {
+  top: 0;
+  bottom: 0;
+  width: 8px;
+  margin: 0 -4px;
+}
+.docxtor .obj-frame .obj-edge.e,
+.docxtor .img-frame .obj-edge.e { left: 100%; }
+.docxtor .obj-frame .obj-edge.w,
+.docxtor .img-frame .obj-edge.w { left: 0; }
+.docxtor .shape-strip .color-chip {
+  gap: 6px;
+  font-size: 11.5px;
+}
+.docxtor .shape-strip .chip {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  box-shadow: inset 0 0 0 1px var(--rule-3);
+}
+.docxtor .shape-strip .chip.none {
+  background: linear-gradient(to top right, transparent calc(50% - 1px), var(--danger) calc(50% - 1px), var(--danger) calc(50% + 1px), transparent calc(50% + 1px)), var(--paper);
+}
+.docxtor .tb-select {
+  height: 28px;
+  border: 0;
+  border-radius: var(--r-sm);
+  padding: 0 6px;
+  background: var(--key);
+  box-shadow: inset 0 0 0 1px var(--rule-2);
+  color: var(--ink-2);
+  font-size: 11.5px;
+}
+.docxtor .tb-select:disabled {
+  opacity: 0.55;
+}
+.docxtor .custom-color input {
+  width: 28px;
+  height: 20px;
+  padding: 0;
+  border: 0;
+  background: none;
+}
+.docxtor .shape-picker {
+  width: 292px;
+  max-height: min(60vh, 480px);
+  overflow-y: auto;
+  padding-bottom: var(--space-sm);
+}
+.docxtor .shape-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 2px;
+  padding: 0 var(--space-sm);
+}
+.docxtor .shape-choice {
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: var(--r-sm);
+  background: none;
+  color: var(--ink-2);
+  cursor: pointer;
+  padding: 0;
+}
+.docxtor .shape-choice:hover {
+  background: var(--hover);
+}
+.docxtor .shape-choice:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: -2px;
+}
+.docxtor .shape-preview {
+  width: 30px;
+  height: 22px;
+  overflow: visible;
+}

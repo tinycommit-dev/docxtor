@@ -1,0 +1,215 @@
+/*
+  The documentation site wears Docxtor's design (DESIGN.md at the top of the repository): a cream canvas, warm ink, Inter, hairlines
+  instead of shadows. It is VitePress's default theme with its colour and type variables replaced, nothing more.
+  avoid-ai-design-ignore-file: SD1, T1  (Inter and the cream and orange palette are a fixed part of the design)
+
+  Tokens, the same names and values as DESIGN.md. Orange (signal) is the selection wash only; orange as text is signal-text.
+*/
+
+/* Inter, served from this site (the package the app uses): the Latin and Latin extended ranges, which cover English, Spanish and the
+   names in the documents. Nothing is fetched from another address. */
+@font-face {
+  font-family: "Inter Variable";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("../../../node_modules/@fontsource-variable/inter/files/inter-latin-ext-wght-normal.woff2") format("woff2-variations");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Inter Variable";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("../../../node_modules/@fontsource-variable/inter/files/inter-latin-wght-normal.woff2") format("woff2-variations");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+:root {
+  --dx-canvas: #fffefb;
+  --dx-canvas-soft: #f8f4f0;
+  --dx-desk: #efe9e0;
+  --dx-ink: #201515;
+  --dx-ink-mid: #36342e;
+  --dx-muted: #605d52;
+  --dx-faint: #6b675d;
+  --dx-mute: #c5c0b1;
+  --dx-signal: #ff4f00;
+  --dx-signal-text: #b03600;
+  --dx-danger: #b42318;
+  --dx-ok: #266a42;
+}
+:root.dark {
+  --dx-canvas: #201515;
+  --dx-canvas-soft: #2f2a26;
+  --dx-desk: #1a1212;
+  --dx-ink: #fffefb;
+  --dx-ink-mid: #e9e6dc;
+  --dx-muted: #c5c0b1;
+  --dx-faint: #a9a497;
+  --dx-mute: #4a443e;
+  --dx-signal-text: #ff8a5c;
+  --dx-danger: #ff8f84;
+  --dx-ok: #6fcf97;
+}
+
+:root {
+  --vp-font-family-base: "Inter Variable", "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* Surfaces: the page is the canvas, the sidebar and code sit on the soft canvas. */
+  --vp-c-bg: var(--dx-canvas);
+  --vp-c-bg-alt: var(--dx-canvas-soft);
+  --vp-c-bg-elv: var(--dx-canvas);
+  --vp-c-bg-soft: var(--dx-canvas-soft);
+
+  /* Text. */
+  --vp-c-text-1: var(--dx-ink);
+  --vp-c-text-2: var(--dx-muted);
+  --vp-c-text-3: var(--dx-faint);
+
+  /* Hairlines. */
+  --vp-c-divider: var(--dx-mute);
+  --vp-c-border: var(--dx-mute);
+  --vp-c-gutter: var(--dx-desk);
+
+  /* Brand is ink: links are ink and underlined, a hover goes to the orange that is allowed as text. */
+  --vp-c-brand-1: var(--dx-ink);
+  --vp-c-brand-2: var(--dx-signal-text);
+  --vp-c-brand-3: var(--dx-ink);
+  --vp-c-brand-soft: rgb(32 21 21 / 0.07);
+
+  --vp-c-default-1: var(--dx-mute);
+  --vp-c-default-2: var(--dx-desk);
+  --vp-c-default-3: var(--dx-faint);
+  --vp-c-default-soft: rgb(32 21 21 / 0.07);
+
+  --vp-c-tip-1: var(--dx-ok);
+  --vp-c-danger-1: var(--dx-danger);
+
+  /* Buttons are ink with canvas text. */
+  --vp-button-brand-bg: var(--dx-ink);
+  --vp-button-brand-text: var(--dx-canvas);
+  --vp-button-brand-border: var(--dx-ink);
+  --vp-button-brand-hover-bg: var(--dx-ink-mid);
+  --vp-button-brand-hover-text: var(--dx-canvas);
+  --vp-button-brand-hover-border: var(--dx-ink-mid);
+  --vp-button-brand-active-bg: var(--dx-ink-mid);
+  --vp-button-brand-active-text: var(--dx-canvas);
+  --vp-button-brand-active-border: var(--dx-ink-mid);
+
+  /* Code is a quiet inset on the soft canvas; inline code a light tint. */
+  --vp-code-block-bg: var(--dx-canvas-soft);
+  --vp-code-block-color: var(--dx-ink);
+  --vp-code-bg: rgb(32 21 21 / 0.07);
+  --vp-code-color: var(--dx-ink);
+  --vp-code-line-number-color: var(--dx-muted);
+  --vp-code-lang-color: var(--dx-muted);
+  --vp-code-line-highlight-color: rgb(32 21 21 / 0.07);
+  --vp-code-copy-code-bg: var(--dx-canvas);
+  --vp-code-copy-code-border-color: var(--dx-mute);
+
+  /* No drop shadows on the page. Only what floats over it (the search box, the menus) keeps one, soft. */
+  --vp-shadow-1: none;
+  --vp-shadow-2: none;
+  --vp-shadow-3: 0 8px 24px rgb(32 21 21 / 0.12);
+  --vp-shadow-4: 0 8px 24px rgb(32 21 21 / 0.12);
+  --vp-shadow-5: 0 8px 24px rgb(32 21 21 / 0.12);
+
+  --vp-nav-height: 56px;
+}
+:root.dark {
+  --vp-c-bg-alt: var(--dx-desk);
+  --vp-c-bg-soft: var(--dx-canvas-soft);
+  --vp-c-bg-elv: var(--dx-canvas-soft);
+  --vp-c-gutter: var(--dx-desk);
+  --vp-c-brand-soft: rgb(255 254 251 / 0.1);
+  --vp-c-default-soft: rgb(255 254 251 / 0.1);
+  --vp-button-brand-bg: var(--dx-ink);
+  --vp-button-brand-hover-bg: var(--dx-ink-mid);
+  --vp-code-block-bg: var(--dx-desk);
+  --vp-code-bg: rgb(255 254 251 / 0.1);
+  --vp-code-line-highlight-color: rgb(255 254 251 / 0.1);
+  --vp-shadow-3: 0 8px 24px rgb(0 0 0 / 0.4);
+  --vp-shadow-4: 0 8px 24px rgb(0 0 0 / 0.4);
+  --vp-shadow-5: 0 8px 24px rgb(0 0 0 / 0.4);
+}
+
+/* The selection is the one place orange is a wash. */
+::selection {
+  background: rgb(255 79 0 / 0.28);
+}
+
+/* The page. Headings are Inter at 650 with tight tracking, like the app's start screen; no rules under headings. */
+.vp-doc h1,
+.vp-doc h2,
+.vp-doc h3 {
+  font-weight: 650;
+  letter-spacing: -0.02em;
+}
+.vp-doc h1 {
+  letter-spacing: -0.03em;
+}
+.vp-doc h2 {
+  border-top: 0;
+  margin-top: 40px;
+  padding-top: 0;
+}
+.vp-doc a {
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+.vp-doc :not(pre) > code {
+  border-radius: 6px;
+}
+.vp-doc div[class*="language-"],
+.vp-doc table {
+  border-radius: 12px;
+}
+.vp-doc div[class*="language-"] {
+  border: 1px solid var(--dx-mute);
+  background: var(--vp-code-block-bg);
+}
+.vp-doc tr:nth-child(2n) {
+  background: transparent;
+}
+.vp-doc th {
+  background: var(--dx-canvas-soft);
+}
+
+/* A focus ring everyone can see: ink, two pixels. */
+:focus-visible {
+  outline: 2px solid var(--dx-ink);
+  outline-offset: 2px;
+}
+
+/* The sidebar: the current page is ink and heavier, with a soft tint; section names are quiet and in sentence case as written. */
+.VPSidebarItem.level-0 > .item .text {
+  font-weight: 650;
+}
+.VPSidebarItem .is-active > .link > .text,
+.VPSidebarItem.is-active > .item > .link > .text {
+  font-weight: 650;
+}
+.VPNavBarMenuLink.active,
+.VPNavBarMenuLink:hover {
+  color: var(--dx-ink);
+}
+.VPNavBarMenuLink.active {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 6px;
+}
+.VPNavBar .title {
+  font-weight: 650;
+  letter-spacing: -0.02em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+    scroll-behavior: auto !important;
+  }
+}

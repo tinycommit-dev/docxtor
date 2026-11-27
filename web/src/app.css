@@ -1,0 +1,2079 @@
+/* Docxtor app shell: top bar, navigator, assistant, status bar, start screen. Builds on @docxtor/editor/style.css. */
+html,
+body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+#app {
+  height: 100%;
+  background: var(--chassis);
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+}
+/* The toolbar goes while the text is read-only (Viewing, Reading): the other rows keep their places. */
+#app > .topbar {
+  grid-row: 1;
+}
+#app > .toolbar {
+  grid-row: 2;
+}
+#app > .workspace {
+  grid-row: 3;
+  min-height: 0;
+}
+#app > .statusbar {
+  grid-row: 4;
+}
+
+/* ---------- top bar ---------- */
+.docxtor .topbar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-sm) var(--space-md) var(--space-sm) var(--space-sm);
+  background: var(--chassis);
+  border-bottom: 1px solid var(--rule);
+}
+.docxtor a.wordmark {
+  color: inherit;
+  text-decoration: none;
+  border-radius: var(--r-sm);
+}
+.docxtor a.wordmark:hover {
+  color: var(--ink-2);
+}
+.docxtor .wordmark {
+  display: inline-flex;
+  align-items: center;
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: -0.035em;
+  padding: 0 var(--space-xs);
+  user-select: none;
+}
+/* the document's name and save state, with the menu bar under them */
+.docxtor .doc-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+  flex: 1;
+  padding-inline-start: var(--space-md);
+  border-inline-start: 1px solid var(--rule-2);
+}
+.docxtor .doc-head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  min-width: 0;
+  max-width: 100%;
+  height: 28px;
+}
+.docxtor .doc-meta .menubar {
+  margin-inline-start: calc(-1 * var(--space-sm));
+}
+.docxtor .doc-title {
+  font-weight: 600;
+  font-size: 14.5px;
+  border: 0;
+  background: transparent;
+  border-radius: var(--r-sm);
+  padding: 4px 6px;
+  margin-inline-start: -6px;
+  /* as wide as the name, up to a cap; long names end in an ellipsis */
+  field-sizing: content;
+  flex: 0 1 auto;
+  min-width: 3ch;
+  max-width: min(360px, 40vw);
+  text-overflow: ellipsis;
+}
+.docxtor .doc-title:hover {
+  background: var(--hover);
+}
+.docxtor .doc-title:focus {
+  outline: none;
+  background: var(--panel-hi);
+  box-shadow: 0 0 0 1px var(--rule-2);
+}
+/* save state, in words */
+.docxtor .doc-sub {
+  user-select: none;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  font-size: 12px;
+}
+.docxtor .led {
+  color: var(--muted);
+}
+/* the padlock of a document protected with a password */
+.docxtor .lock-mark {
+  display: inline-flex;
+  margin-inline-end: 5px;
+  color: var(--muted);
+}
+.docxtor .lock-mark[hidden] {
+  display: none;
+}
+.docxtor .lock-mark svg {
+  width: 13px;
+  height: 13px;
+}
+.docxtor .led.dirty {
+  color: var(--ink);
+  font-weight: 500;
+}
+.docxtor .led.error {
+  color: var(--danger);
+  font-weight: 500;
+}
+.docxtor .top-actions {
+  display: flex;
+  gap: var(--space-sm);
+  align-items: center;
+}
+/* hairline between the quiet actions and the keys */
+.docxtor .top-sep {
+  width: 1px;
+  height: 18px;
+  background: var(--rule-2);
+  margin: 0 var(--space-2xs);
+}
+
+/* keys */
+/* ---------- workspace ---------- */
+.docxtor .workspace {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  min-height: 0;
+  position: relative;
+}
+
+/* ---------- sidebar (navigator) ---------- */
+.docxtor .sidebar {
+  width: 248px;
+  background: var(--panel);
+  border-inline-end: 1px solid var(--rule-2);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+.docxtor .sidebar.closed {
+  width: 0;
+  border: none;
+}
+.docxtor .tabs {
+  display: flex;
+  border-bottom: 1px solid var(--rule-2);
+  padding: 0 var(--space-xs);
+  flex: none;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.docxtor .tabs::-webkit-scrollbar {
+  display: none;
+}
+/* A tool's tab (accessibility, dictionary) carries its close mark: a picture for the pointer; the keyboard closes the tab with Delete. */
+.docxtor .tab.closable {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding-inline-end: 2px;
+}
+.docxtor .tab-close {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  color: var(--muted);
+  cursor: pointer;
+  border-radius: var(--r-sm);
+}
+.docxtor .tab-close:hover {
+  background: var(--hover);
+  color: var(--ink);
+}
+.docxtor .tab-close svg {
+  width: 12px;
+  height: 12px;
+  stroke-width: 1.6;
+}
+.docxtor .tab {
+  flex: 1 0 auto;
+  border: 0;
+  background: none;
+  padding: 10px 4px 8px;
+  cursor: pointer;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--muted);
+  position: relative;
+}
+.docxtor .tab:hover {
+  color: var(--ink);
+}
+.docxtor .tab.on {
+  color: var(--ink);
+}
+.docxtor .tab.on::after {
+  content: "";
+  position: absolute;
+  inset-inline-start: 25%;
+  inset-inline-end: 25%;
+  bottom: -1px;
+  height: 2px;
+  background: var(--ink);
+}
+.docxtor .tab-body {
+  flex: 1;
+  overflow: auto;
+  min-height: 0;
+  padding: var(--space-sm) var(--space-xs) var(--space-3xl);
+}
+.docxtor .panel-title {
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-sm) var(--space-sm) var(--space-xs);
+}
+.docxtor .empty-note {
+  color: var(--muted);
+  padding: var(--space-sm);
+  line-height: 1.5;
+  font-size: 12px;
+}
+
+/* files */
+.docxtor .fs-root {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-sm) var(--space-sm);
+}
+.docxtor .fs-root .name {
+  flex: 1;
+  min-width: 0;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.docxtor .fs-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  border: 0;
+  background: none;
+  text-align: start;
+  padding: 4px var(--space-sm);
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+.docxtor .fs-item:hover {
+  background: var(--hover);
+  color: var(--ink);
+}
+.docxtor .fs-item.active {
+  background: var(--key);
+  box-shadow: var(--key-edge);
+  color: var(--ink);
+  font-weight: 600;
+}
+.docxtor .fs-item svg {
+  width: 14px;
+  height: 14px;
+  flex: none;
+  color: var(--faint);
+}
+.docxtor .fs-item.dir svg {
+  color: var(--muted);
+}
+.docxtor .fs-item .nm {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+}
+.docxtor .fs-item .meta {
+  font-family: var(--font-readout);
+  font-size: 11.5px;
+  color: var(--faint);
+}
+.docxtor .fs-children {
+  padding-inline-start: 12px;
+  margin-inline-start: 10px;
+  box-shadow: inset 1px 0 0 var(--rule);
+}
+.docxtor .fs-actions {
+  display: flex;
+  gap: var(--space-xs);
+  padding: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+/* history */
+.docxtor .ver {
+  display: grid;
+  grid-template-columns: 14px 1fr;
+  gap: 0 var(--space-sm);
+  padding: 6px var(--space-sm);
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  position: relative;
+}
+.docxtor .ver:hover {
+  background: var(--hover);
+}
+.docxtor .ver.sel {
+  background: var(--key);
+  box-shadow: var(--key-edge);
+}
+.docxtor .ver .pin {
+  width: 7px;
+  height: 7px;
+  margin-top: 5px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px var(--rule-3);
+  background: var(--panel-hi);
+  justify-self: center;
+}
+.docxtor .ver.ai .pin {
+  background: var(--signal);
+  box-shadow: none;
+}
+.docxtor .ver.named .pin {
+  background: var(--ink);
+  box-shadow: none;
+}
+.docxtor .ver .what {
+  font-weight: 500;
+  color: var(--ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.docxtor .ver .when {
+  grid-column: 2;
+  font-family: var(--font-readout);
+  font-size: 11.5px;
+  color: var(--faint);
+}
+.docxtor .ver-detail {
+  margin: var(--space-xs) var(--space-sm) var(--space-md);
+  padding: var(--space-sm);
+  border-radius: var(--r-md);
+  background: var(--panel-hi);
+  box-shadow: 0 0 0 1px var(--rule-2);
+}
+.docxtor .ver-detail .row {
+  display: flex;
+  gap: var(--space-xs);
+  margin-top: var(--space-sm);
+}
+
+/* ---------- AI panel: a legible log ---------- */
+.docxtor .ai-panel {
+  width: 0;
+  overflow: hidden;
+  background: var(--panel);
+  display: flex;
+  flex-direction: column;
+  transition: width 0.22s var(--ease);
+}
+.docxtor .ai-panel.open {
+  width: 400px;
+  box-shadow: -1px 0 0 var(--rule-2);
+}
+.docxtor .ai-inner {
+  width: 400px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.docxtor .ai-head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-sm) var(--space-sm) var(--space-md);
+  border-bottom: 1px solid var(--rule-2);
+}
+.docxtor .ai-head .t {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  font-size: 13.5px;
+}
+.docxtor .ai-head .t i {
+  width: 16px;
+  height: 16px;
+  background: var(--signal);
+  -webkit-mask: var(--caret-mark) center / 12px no-repeat;
+  mask: var(--caret-mark) center / 12px no-repeat;
+}
+/* working: the caret breathes, the way a cursor waits */
+.docxtor .ai-head .t.busy i {
+  animation: breathe 1.1s var(--ease) infinite alternate;
+}
+@keyframes breathe {
+  to {
+    opacity: 0.25;
+  }
+}
+.docxtor .model-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 24px;
+  padding: 0 8px;
+  border-radius: var(--r-sm);
+  border: 0;
+  background: var(--key);
+  box-shadow: inset 0 0 0 1px var(--rule-2);
+  cursor: pointer;
+  font-family: var(--font-readout);
+  font-size: 11.5px;
+  color: var(--ink-2);
+  max-width: 170px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.docxtor .model-chip i {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--ok);
+  flex: none;
+}
+.docxtor .model-chip.off i {
+  background: var(--faint);
+}
+.docxtor .ai-log {
+  flex: 1;
+  overflow: auto;
+  padding: var(--space-md) 0 var(--space-lg);
+  display: flex;
+  flex-direction: column;
+}
+.docxtor .entry {
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md) var(--space-sm) 0;
+}
+.docxtor .entry .who {
+  text-align: end;
+  padding-top: 2px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--faint);
+}
+.docxtor .entry.user .who {
+  color: var(--ink-2);
+}
+.docxtor .entry.bot .who {
+  color: var(--signal-text);
+}
+.docxtor .entry.user .body {
+  color: var(--ink);
+  font-weight: 500;
+  white-space: pre-wrap;
+}
+.docxtor .entry .sel-ref {
+  display: block;
+  font-size: 11.5px;
+  color: var(--muted);
+  font-weight: 400;
+  margin-bottom: 3px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.docxtor .entry.bot .body {
+  line-height: 1.55;
+  color: var(--ink);
+}
+.docxtor .entry.bot p {
+  margin: 0 0 var(--space-sm);
+}
+.docxtor .entry.bot p:last-child {
+  margin: 0;
+}
+.docxtor .entry.bot code {
+  font: 11px var(--font-readout);
+  background: var(--well);
+  padding: 1px 4px;
+  border-radius: 2px;
+}
+.docxtor .entry.bot ul {
+  margin: 4px 0 8px;
+  padding-inline-start: 16px;
+}
+.docxtor .entry.user {
+  border-top: 1px solid var(--rule);
+  margin-top: var(--space-xs);
+}
+.docxtor .entry.user:first-child {
+  border-top: 0;
+  margin-top: 0;
+}
+.docxtor .note-line {
+  padding: 2px var(--space-md) 2px 52px;
+  color: var(--muted);
+  font-size: 12px;
+}
+.docxtor .err-line {
+  margin: var(--space-xs) var(--space-md) var(--space-xs) 52px;
+  color: var(--danger);
+  background: var(--danger-soft);
+  border-radius: var(--r-sm);
+  padding: var(--space-sm) var(--space-md);
+  font-size: 12px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.docxtor .tool-row {
+  display: grid;
+  grid-template-columns: 44px auto 1fr;
+  gap: var(--space-sm);
+  align-items: baseline;
+  padding: 2px var(--space-md) 2px 0;
+  font-size: 11.5px;
+  color: var(--muted);
+  cursor: pointer;
+}
+.docxtor .tool-row:hover {
+  background: var(--hover);
+}
+.docxtor .tool-row .idx {
+  text-align: end;
+  font-family: var(--font-readout);
+  font-size: 11.5px;
+  color: var(--signal-text);
+}
+.docxtor .tool-row.bad .idx {
+  color: var(--danger);
+}
+.docxtor .tool-row .tname {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--ink-2);
+}
+.docxtor .tool-row .tdetail {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.docxtor .tool-out {
+  font: 12px/1.55 var(--font-readout);
+  white-space: pre-wrap;
+  background: var(--well);
+  border-radius: var(--r-sm);
+  padding: var(--space-sm) var(--space-md);
+  max-height: 220px;
+  overflow: auto;
+  margin: 2px var(--space-md) var(--space-xs) 52px;
+  color: var(--ink-2);
+}
+.docxtor .thinking {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-xs) var(--space-md) var(--space-xs) 52px;
+  color: var(--muted);
+  font-size: 12px;
+}
+.docxtor .thinking i {
+  width: 16px;
+  height: 16px;
+  background: var(--signal);
+  -webkit-mask: var(--caret-mark) center / 12px no-repeat;
+  mask: var(--caret-mark) center / 12px no-repeat;
+  animation: breathe 1.1s var(--ease) infinite alternate;
+}
+.docxtor .review {
+  margin: var(--space-sm) var(--space-md) var(--space-sm) 52px;
+  border-radius: var(--r-md);
+  background: var(--panel-hi);
+  box-shadow: 0 0 0 1px var(--rule-2);
+  overflow: hidden;
+}
+.docxtor .review-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-sm) var(--space-md);
+  border-bottom: 1px solid var(--rule);
+}
+.docxtor .review-head .count {
+  font-family: var(--font-readout);
+  font-size: 11.5px;
+  color: var(--muted);
+}
+.docxtor .review-list {
+  max-height: 260px;
+  overflow: auto;
+}
+.docxtor .review-item {
+  display: grid;
+  grid-template-columns: 58px minmax(0, 1fr);
+  gap: var(--space-sm);
+  padding: 7px var(--space-md);
+  border-bottom: 1px solid var(--rule);
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.docxtor .review-item:hover {
+  background: var(--hover);
+}
+.docxtor .review-item .tag {
+  font-family: var(--font-readout);
+  font-size: 11px;
+  padding-top: 2px;
+}
+.docxtor .review-item .tag.add {
+  color: var(--ok);
+}
+.docxtor .review-item .tag.mod {
+  color: var(--signal-text);
+}
+.docxtor .review-item .tag.del {
+  color: var(--danger);
+}
+.docxtor .review-item del {
+  color: var(--danger);
+  background: var(--danger-soft);
+  text-decoration-thickness: 1px;
+}
+.docxtor .review-item ins {
+  color: var(--ok);
+  background: var(--ok-soft);
+  text-decoration: none;
+}
+.docxtor .review-actions {
+  display: flex;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  justify-content: flex-end;
+  align-items: center;
+}
+.docxtor .review.settled {
+  opacity: 0.65;
+}
+/* empty state: a short note at the top of the log, not a centred splash */
+.docxtor .ai-empty {
+  padding: var(--space-xl) var(--space-lg) var(--space-2xl);
+}
+.docxtor .ai-empty h3 {
+  margin: 0 0 var(--space-xs);
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: -0.01em;
+}
+.docxtor .ai-empty p {
+  color: var(--muted);
+  margin: 0 0 var(--space-lg);
+  max-width: 34ch;
+  line-height: 1.55;
+}
+.docxtor .cmd-list {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--rule);
+}
+.docxtor .cmd {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-sm);
+  text-align: start;
+  border: 0;
+  border-bottom: 1px solid var(--rule);
+  background: none;
+  padding: 7px 2px;
+  cursor: pointer;
+  color: var(--ink-2);
+}
+.docxtor .cmd:hover {
+  color: var(--ink);
+  background: var(--hover);
+}
+.docxtor .composer {
+  padding: var(--space-sm) var(--space-md) var(--space-md);
+  border-top: 1px solid var(--rule-2);
+  background: var(--chassis);
+}
+.docxtor .composer-box {
+  border-radius: var(--r-md);
+  background: var(--panel-hi);
+  box-shadow: 0 0 0 1px var(--rule-2);
+  padding: var(--space-sm) var(--space-sm) var(--space-sm) var(--space-md);
+}
+.docxtor .composer-box:focus-within {
+  box-shadow: 0 0 0 1px var(--rule-3);
+}
+.docxtor .composer textarea {
+  width: 100%;
+  border: none;
+  outline: none;
+  resize: none;
+  background: transparent;
+  min-height: 22px;
+  max-height: 180px;
+  line-height: 1.5;
+}
+.docxtor .composer-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-top: var(--space-xs);
+}
+.docxtor .sel-chip {
+  font-size: 11px;
+  color: var(--ink-2);
+  background: var(--signal-soft);
+  border-radius: 2px;
+  padding: 2px 7px;
+  max-width: 230px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.docxtor .send {
+  margin-inline-start: auto;
+  height: 26px;
+  padding: 0 10px;
+  border-radius: var(--r-sm);
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  color: var(--button-ink);
+  background: var(--button);
+  font-weight: 600;
+  font-size: 12px;
+}
+.docxtor .send:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.docxtor .send svg {
+  width: 13px;
+  height: 13px;
+}
+.docxtor .send.stop {
+  background: var(--key);
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1px var(--rule-3);
+}
+.docxtor .composer-hint {
+  font-size: 12px;
+  color: var(--faint);
+  margin-top: 6px;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* ---------- status bar ---------- */
+.docxtor .statusbar {
+  user-select: none;
+  display: flex;
+  align-items: stretch;
+  height: 28px;
+  padding: 0 var(--space-xs);
+  background: var(--chassis);
+  border-top: 1px solid var(--rule);
+  color: var(--muted);
+}
+.docxtor .statusbar > * {
+  white-space: nowrap;
+}
+.docxtor .stat {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0 var(--space-sm);
+}
+.docxtor .status-key {
+  font-size: 11px;
+}
+.docxtor .statusbar .grow {
+  flex: 1;
+}
+.docxtor .stat.fidelity .readout {
+  color: var(--muted);
+}
+/* ---------- start screen: a desk of documents ---------- */
+/* Docxtor could not start (failsafe.ts): a plain page in the start screen's colours instead of a blank one. */
+.docxtor.start-failed-page {
+  position: fixed;
+  inset: 0;
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--font-ui);
+  display: grid;
+  place-items: center;
+  padding: var(--space-xl);
+}
+.docxtor .start-failed {
+  max-width: 34rem;
+}
+.docxtor .start-failed h1 {
+  font-size: 1.5rem;
+  margin: 0 0 var(--space-md);
+}
+.docxtor .start-failed p {
+  color: var(--ink-2);
+  line-height: 1.5;
+  margin: 0 0 var(--space-md);
+}
+.docxtor .start-failed .start-failed-reason {
+  font-size: 0.875rem;
+  overflow-wrap: anywhere;
+}
+.docxtor .start {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  background: var(--canvas);
+  overflow: auto;
+  padding: var(--space-3xl) var(--space-xl);
+}
+.docxtor .start-inner {
+  width: min(1080px, 100%);
+  margin: 0 auto;
+  animation: rise 0.4s var(--ease) both;
+}
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+.docxtor .start .wordmark {
+  font-size: 20px;
+  padding: 0;
+  margin-bottom: var(--space-3xl);
+}
+.docxtor .start h1 {
+  margin: 0 0 var(--space-sm);
+  font-size: clamp(28px, 3.4vw, 40px);
+  font-weight: 650;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+.docxtor .start .lede {
+  margin: 0 0 var(--space-2xl);
+  max-width: 60ch;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.55;
+}
+.docxtor .desk-tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: var(--space-xl) var(--space-lg);
+  margin-bottom: var(--space-2xl);
+}
+.docxtor .doc-tile {
+  display: flex;
+  flex-direction: column;
+  /* A button sizes itself to what it holds: every tile takes its whole column, so every page is the same size. */
+  width: 100%;
+  gap: var(--space-sm);
+  padding: 0;
+  border: 0;
+  background: none;
+  text-align: start;
+  cursor: pointer;
+  color: var(--ink);
+  min-width: 0;
+}
+/* a real page: white, letter-proportioned, with the document's own first lines */
+.docxtor .doc-tile .page {
+  aspect-ratio: 8.5 / 11;
+  background: var(--paper);
+  box-shadow: var(--paper-edge);
+  border-radius: 2px;
+  padding: 14% 12%;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  overflow: hidden;
+  font-family: Calibri, Carlito, sans-serif;
+  color: #000;
+  transition: transform 0.18s var(--ease), box-shadow 0.18s var(--ease);
+}
+.docxtor .doc-tile:hover .page,
+.docxtor .doc-tile:focus-visible .page {
+  transform: translateY(-2px);
+  box-shadow: 0 0 0 1px var(--rule-3);
+}
+.docxtor .doc-tile .pl {
+  /* A first line without spaces (a row of symbols, a long link) wraps inside the page instead of widening it. */
+  overflow-wrap: anywhere;
+  min-width: 0;
+  font-size: 5.5px;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.docxtor .doc-tile .pl.title {
+  font-size: 10px;
+  line-height: 1.15;
+  margin-bottom: 3px;
+  -webkit-line-clamp: 2;
+}
+.docxtor .doc-tile .pl.h {
+  font-size: 7px;
+  font-weight: 700;
+  margin-top: 3px;
+}
+.docxtor .doc-tile .pl.li {
+  padding-inline-start: 6px;
+}
+/* a protected document shows a padlock, not its text */
+.docxtor .doc-tile.locked .page {
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  text-align: center;
+}
+.docxtor .doc-tile.locked .page svg {
+  width: 26px;
+  height: 26px;
+  flex: none;
+}
+.docxtor .doc-tile.locked .pl.lock-note {
+  font-size: 7.5px;
+  -webkit-line-clamp: 2;
+}
+.docxtor .doc-tile .cap {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+.docxtor .doc-tile .cap b {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-weight: 600;
+  font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.docxtor .doc-tile .cap span {
+  font-size: 12px;
+  color: var(--muted);
+}
+/* a pin on each recent document: the tile is a button, so the pin sits over its corner beside it */
+.docxtor .tile-wrap {
+  position: relative;
+  min-width: 0;
+}
+.docxtor .tile-pin {
+  position: absolute;
+  top: var(--space-sm);
+  inset-inline-end: var(--space-sm);
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: var(--r-sm);
+  background: var(--canvas);
+  color: var(--muted);
+  box-shadow: 0 0 0 1px var(--rule-2);
+  cursor: pointer;
+  opacity: 0;
+}
+.docxtor .tile-wrap:hover .tile-pin,
+.docxtor .tile-wrap:focus-within .tile-pin,
+.docxtor .tile-pin.on {
+  opacity: 1;
+}
+.docxtor .tile-pin.on {
+  color: var(--ink);
+  background: var(--selected);
+}
+.docxtor .tile-pin:hover {
+  color: var(--ink);
+}
+.docxtor .tile-pin:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+.docxtor .tile-pin svg {
+  width: 15px;
+  height: 15px;
+}
+/* the blank sheet: the one place the start screen uses orange */
+.docxtor .doc-tile.new .page {
+  align-items: center;
+  justify-content: center;
+}
+.docxtor .doc-tile.new .plus {
+  width: 28px;
+  height: 28px;
+  background: var(--signal);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 4v16M4 12h16' stroke='%23000' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 4v16M4 12h16' stroke='%23000' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+/* reopening a file needs a click before the browser grants access again */
+.docxtor .resume {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+  flex-wrap: wrap;
+  margin: 0 0 var(--space-2xl);
+  padding: var(--space-md) var(--space-lg);
+  background: var(--panel-hi);
+  border-radius: var(--r-md);
+  box-shadow: 0 0 0 1px var(--rule-2);
+}
+.docxtor .resume p {
+  margin: 0;
+  flex: 1 1 320px;
+  color: var(--muted);
+}
+.docxtor .resume b {
+  color: var(--ink);
+  font-weight: 600;
+}
+.docxtor .start-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-2xl);
+}
+.docxtor .btn.start-action {
+  height: 34px;
+  padding: 0 var(--space-md);
+  box-shadow: 0 0 0 1px var(--rule-2);
+  border-radius: var(--r-md);
+  gap: var(--space-sm);
+}
+.docxtor .start .kbd {
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 4px;
+  box-shadow: inset 0 0 0 1px var(--rule-2);
+  color: var(--muted);
+  font: 500 11px/1 var(--font-ui);
+}
+.docxtor .start-foot {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+.docxtor .start.drag .desk-tiles {
+  outline: 2px dashed var(--signal);
+  outline-offset: 10px;
+  border-radius: var(--r-md);
+}
+@media (max-width: 640px) {
+  .docxtor .start {
+    padding: var(--space-xl) var(--space-lg);
+  }
+  .docxtor .desk-tiles {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
+}
+
+.docxtor .drop-veil {
+  position: fixed;
+  inset: 10px;
+  z-index: 70;
+  border: 1px dashed var(--signal);
+  border-radius: var(--r-lg);
+  background: var(--signal-soft);
+  display: grid;
+  place-items: center;
+  font-weight: 600;
+  font-size: 18px;
+  color: var(--signal-text);
+  pointer-events: none;
+}
+
+@media (max-width: 1100px) {
+  .docxtor .ai-panel.open {
+    position: absolute;
+    inset-inline-end: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 20;
+    box-shadow: -1px 0 0 var(--rule-2), -8px 0 24px -12px rgb(32 21 21 / 0.25);
+  }
+  .docxtor .sidebar:not(.closed) {
+    position: absolute;
+    inset-inline-start: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 20;
+    box-shadow: 1px 0 0 var(--rule-2), 8px 0 24px -12px rgb(32 21 21 / 0.25);
+  }
+}
+@media (max-width: 720px) {
+  .docxtor .top-actions .btn .txt,
+  .docxtor .top-sep,
+  .docxtor .doc-sub {
+    display: none;
+  }
+  .docxtor .top-actions .btn {
+    width: 32px;
+    padding: 0;
+    justify-content: center;
+  }
+  .docxtor .topbar {
+    gap: var(--space-sm);
+  }
+  .docxtor .canvas {
+    padding: 0 12px 120px;
+  }
+  .docxtor .ai-panel.open,
+  .docxtor .ai-inner {
+    width: 100vw;
+  }
+  .docxtor .statusbar .hide-sm {
+    display: none;
+  }
+  .docxtor .page-num,
+  .docxtor .sheet::before,
+  .docxtor .sheet::after {
+    display: none;
+  }
+}
+
+/* ---------- extensions dialog ---------- */
+.docxtor .ext-dialog {
+  width: min(var(--dialog-m), 100%);
+}
+.docxtor .ext-search {
+  width: 100%;
+  margin-top: var(--space-md);
+}
+.docxtor .ext-note {
+  margin-top: var(--space-sm);
+}
+.docxtor .ext-list {
+  display: flex;
+  flex-direction: column;
+  margin: 0 calc(-1 * var(--space-xl));
+}
+.docxtor .ext-row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-lg);
+  padding: var(--space-md) var(--space-xl);
+  border-top: 1px solid var(--rule);
+}
+.docxtor .ext-row:first-child {
+  border-top: 0;
+}
+.docxtor .ext-text {
+  flex: 1;
+  min-width: 0;
+}
+.docxtor .ext-name {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-sm);
+  font-weight: 600;
+  color: var(--ink);
+}
+.docxtor .ext-row.off .ext-name {
+  color: var(--muted);
+}
+.docxtor .ext-tag,
+.docxtor .ext-ver {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--faint);
+}
+.docxtor .ext-desc,
+.docxtor .ext-adds,
+.docxtor .ext-error {
+  margin: 2px 0 0;
+  font-size: 12px;
+  color: var(--muted);
+  max-width: 56ch;
+}
+.docxtor .ext-adds {
+  color: var(--faint);
+}
+.docxtor .ext-error {
+  color: var(--danger);
+}
+.docxtor .ext-fixed {
+  flex: none;
+  font-size: 12px;
+  color: var(--faint);
+  padding-top: 2px;
+}
+.docxtor .switch {
+  flex: none;
+  position: relative;
+  width: 34px;
+  height: 20px;
+  margin-top: 1px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--rule-3);
+  cursor: pointer;
+  transition: background-color 0.15s var(--ease);
+}
+.docxtor .switch::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  inset-inline-start: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--key);
+  transition: transform 0.15s var(--ease);
+}
+.docxtor .switch[aria-checked="true"] {
+  background: var(--button);
+}
+.docxtor .switch[aria-checked="true"]::after {
+  transform: translateX(14px);
+}
+.docxtor .switch:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .docxtor .switch,
+  .docxtor .switch::after {
+    transition: none;
+  }
+}
+
+/* ---------- help ---------- */
+.docxtor .help-dialog {
+  width: min(var(--dialog-l), 100%);
+}
+.docxtor .help-body {
+  display: grid;
+  grid-template-columns: 180px minmax(0, 1fr);
+  gap: var(--space-lg);
+  max-height: min(60vh, 460px);
+  overflow: auto;
+  padding-bottom: var(--space-md);
+}
+.docxtor .help-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.docxtor .help-tab {
+  border: 0;
+  background: none;
+  text-align: start;
+  padding: 6px var(--space-sm);
+  border-radius: var(--r-sm);
+  color: var(--ink-2);
+  cursor: pointer;
+}
+.docxtor .help-tab:hover {
+  background: var(--hover);
+}
+.docxtor .help-tab.on {
+  background: var(--selected);
+  color: var(--ink);
+  font-weight: 600;
+}
+.docxtor .help-page h3,
+.docxtor .help-news h3 {
+  margin: 0 0 var(--space-sm);
+  font-size: 14px;
+  font-weight: 650;
+}
+.docxtor .help-page p,
+.docxtor .help-news li {
+  margin: 0 0 var(--space-sm);
+  line-height: 1.5;
+  max-width: 60ch;
+}
+.docxtor .help-news ul {
+  margin: 0 0 var(--space-lg);
+  padding-inline-start: var(--space-lg);
+}
+.docxtor .help-links {
+  display: flex;
+  gap: var(--space-xs);
+}
+@media (max-width: 560px) {
+  .docxtor .help-body {
+    grid-template-columns: 1fr;
+  }
+  .docxtor .help-nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+}
+
+/* ---------- the trash in the Files view ---------- */
+.docxtor .trash-toggle {
+  width: 100%;
+  border: none;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  text-align: start;
+  border-radius: var(--r-sm);
+}
+.docxtor .trash-toggle:hover {
+  background: var(--hover);
+}
+.docxtor .trash-toggle[aria-expanded="true"] {
+  font-weight: 600;
+}
+.docxtor .trash-count {
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.docxtor .trash-row {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 4px var(--space-sm);
+  border-radius: var(--r-sm);
+}
+.docxtor .trash-row:hover {
+  background: var(--hover);
+}
+.docxtor .trash-name {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.docxtor .trash-name .nm {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.docxtor .trash-name .meta {
+  color: var(--muted);
+  font-size: 11.5px;
+}
+.docxtor .trash-actions {
+  display: flex;
+  gap: var(--space-xs);
+}
+
+/* ---------- templates and recovered documents ---------- */
+.docxtor .tpl-dialog,
+.docxtor .rec-dialog {
+  width: min(var(--dialog-m), 100%);
+}
+.docxtor .tpl-body {
+  max-height: min(60vh, 520px);
+  overflow: auto;
+  padding-bottom: var(--space-md);
+}
+.docxtor .tpl-section .pref-heading {
+  margin-top: var(--space-md);
+}
+.docxtor .tpl-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-sm);
+  border-radius: var(--r-sm);
+}
+.docxtor .tpl-row:hover {
+  background: var(--hover);
+}
+.docxtor .tpl-name {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+.docxtor .tpl-name span {
+  color: var(--muted);
+  font-size: 12px;
+}
+.docxtor .tpl-actions {
+  display: flex;
+  gap: var(--space-xs);
+}
+
+/* ---------- document details ---------- */
+.docxtor .dd-dialog {
+  width: min(var(--dialog-m), 100%);
+}
+.docxtor .dd-body {
+  max-height: min(72vh, 680px);
+  overflow: auto;
+  padding-bottom: var(--space-md);
+}
+.docxtor .dd-body .pref-heading:first-child {
+  margin-top: 0;
+}
+.docxtor .dd-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 var(--space-lg);
+}
+.docxtor .dd-form .field.wide {
+  grid-column: 1 / -1;
+}
+.docxtor .dd-form textarea {
+  width: 100%;
+  box-sizing: border-box;
+  font: inherit;
+  color: var(--ink);
+}
+.docxtor .dd-prop {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) 88px minmax(0, 1.4fr) auto;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
+}
+.docxtor .dd-prop-name {
+  overflow-wrap: anywhere;
+  font-weight: 600;
+}
+.docxtor .dd-prop-type {
+  color: var(--muted);
+}
+.docxtor .dd-prop input,
+.docxtor .dd-prop select {
+  height: 30px;
+  min-width: 0;
+  border: 0;
+  border-radius: var(--r-sm);
+  padding: 0 8px;
+  background: var(--key);
+  color: var(--ink);
+  font: inherit;
+  box-shadow: inset 0 0 0 1px var(--rule-2);
+}
+.docxtor .dd-prop input:focus,
+.docxtor .dd-prop select:focus {
+  outline: 1px solid var(--signal);
+}
+@media (max-width: 560px) {
+  .docxtor .dd-form {
+    grid-template-columns: 1fr;
+  }
+  .docxtor .dd-prop {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.docxtor .doc-details {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--space-sm) var(--space-lg);
+  margin: 0;
+}
+.docxtor .doc-details dt {
+  color: var(--muted);
+}
+.docxtor .doc-details dd {
+  margin: 0;
+  font-size: 13px;
+  overflow-wrap: anywhere;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- small buttons, in panels and in the compare view ---------- */
+.docxtor .btn.sm {
+  height: 26px;
+  padding: 0 10px;
+  font-size: 12px;
+}
+.docxtor .btn.sm svg {
+  width: 14px;
+  height: 14px;
+}
+.docxtor .btn.sm.up svg {
+  transform: rotate(180deg);
+}
+.docxtor .btn[aria-pressed="true"] {
+  background: var(--selected);
+}
+.docxtor .btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* ---------- accessibility check ---------- */
+.docxtor .a11y-summary {
+  margin: 0 var(--space-sm) var(--space-xs);
+  color: var(--muted);
+}
+.docxtor .a11y-group h3 {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin: var(--space-md) var(--space-sm) var(--space-xs);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.docxtor .a11y-count {
+  color: var(--muted);
+  font-weight: 500;
+}
+.docxtor .a11y-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.docxtor .a11y-issue {
+  padding: var(--space-sm);
+  border-top: 1px solid var(--rule);
+}
+.docxtor .a11y-msg {
+  margin: 0;
+  line-height: 1.45;
+  color: var(--ink);
+}
+.docxtor .a11y-detail {
+  margin: 2px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+.docxtor .a11y-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  margin-top: var(--space-sm);
+}
+.docxtor .a11y-clear {
+  padding: var(--space-sm);
+  line-height: 1.5;
+}
+.docxtor .a11y-clear p {
+  margin: var(--space-xs) 0 0;
+  color: var(--muted);
+}
+
+/* ---------- compare documents ---------- */
+.docxtor .cmp-dialog {
+  width: min(var(--dialog-xl), 100%);
+  max-height: var(--dialog-h-xl);
+  height: var(--dialog-h-xl);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.docxtor .cmp-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm) var(--space-lg);
+  padding: var(--space-sm) var(--space-xl);
+  border-bottom: 1px solid var(--rule);
+}
+.docxtor .cmp-status {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-md);
+}
+.docxtor .cmp-count {
+  font-weight: 600;
+}
+.docxtor .cmp-pos {
+  color: var(--muted);
+}
+.docxtor .cmp-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+}
+.docxtor .cmp-only {
+  margin: 0 0 0 var(--space-xs);
+  font-size: 12px;
+}
+.docxtor .cmp-body {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: var(--space-sm) var(--space-xl);
+}
+.docxtor .cmp-same {
+  margin-bottom: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--r-sm);
+  background: var(--panel);
+  color: var(--ink-2);
+}
+.docxtor .cmp-row {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr);
+  gap: var(--space-md);
+  padding: 5px var(--space-xs);
+  line-height: 1.55;
+  border-radius: var(--r-sm);
+}
+.docxtor .cmp-row.same {
+  color: var(--muted);
+}
+.docxtor .cmp-row.table {
+  background: var(--panel);
+}
+.docxtor .cmp-row.current {
+  background: var(--selected);
+}
+.docxtor .cmp-tag {
+  font-size: 12px;
+  color: var(--muted);
+  padding-top: 1px;
+}
+.docxtor .cmp-text {
+  overflow-wrap: anywhere;
+}
+.docxtor .cmp-text ins,
+.docxtor .cmp-text del {
+  text-decoration-thickness: 1px;
+}
+.docxtor .cmp-text ins {
+  color: var(--ok);
+  background: var(--ok-soft);
+  text-decoration-line: underline;
+  text-underline-offset: 2px;
+}
+.docxtor .cmp-text del {
+  color: var(--danger);
+  background: var(--danger-soft);
+  text-decoration-line: line-through;
+}
+/* words that kept their text and changed their formatting: a dotted underline and a tint, so colour is never the only sign */
+.docxtor .cmp-text .fmt {
+  background: var(--selected);
+  text-decoration-line: underline;
+  text-decoration-style: dotted;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+.docxtor .cmp-note {
+  display: block;
+  margin-top: 2px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.docxtor .cmp-who {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: 12px;
+}
+.docxtor .cmp-author {
+  width: 140px;
+  height: 28px;
+  border: 0;
+  border-radius: var(--r-sm);
+  padding: 0 var(--space-sm);
+  background: var(--key);
+  color: var(--ink);
+  font: inherit;
+  box-shadow: inset 0 0 0 1px var(--rule-2);
+}
+.docxtor .cmp-author:focus {
+  outline: 1px solid var(--signal);
+}
+@media (max-width: 560px) {
+  .docxtor .cmp-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  .docxtor .cmp-bar,
+  .docxtor .cmp-body {
+    padding-inline-start: var(--space-lg);
+    padding-inline-end: var(--space-lg);
+  }
+}
+
+/* ---------- dictionary ---------- */
+.docxtor .dict-form {
+  display: flex;
+  gap: var(--space-xs);
+  padding: 0 var(--space-sm) var(--space-sm);
+}
+.docxtor .dict-input {
+  flex: 1;
+  min-width: 0;
+  height: 28px;
+  border: 0;
+  border-radius: var(--r-sm);
+  padding: 0 10px;
+  background: var(--key);
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1px var(--rule-2);
+}
+.docxtor .dict-input:focus {
+  outline: 1px solid var(--signal);
+}
+.docxtor .dict-notice {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin: 0 var(--space-sm) var(--space-sm);
+  padding-bottom: var(--space-sm);
+  border-bottom: 1px solid var(--rule);
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.45;
+}
+.docxtor .dict-notice p {
+  flex: 1;
+  margin: 0;
+}
+.docxtor .dict-results {
+  padding: 0 var(--space-sm);
+}
+.docxtor .dict-results .empty-note {
+  padding-inline-start: 0;
+  padding-inline-end: 0;
+}
+.docxtor .dict-message {
+  margin: 0;
+  color: var(--ink-2);
+  line-height: 1.5;
+}
+.docxtor .dict-word {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+.docxtor .dict-note {
+  margin: var(--space-xs) 0 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+.docxtor .dict-lang {
+  margin: var(--space-lg) 0 0;
+  font-size: 13px;
+  font-weight: 600;
+}
+.docxtor .dict-pos {
+  margin: var(--space-md) 0 var(--space-xs);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-2);
+  font-style: italic;
+}
+.docxtor .dict-defs {
+  margin: 0;
+  padding-inline-start: 20px;
+}
+.docxtor .dict-defs li {
+  margin-bottom: 6px;
+  line-height: 1.45;
+}
+.docxtor .dict-ex {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+  font-style: italic;
+}
+.docxtor .dict-source {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: var(--space-lg) 0 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+.docxtor .dict-source a {
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+/* A replaced word reads as old then new: a hair of space between the struck and the added. */
+.docxtor .cmp-text del + ins {
+  margin-inline-start: 0.25em;
+}
+
+/* ---------- citations ---------- */
+.docxtor .cite-panel .src-block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding: 0 var(--space-sm) var(--space-md);
+}
+.docxtor .cite-panel h3 {
+  margin: 0 0 2px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.docxtor .cite-panel label {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 500;
+}
+.docxtor .src-select,
+.docxtor .src-search {
+  width: 100%;
+  height: 30px;
+  border: 0;
+  border-radius: var(--r-sm);
+  padding: 0 10px;
+  background: var(--key);
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1px var(--rule-2);
+}
+.docxtor .src-select:focus,
+.docxtor .src-search:focus {
+  outline: 1px solid var(--signal);
+}
+.docxtor .src-add {
+  justify-content: flex-start;
+  width: 100%;
+}
+.docxtor .src-help {
+  margin: var(--space-xs) 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.45;
+}
+.docxtor .src-list {
+  list-style: none;
+  margin: var(--space-xs) 0 0;
+  padding: 0;
+}
+.docxtor .src-item {
+  padding: var(--space-sm) var(--space-xs);
+  border-top: 1px solid var(--rule);
+  border-radius: var(--r-sm);
+}
+.docxtor .src-list.navigating .src-item.on {
+  background: var(--selected);
+}
+.docxtor .src-title {
+  font-weight: 600;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+.docxtor .src-detail {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.45;
+}
+.docxtor .src-actions {
+  display: flex;
+  gap: var(--space-xs);
+  margin-top: var(--space-sm);
+}
+.docxtor .src-more {
+  margin-inline-start: auto;
+  padding: 0 6px;
+}
+.docxtor .src-menu {
+  min-width: 170px;
+}
+.docxtor .src-foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  padding: var(--space-sm) var(--space-sm) 0;
+}
+.docxtor .src-dialog {
+  width: min(var(--dialog-l), 100%);
+}
+.docxtor .src-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: var(--space-md);
+}
+.docxtor .src-grid .field.wide {
+  grid-column: 1 / -1;
+}
+.docxtor .src-section {
+  margin-bottom: var(--space-lg);
+}
+.docxtor .src-section h3 {
+  margin: 0 0 var(--space-sm);
+  font-size: 13px;
+  font-weight: 600;
+}
+.docxtor .src-people {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
+}
+.docxtor .src-person {
+  display: grid;
+  grid-template-columns: 92px 124px 1fr 1fr 28px;
+  gap: var(--space-xs);
+  align-items: center;
+}
+.docxtor .src-person.organisation input {
+  grid-column: span 2;
+}
+.docxtor .src-person input,
+.docxtor .src-person select,
+.docxtor .src-dialog .field select,
+.docxtor .src-dialog textarea {
+  border: 0;
+  border-radius: var(--r-sm);
+  background: var(--key);
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1px var(--rule-2);
+}
+.docxtor .src-person input,
+.docxtor .src-person select {
+  height: 34px;
+  padding: 0 10px;
+}
+.docxtor .src-person input:focus,
+.docxtor .src-person select:focus,
+.docxtor .src-dialog textarea:focus {
+  outline: 1px solid var(--signal);
+}
+.docxtor .src-paste {
+  width: 100%;
+  padding: 8px 10px;
+  resize: vertical;
+  line-height: 1.45;
+}
+.docxtor .src-paste-actions {
+  display: flex;
+  gap: var(--space-sm);
+}
+.docxtor .src-preview {
+  max-height: 30vh;
+  overflow: auto;
+  margin-bottom: var(--space-md);
+}
+.docxtor .src-preview h3 {
+  margin: 0 0 var(--space-xs);
+  font-size: 13px;
+  font-weight: 600;
+}
+.docxtor .src-found {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  padding: var(--space-sm) 0;
+  border-top: 1px solid var(--rule);
+  cursor: pointer;
+}
+.docxtor .src-found input {
+  margin-top: 3px;
+  accent-color: var(--ink);
+}
+.docxtor .src-found-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+/* A provider's settings sit at the left of the dialog's buttons. */
+.docxtor .src-dialog .src-settings,
+.docxtor .dialog-actions .src-settings {
+  margin-inline-end: auto;
+}
+.docxtor .dialog .field label.radio {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  color: var(--ink);
+  cursor: pointer;
+}
+.docxtor .dialog .field label.radio input {
+  accent-color: var(--ink);
+}
+@media (max-width: 560px) {
+  .docxtor .src-grid {
+    grid-template-columns: 1fr;
+  }
+  .docxtor .src-person {
+    grid-template-columns: 1fr 1fr 28px;
+  }
+  .docxtor .src-person input {
+    grid-column: 1 / -1;
+  }
+}
+
+/* The shared list of sources: two lists side by side, copy buttons under each */
+.docxtor .lib-dialog {
+  width: min(var(--dialog-l), 100%);
+}
+.docxtor .lib-cols {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-lg);
+}
+.docxtor .lib-cols h3 {
+  margin: 0 0 var(--space-sm);
+}
+.docxtor .lib-list {
+  height: 260px;
+  overflow: auto;
+}
+.docxtor .lib-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
+}
+
+/* View side by side: the open document and another, half the width each */
+.docxtor .workspace.side-by-side {
+  grid-template-columns: auto minmax(0, 1fr) minmax(0, 1fr) auto;
+}
+.docxtor .sbs-pane {
+  display: flex;
+  flex-direction: column;
+  /* The pane scrolls inside itself: it must not grow the row to its document's height. */
+  min-height: 0;
+  overflow: hidden;
+  border-inline-start: 1px solid var(--rule-2);
+  background: var(--canvas);
+}
+.docxtor .sbs-head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-xs) var(--space-sm);
+  border-bottom: 1px solid var(--rule-2);
+  color: var(--ink);
+  font: 500 13px/1.3 var(--font-ui);
+}
+.docxtor .sbs-name {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.docxtor .sbs-status {
+  color: var(--muted);
+  font-size: 12px;
+}
+.docxtor .sbs-body {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}

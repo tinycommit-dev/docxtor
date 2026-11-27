@@ -1,0 +1,41 @@
+# cargo-deny settings: advisories, licences, bans and sources for every Rust crate Docxtor ships (the engine for the browser, the
+# spelling checker, the command-line program, the MCP server). CI runs `cargo deny check` in the `deps` job of ci.yml.
+#
+# The licence allow-list below is the same list as `ALLOWED` in scripts/notices.mjs and `accepted` in about/*.toml;
+# `npm run check:notices` fails when the three differ.
+
+[graph]
+targets = [
+  "wasm32-unknown-unknown",
+  "aarch64-apple-darwin",
+  "x86_64-apple-darwin",
+  "x86_64-unknown-linux-gnu",
+  "aarch64-unknown-linux-gnu",
+  "x86_64-pc-windows-msvc",
+]
+
+[advisories]
+version = 2
+yanked = "deny"
+# An advisory that cannot be fixed gets an entry here: { id = "RUSTSEC-...", reason = "why it does not reach Docxtor (date)" }.
+ignore = []
+
+[licenses]
+version = 2
+allow = [
+  "MIT", "Apache-2.0", "BSD-2-Clause", "BSD-3-Clause", "ISC", "Zlib", "MPL-2.0", "OFL-1.1", "Unicode-3.0", "CC0-1.0",
+  "Apache-2.0 WITH LLVM-exception",
+]
+# The list is shared with the notices and the other Rust checks, so one program may not use every entry.
+unused-allowed-license = "allow"
+confidence-threshold = 0.93
+
+[bans]
+multiple-versions = "allow"
+wildcards = "deny"
+
+[sources]
+unknown-registry = "deny"
+unknown-git = "deny"
+allow-registry = ["https://github.com/rust-lang/crates.io-index"]
+allow-git = []

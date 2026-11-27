@@ -1,0 +1,9 @@
+# Docxtor's gitleaks settings: the default rules, plus the reviewed false positives below.
+[extend]
+useDefault = true
+
+# Keyboard shortcuts such as keybinding: "Alt+Shift+ArrowLeft", which the generic-api-key rule takes for a key.
+[[allowlists]]
+targetRules = ["generic-api-key"]
+regexTarget = "match"
+regexes = ['''keybinding: "[A-Za-z0-9+]+"''']

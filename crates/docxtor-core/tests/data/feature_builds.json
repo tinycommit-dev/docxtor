@@ -1,0 +1,2014 @@
+[
+ {
+  "name": "new_blank",
+  "start": "blank",
+  "expect": [],
+  "steps": []
+ },
+ {
+  "name": "markdown",
+  "start": "blank",
+  "expect": [
+   "A title",
+   "A list",
+   "A quotation",
+   "code block",
+   "The note."
+  ],
+  "steps": [
+   {
+    "tool": "insert_content",
+    "args": {
+     "before": "$0",
+     "markdown": "# A title\n\nA paragraph with **bold**, *italic*, `code` and a [link](https://example.com).\n\n## A list\n\n- one\n- two\n  - nested\n\n1. first\n2. second\n\n| a | b |\n|---|---|\n| 1 | 2 |\n\n> A quotation\n\n```\ncode block\n```\n\nA note.[^1]\n\n[^1]: The note.\n"
+    }
+   },
+   {
+    "tool": "delete_blocks",
+    "args": {
+     "ids": [
+      "$last"
+     ]
+    }
+   }
+  ]
+ },
+ {
+  "name": "table",
+  "start": "text",
+  "expect": [
+   "Name",
+   "Pens",
+   "4.50"
+  ],
+  "steps": [
+   {
+    "ops": [
+     {
+      "op": "insert_table",
+      "after": "$3",
+      "rows": 3,
+      "cols": 3,
+      "data": [
+       [
+        "Name",
+        "Qty",
+        "Price"
+       ],
+       [
+        "Pens",
+        "3",
+        "1.20"
+       ],
+       [
+        "Ink",
+        "1",
+        "4.50"
+       ]
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "table_designed",
+  "start": "text",
+  "expect": [
+   "a",
+   "i"
+  ],
+  "steps": [
+   {
+    "ops": [
+     {
+      "op": "insert_table",
+      "after": "$3",
+      "rows": 3,
+      "cols": 3,
+      "data": [
+       [
+        "a",
+        "b",
+        "c"
+       ],
+       [
+        "d",
+        "e",
+        "f"
+       ],
+       [
+        "g",
+        "h",
+        "i"
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "tool": "set_table_design",
+    "args": {
+     "cell": "$4",
+     "design": "Grid Table 4 Accent 1",
+     "header_row": true,
+     "banded_rows": true
+    }
+   },
+   {
+    "tool": "edit_table",
+    "args": {
+     "action": "row_below",
+     "cell": "$4"
+    }
+   }
+  ]
+ },
+ {
+  "name": "picture",
+  "start": "text",
+  "expect": [
+   "A third paragraph, for a table after it."
+  ],
+  "steps": [
+   {
+    "ops": [
+     {
+      "op": "insert_image",
+      "at": {
+       "p": "$1",
+       "o": 5
+      },
+      "media": "$media",
+      "width": 120.0,
+      "height": 90.0,
+      "alt": "A red square"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "footnote",
+  "start": "text",
+  "expect": [
+   "A footnote.",
+   "An endnote."
+  ],
+  "steps": [
+   {
+    "tool": "insert_footnote",
+    "args": {
+     "id": "$1",
+     "after_text": "first",
+     "text": "A footnote."
+    }
+   },
+   {
+    "tool": "insert_endnote",
+    "args": {
+     "id": "$2",
+     "after_text": "second",
+     "text": "An endnote."
+    }
+   }
+  ]
+ },
+ {
+  "name": "list",
+  "start": "text",
+  "expect": [
+   "A second paragraph, for lists and notes."
+  ],
+  "steps": [
+   {
+    "ops": [
+     {
+      "op": "toggle_list",
+      "ids": [
+       "$1",
+       "$2"
+      ],
+      "kind": "bullet"
+     },
+     {
+      "op": "toggle_list",
+      "ids": [
+       "$3"
+      ],
+      "kind": "decimal"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "header_footer_field",
+  "start": "text",
+  "expect": [
+   "A running header"
+  ],
+  "steps": [
+   {
+    "tool": "set_header_footer",
+    "args": {
+     "kind": "header",
+     "text": "A running header",
+     "variant": "default"
+    }
+   },
+   {
+    "tool": "set_header_footer",
+    "args": {
+     "kind": "footer",
+     "text": "Page",
+     "variant": "default"
+    }
+   },
+   {
+    "tool": "insert_field",
+    "args": {
+     "id": "$1",
+     "after_text": "first",
+     "field": "PAGE"
+    }
+   }
+  ]
+ },
+ {
+  "name": "fields",
+  "start": "text",
+  "expect": [],
+  "steps": [
+   {
+    "tool": "insert_field",
+    "args": {
+     "id": "$1",
+     "after_text": "first",
+     "field": "DATE"
+    }
+   },
+   {
+    "tool": "insert_field",
+    "args": {
+     "id": "$2",
+     "after_text": "second",
+     "field": "NUMWORDS"
+    }
+   }
+  ]
+ },
+ {
+  "name": "equation",
+  "start": "text",
+  "expect": [
+   "Introduction to the document"
+  ],
+  "steps": [
+   {
+    "tool": "insert_equation",
+    "args": {
+     "id": "$1",
+     "after_text": "first",
+     "latex": "\\frac{a+b}{2} = x^2 + \\sqrt{y}",
+     "display": true
+    }
+   }
+  ]
+ },
+ {
+  "name": "chart",
+  "start": "text",
+  "expect": [
+   "Sales"
+  ],
+  "steps": [
+   {
+    "tool": "insert_chart",
+    "args": {
+     "after": "$3",
+     "kind": "column",
+     "title": "Sales",
+     "categories": [
+      "Q1",
+      "Q2",
+      "Q3"
+     ],
+     "series": [
+      {
+       "name": "2025",
+       "values": [
+        4.0,
+        5.5,
+        7.0
+       ]
+      },
+      {
+       "name": "2026",
+       "values": [
+        5.0,
+        6.0,
+        9.0
+       ]
+      }
+     ],
+     "legend": "bottom",
+     "data_labels": true
+    }
+   }
+  ]
+ },
+ {
+  "name": "table_of_contents",
+  "start": "text",
+  "expect": [
+   "Introduction to the document"
+  ],
+  "steps": [
+   {
+    "tool": "insert_table_of_contents",
+    "args": {
+     "after": "$0",
+     "levels": 3
+    }
+   }
+  ]
+ },
+ {
+  "name": "index",
+  "start": "text",
+  "expect": [
+   "First"
+  ],
+  "steps": [
+   {
+    "tool": "mark_index_entry",
+    "args": {
+     "id": "$1",
+     "text": "first",
+     "entry": "First"
+    }
+   },
+   {
+    "tool": "insert_index",
+    "args": {
+     "after": "$3"
+    }
+   }
+  ]
+ },
+ {
+  "name": "citation_bibliography",
+  "start": "text",
+  "expect": [
+   "A Book"
+  ],
+  "steps": [
+   {
+    "tool": "add_source",
+    "args": {
+     "tag": "Smith2020",
+     "type": "book",
+     "title": "A Book",
+     "authors": [
+      "Smith, Jane"
+     ],
+     "publisher": "Press"
+    }
+   },
+   {
+    "tool": "cite",
+    "args": {
+     "id": "$1",
+     "after_text": "first",
+     "tags": [
+      "Smith2020"
+     ]
+    }
+   },
+   {
+    "tool": "insert_bibliography",
+    "args": {
+     "after": "$3"
+    }
+   }
+  ]
+ },
+ {
+  "name": "text_box_shape",
+  "start": "text",
+  "expect": [
+   "In a box",
+   "A shape"
+  ],
+  "steps": [
+   {
+    "tool": "insert_text_box",
+    "args": {
+     "id": "$1",
+     "after_text": "first",
+     "text": "In a box",
+     "width": 150.0,
+     "height": 60.0
+    }
+   },
+   {
+    "tool": "insert_shape",
+    "args": {
+     "id": "$2",
+     "after_text": "second",
+     "shape": "rectangle",
+     "text": "A shape",
+     "fill": "FFCC00",
+     "width": 100.0,
+     "height": 50.0
+    }
+   }
+  ]
+ },
+ {
+  "name": "content_controls",
+  "start": "text",
+  "expect": [
+   "Click to type"
+  ],
+  "steps": [
+   {
+    "tool": "insert_content_control",
+    "args": {
+     "id": "$1",
+     "after_text": "first",
+     "kind": "text",
+     "alias": "Name",
+     "placeholder": "Click to type"
+    }
+   },
+   {
+    "tool": "insert_content_control",
+    "args": {
+     "id": "$2",
+     "after_text": "second",
+     "kind": "dropDown",
+     "items": [
+      "One",
+      "Two"
+     ]
+    }
+   }
+  ]
+ },
+ {
+  "name": "caption_cross_reference",
+  "start": "text",
+  "expect": [
+   "A caption"
+  ],
+  "steps": [
+   {
+    "tool": "insert_caption",
+    "args": {
+     "after": "$3",
+     "label": "Figure",
+     "text": "A caption"
+    }
+   },
+   {
+    "tool": "add_bookmark",
+    "args": {
+     "id": "$1",
+     "text": "first",
+     "name": "Here"
+    }
+   },
+   {
+    "tool": "insert_cross_reference",
+    "args": {
+     "id": "$2",
+     "after_text": "second",
+     "target": {
+      "type": "bookmark",
+      "name": "Here"
+     },
+     "show": "text"
+    }
+   }
+  ]
+ },
+ {
+  "name": "page_layout_watermark",
+  "start": "text",
+  "expect": [
+   "Introduction to the document"
+  ],
+  "steps": [
+   {
+    "tool": "set_page_layout",
+    "args": {
+     "orientation": "landscape",
+     "columns": 2,
+     "margins_pt": {
+      "top": 54.0,
+      "bottom": 54.0,
+      "left": 72.0,
+      "right": 72.0
+     },
+     "page_numbers_start": 3
+    }
+   },
+   {
+    "tool": "set_watermark",
+    "args": {
+     "text": "DRAFT"
+    }
+   }
+  ]
+ },
+ {
+  "name": "breaks_html",
+  "start": "text",
+  "expect": [
+   "From HTML",
+   "bold"
+  ],
+  "steps": [
+   {
+    "tool": "insert_break",
+    "args": {
+     "id": "$1",
+     "kind": "next_page"
+    }
+   },
+   {
+    "tool": "insert_html",
+    "args": {
+     "after": "$3",
+     "html": "<h2>From HTML</h2><p>Some <b>bold</b> and <i>italic</i> text.</p><ul><li>a</li><li>b</li></ul>"
+    }
+   }
+  ]
+ },
+ {
+  "name": "op_delete_style",
+  "start": "text",
+  "expect": [
+   "The first paragraph of the body"
+  ],
+  "steps": [
+   {
+    "ops": [
+     {
+      "op": "create_style",
+      "from": {
+       "p": "$1",
+       "o": 4
+      },
+      "to": {
+       "p": "$1",
+       "o": 9
+      },
+      "kind": "character",
+      "name": "Warn"
+     }
+    ]
+   },
+   {
+    "ops": [
+     {
+      "op": "delete_style",
+      "style": "Warn"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "op_continue_numbering",
+  "start": "text",
+  "expect": [
+   "The first paragraph of the body"
+  ],
+  "steps": [
+   {
+    "ops": [
+     {
+      "op": "set_list_style",
+      "ids": [
+       "$1"
+      ],
+      "style": "decimal"
+     }
+    ]
+   },
+   {
+    "ops": [
+     {
+      "op": "set_list_style",
+      "ids": [
+       "$3"
+      ],
+      "style": "decimal"
+     }
+    ]
+   },
+   {
+    "ops": [
+     {
+      "op": "continue_numbering",
+      "id": "$3"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "op_set_checked",
+  "start": "text",
+  "expect": [
+   "The first paragraph of the body"
+  ],
+  "steps": [
+   {
+    "ops": [
+     {
+      "op": "set_list_style",
+      "ids": [
+       "$1",
+       "$2"
+      ],
+      "style": "checklist"
+     }
+    ]
+   },
+   {
+    "ops": [
+     {
+      "op": "set_checked",
+      "ids": [
+       "$1"
+      ],
+      "checked": true
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "op_table_cells",
+  "start": "text",
+  "expect": [
+   "The first paragraph of the body"
+  ],
+  "steps": [
+   {
+    "ops": [
+     {
+      "op": "insert_table",
+      "after": "$3",
+      "rows": 3,
+      "cols": 3,
+      "data": [
+       [
+        "b",
+        "2",
+        "x"
+       ],
+       [
+        "a",
+        "1",
+        "y"
+       ],
+       [
+        "c",
+        "3",
+        "z"
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "ops": [
+     {
+      "op": "table_cells",
+      "action": {
+       "type": "merge"
+      },
+      "from": "$4",
+      "to": "$5"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "op_sort_table",
+  "start": "text",
+  "expect": [
+   "The first paragraph of the body"
+  ],
+  "steps": [
+   {
+    "ops": [
+     {
+      "op": "insert_table",
+      "after": "$3",
+      "rows": 3,
+      "cols": 3,
+      "data": [
+       [
+        "b",
+        "2",
+        "x"
+       ],
+       [
+        "a",
+        "1",
+        "y"
+       ],
+       [
+        "c",
+        "3",
+        "z"
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "ops": [
+     {
+      "op": "sort_table",
+      "from": "$4",
+      "header": false,
+      "keys": [
+       {
+        "descending": false,
+        "field": 1,
+        "type": "text"
+       }
+      ],
+      "separator": "tabs",
+      "case_sensitive": false
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "op_set_link",
+  "start": "text",
+  "expect": [
+   "The first paragraph of the body"
+  ],
+  "steps": [
+   {
+    "ops": [
+     {
+      "op": "set_link",
+      "from": {
+       "p": "$1",
+       "o": 4
+      },
+      "to": {
+       "p": "$1",
+       "o": 9
+      },
+      "url": "https://example.com/page"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "op_set_page_color",
+  "start": "text",
+  "expect": [
+   "The first paragraph of the body"
+  ],
+  "steps": [
+   {
+    "ops": [
+     {
+      "op": "set_page_color",
+      "color": "FFF2CC"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "op_remove_page_numbers",
+  "start": "text",
+  "expect": [
+   "The first paragraph of the body"
+  ],
+  "steps": [
+   {
+    "ops": [
+     {
+      "op": "insert_page_number",
+      "place": "bottom",
+      "align": "right"
+     }
+    ]
+   },
+   {
+    "ops": [
+     {
+      "op": "remove_page_numbers"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "op_set_field_result",
+  "start": "text",
+  "expect": [
+   "A third paragraph, for a table after it."
+  ],
+  "steps": [
+   {
+    "ops": [
+     {
+      "op": "insert_field",
+      "at": {
+       "p": "$1",
+       "o": 3
+      },
+      "field": "AUTHOR"
+     }
+    ]
+   },
+   {
+    "ops": [
+     {
+      "op": "set_field_result",
+      "at": {
+       "p": "$1",
+       "o": 3
+      },
+      "text": "Ada"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "op_mark_all_index_entries",
+  "start": "text",
+  "expect": [
+   "The first paragraph of the body"
+  ],
+  "steps": [
+   {
+    "ops": [
+     {
+      "op": "mark_all_index_entries",
+      "text": "paragraph",
+      "entry": "Paragraph",
+      "ignore_case": false,
+      "whole_word": false,
+      "bold": false,
+      "italic": false
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "op_auto_mark_index",
+  "start": "text",
+  "expect": [
+   "The first paragraph of the body"
+  ],
+  "steps": [
+   {
+    "ops": [
+     {
+      "op": "auto_mark_index",
+      "entries": [
+       {
+        "text": "paragraph",
+        "entry": "Para:Body",
+        "bold": false,
+        "italic": false
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "op_update_source",
+  "start": "text",
+  "expect": [
+   "The first paragraph of the body"
+  ],
+  "steps": [
+   {
+    "ops": [
+     {
+      "op": "add_source",
+      "source": {
+       "authors": [],
+       "tag": "Smi20",
+       "title": "A Source",
+       "type": "misc"
+      }
+     }
+    ]
+   },
+   {
+    "ops": [
+     {
+      "op": "update_source",
+      "tag": "Smi20",
+      "source": {
+       "authors": [],
+       "tag": "Smi20",
+       "title": "A Source, revised",
+       "type": "misc",
+       "year": "2001"
+      }
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "op_delete_source",
+  "start": "text",
+  "expect": [
+   "The first paragraph of the body"
+  ],
+  "steps": [
+   {
+    "ops": [
+     {
+      "op": "add_source",
+      "source": {
+       "authors": [],
+       "tag": "Smi20",
+       "title": "A Source",
+       "type": "misc"
+      }
+     }
+    ]
+   },
+   {
+    "ops": [
+     {
+      "op": "delete_source",
+      "tag": "Smi20",
+      "force": true
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "op_insert_citation",
+  "start": "text",
+  "expect": [
+   "A third paragraph, for a table after it."
+  ],
+  "steps": [
+   {
+    "ops": [
+     {
+      "op": "add_source",
+      "source": {
+       "authors": [],
+       "tag": "Smi20",
+       "title": "A Source",
+       "type": "misc"
+      }
+     }
+    ]
+   },
+   {
+    "ops": [
+     {
+      "op": "insert_citation",
+      "at": {
+       "p": "$1",
+       "o": 4
+      },
+      "tags": [
+       "Smi20"
+      ],
+      "page": "23"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "op_edit_citation",
+  "start": "text",
+  "expect": [
+   "A third paragraph, for a table after it."
+  ],
+  "steps": [
+   {
+    "ops": [
+     {
+      "op": "add_source",
+      "source": {
+       "authors": [],
+       "tag": "Smi20",
+       "title": "A Source",
+       "type": "misc"
+      }
+     }
+    ]
+   },
+   {
+    "ops": [
+     {
+      "op": "insert_citation",
+      "at": {
+       "p": "$1",
+       "o": 4
+      },
+      "tags": [
+       "Smi20"
+      ]
+     }
+    ]
+   },
+   {
+    "ops": [
+     {
+      "op": "edit_citation",
+      "at": {
+       "p": "$1",
+       "o": 4
+      },
+      "page": "9",
+      "tags": [
+       "Smi20"
+      ],
+      "suppress_year": true
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "op_remove_citation",
+  "start": "text",
+  "expect": [
+   "The first paragraph of the body"
+  ],
+  "steps": [
+   {
+    "ops": [
+     {
+      "op": "add_source",
+      "source": {
+       "authors": [],
+       "tag": "Smi20",
+       "title": "A Source",
+       "type": "misc"
+      }
+     }
+    ]
+   },
+   {
+    "ops": [
+     {
+      "op": "insert_citation",
+      "at": {
+       "p": "$1",
+       "o": 4
+      },
+      "tags": [
+       "Smi20"
+      ]
+     }
+    ]
+   },
+   {
+    "ops": [
+     {
+      "op": "remove_citation",
+      "at": {
+       "p": "$1",
+       "o": 4
+      }
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "op_update_bibliography",
+  "start": "text",
+  "expect": [
+   "The first paragraph of the body"
+  ],
+  "steps": [
+   {
+    "ops": [
+     {
+      "op": "add_source",
+      "source": {
+       "authors": [],
+       "tag": "Smi20",
+       "title": "A Source",
+       "type": "misc"
+      }
+     }
+    ]
+   },
+   {
+    "tool": "insert_bibliography",
+    "args": {
+     "after": "$3"
+    }
+   },
+   {
+    "ops": [
+     {
+      "op": "add_source",
+      "source": {
+       "authors": [],
+       "tag": "Lee21",
+       "title": "Another",
+       "type": "misc"
+      }
+     }
+    ]
+   },
+   {
+    "ops": [
+     {
+      "op": "update_bibliography"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "op_set_shape",
+  "start": "text",
+  "expect": [
+   "The first paragraph of the body"
+  ],
+  "steps": [
+   {
+    "ops": [
+     {
+      "op": "insert_shape",
+      "at": {
+       "p": "$1",
+       "o": 0
+      },
+      "geometry": "rect",
+      "floating": true,
+      "w": 80.0,
+      "h": 40.0,
+      "x": 10.0,
+      "y": 20.0,
+      "fill": "FFE699"
+     }
+    ]
+   },
+   {
+    "ops": [
+     {
+      "op": "set_shape",
+      "at": {
+       "p": "$1",
+       "o": 0
+      },
+      "alt": "A box",
+      "rot": 45.0,
+      "x": 30.0,
+      "y": 40.0
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "op_set_object_order",
+  "start": "text",
+  "expect": [
+   "The first paragraph of the body"
+  ],
+  "steps": [
+   {
+    "ops": [
+     {
+      "op": "insert_shape",
+      "at": {
+       "p": "$1",
+       "o": 0
+      },
+      "geometry": "rect",
+      "floating": true,
+      "w": 80.0,
+      "h": 40.0,
+      "x": 10.0,
+      "y": 20.0,
+      "fill": "FFE699"
+     },
+     {
+      "op": "insert_shape",
+      "at": {
+       "p": "$1",
+       "o": 1
+      },
+      "geometry": "rect",
+      "floating": true,
+      "w": 80.0,
+      "h": 40.0,
+      "x": 60.0,
+      "y": 20.0,
+      "fill": "FFE699"
+     }
+    ]
+   },
+   {
+    "ops": [
+     {
+      "op": "set_object_order",
+      "at": {
+       "p": "$1",
+       "o": 1
+      },
+      "order": "back"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "op_set_behind_text",
+  "start": "text",
+  "expect": [
+   "The first paragraph of the body"
+  ],
+  "steps": [
+   {
+    "ops": [
+     {
+      "op": "insert_shape",
+      "at": {
+       "p": "$1",
+       "o": 0
+      },
+      "geometry": "rect",
+      "floating": true,
+      "w": 80.0,
+      "h": 40.0,
+      "x": 10.0,
+      "y": 20.0,
+      "fill": "FFE699"
+     }
+    ]
+   },
+   {
+    "ops": [
+     {
+      "op": "set_behind_text",
+      "at": {
+       "p": "$1",
+       "o": 0
+      },
+      "behind": true
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "op_group_ungroup_shapes",
+  "start": "text",
+  "expect": [
+   "The first paragraph of the body"
+  ],
+  "steps": [
+   {
+    "ops": [
+     {
+      "op": "insert_shape",
+      "at": {
+       "p": "$1",
+       "o": 0
+      },
+      "geometry": "rect",
+      "floating": true,
+      "w": 80.0,
+      "h": 40.0,
+      "x": 10.0,
+      "y": 20.0,
+      "fill": "FFE699"
+     },
+     {
+      "op": "insert_shape",
+      "at": {
+       "p": "$1",
+       "o": 1
+      },
+      "geometry": "rect",
+      "floating": true,
+      "w": 80.0,
+      "h": 40.0,
+      "x": 100.0,
+      "y": 20.0,
+      "fill": "FFE699"
+     }
+    ]
+   },
+   {
+    "ops": [
+     {
+      "op": "group_shapes",
+      "at": [
+       {
+        "p": "$1",
+        "o": 0
+       },
+       {
+        "p": "$1",
+        "o": 1
+       }
+      ],
+      "offsets": [
+       [
+        100.0,
+        40.0
+       ],
+       [
+        180.0,
+        90.0
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "ops": [
+     {
+      "op": "ungroup_shape",
+      "at": {
+       "p": "$1",
+       "o": 0
+      }
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "op_set_shape_path",
+  "start": "text",
+  "expect": [
+   "The first paragraph of the body"
+  ],
+  "steps": [
+   {
+    "ops": [
+     {
+      "op": "insert_freeform",
+      "at": {
+       "p": "$1",
+       "o": 0
+      },
+      "closed": true,
+      "floating": true,
+      "smooth": false,
+      "cmds": [
+       {
+        "t": "M",
+        "pts": [
+         [
+          0.0,
+          0.0
+         ]
+        ]
+       },
+       {
+        "t": "L",
+        "pts": [
+         [
+          40.0,
+          0.0
+         ]
+        ]
+       },
+       {
+        "t": "L",
+        "pts": [
+         [
+          40.0,
+          30.0
+         ]
+        ]
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "ops": [
+     {
+      "op": "set_shape_path",
+      "at": {
+       "p": "$1",
+       "o": 0
+      },
+      "paths": [
+       {
+        "cmds": [
+         {
+          "t": "M",
+          "pts": [
+           [
+            0.0,
+            0.0
+           ]
+          ]
+         },
+         {
+          "t": "L",
+          "pts": [
+           [
+            50.0,
+            10.0
+           ]
+          ]
+         },
+         {
+          "t": "L",
+          "pts": [
+           [
+            20.0,
+            40.0
+           ]
+          ]
+         }
+        ],
+        "fill": true,
+        "h": 40.0,
+        "stroke": true,
+        "w": 50.0
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "op_set_connector",
+  "start": "text",
+  "expect": [
+   "The first paragraph of the body"
+  ],
+  "steps": [
+   {
+    "ops": [
+     {
+      "op": "insert_shape",
+      "at": {
+       "p": "$1",
+       "o": 0
+      },
+      "geometry": "rect",
+      "floating": true,
+      "w": 80.0,
+      "h": 40.0,
+      "x": 10.0,
+      "y": 20.0,
+      "fill": "FFE699"
+     },
+     {
+      "op": "insert_shape",
+      "at": {
+       "p": "$1",
+       "o": 1
+      },
+      "geometry": "rect",
+      "floating": true,
+      "w": 80.0,
+      "h": 40.0,
+      "x": 160.0,
+      "y": 20.0,
+      "fill": "FFE699"
+     },
+     {
+      "op": "insert_connector",
+      "at": {
+       "p": "$1",
+       "o": 2
+      },
+      "kind": "curved",
+      "start": {
+       "shape": {
+        "p": "$1",
+        "o": 0
+       },
+       "idx": 3
+      },
+      "end": {
+       "shape": {
+        "p": "$1",
+        "o": 1
+       },
+       "idx": 1
+      }
+     }
+    ]
+   },
+   {
+    "ops": [
+     {
+      "op": "set_connector",
+      "at": {
+       "p": "$1",
+       "o": 2
+      },
+      "end": "free",
+      "to": [
+       400.0,
+       200.0
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "op_set_object_position",
+  "start": "text",
+  "expect": [
+   "The first paragraph of the body"
+  ],
+  "steps": [
+   {
+    "ops": [
+     {
+      "op": "insert_shape",
+      "at": {
+       "p": "$1",
+       "o": 0
+      },
+      "geometry": "rect",
+      "floating": true,
+      "w": 80.0,
+      "h": 40.0,
+      "x": 10.0,
+      "y": 20.0,
+      "fill": "FFE699"
+     }
+    ]
+   },
+   {
+    "ops": [
+     {
+      "op": "set_object_position",
+      "at": {
+       "p": "$1",
+       "o": 0
+      },
+      "align": "center",
+      "align_y": "bottom",
+      "rel_x": "margin",
+      "rel_y": "page"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "op_move_object",
+  "start": "text",
+  "expect": [
+   "The first paragraph of the body"
+  ],
+  "steps": [
+   {
+    "ops": [
+     {
+      "op": "insert_shape",
+      "at": {
+       "p": "$1",
+       "o": 0
+      },
+      "geometry": "rect",
+      "floating": true,
+      "w": 80.0,
+      "h": 40.0,
+      "x": 10.0,
+      "y": 20.0,
+      "fill": "FFE699"
+     },
+     {
+      "op": "insert_shape",
+      "at": {
+       "p": "$1",
+       "o": 1
+      },
+      "geometry": "rect",
+      "floating": true,
+      "w": 80.0,
+      "h": 40.0,
+      "x": 60.0,
+      "y": 20.0,
+      "fill": "FFE699"
+     },
+     {
+      "op": "insert_shape",
+      "at": {
+       "p": "$1",
+       "o": 2
+      },
+      "geometry": "rect",
+      "floating": true,
+      "w": 80.0,
+      "h": 40.0,
+      "x": 110.0,
+      "y": 20.0,
+      "fill": "FFE699"
+     }
+    ]
+   },
+   {
+    "ops": [
+     {
+      "op": "move_object",
+      "at": {
+       "p": "$1",
+       "o": 1
+      },
+      "above": {
+       "p": "$1",
+       "o": 2
+      }
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "op_set_merge_recipients",
+  "start": "text",
+  "expect": [
+   "The first paragraph of the body"
+  ],
+  "steps": [
+   {
+    "ops": [
+     {
+      "op": "set_mail_merge",
+      "merge": {
+       "main_type": "formLetters",
+       "source": {
+        "kind": "csv",
+        "name": "people.csv",
+        "delimiter": ","
+       },
+       "columns": [
+        "First Name",
+        "Last Name"
+       ],
+       "rows": [
+        [
+         "Ada",
+         "Lovelace"
+        ],
+        [
+         "Grace",
+         "Hopper"
+        ],
+        [
+         "Alan",
+         "Turing"
+        ]
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "ops": [
+     {
+      "op": "set_merge_recipients",
+      "active": [
+       true,
+       false,
+       true
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "op_protection_password",
+  "start": "text",
+  "expect": [
+   "A third paragraph, for a table after it."
+  ],
+  "markup": [
+   "cryptProviderType",
+   "w:hash=",
+   "w:documentProtection"
+  ],
+  "steps": [
+   {
+    "ops": [
+     {
+      "op": "protection",
+      "action": "set",
+      "settings": {
+       "edit": "readOnly",
+       "enforce": true,
+       "password": "pw1",
+       "salt": "AQIDBAUGBwgJCgsMDQ4PEA=="
+      }
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "op_page_background_gradient",
+  "start": "text",
+  "expect": [
+   "A third paragraph, for a table after it."
+  ],
+  "markup": [
+   "<v:fill"
+  ],
+  "steps": [
+   {
+    "ops": [
+     {
+      "op": "set_page_background",
+      "fill": {
+       "kind": "gradient",
+       "color": "FFF2CC",
+       "color2": "FFFFFF",
+       "angle": 45
+      }
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "op_page_borders_emboss",
+  "start": "text",
+  "expect": [
+   "A third paragraph, for a table after it."
+  ],
+  "markup": [
+   "threeDEmboss"
+  ],
+  "steps": [
+   {
+    "ops": [
+     {
+      "op": "set_page_borders",
+      "borders": {
+       "display": "allPages",
+       "offsetFrom": "page",
+       "zOrder": "front",
+       "top": {
+        "val": "threeDEmboss",
+        "sz": 24,
+        "space": 24,
+        "color": "FF4F00"
+       },
+       "bottom": {
+        "val": "threeDEngrave",
+        "sz": 24,
+        "space": 24,
+        "color": "FF4F00"
+       }
+      }
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "op_merge_greeting_address",
+  "start": "text",
+  "expect": [
+   "A third paragraph, for a table after it."
+  ],
+  "markup": [
+   "GREETINGLINE"
+  ],
+  "steps": [
+   {
+    "ops": [
+     {
+      "op": "set_mail_merge",
+      "merge": {
+       "main_type": "formLetters",
+       "source": {
+        "kind": "csv",
+        "name": "people.csv",
+        "delimiter": ","
+       },
+       "columns": [
+        "First Name",
+        "Last Name"
+       ],
+       "rows": [
+        [
+         "Ada",
+         "Lovelace"
+        ],
+        [
+         "Grace",
+         "Hopper"
+        ]
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "ops": [
+     {
+      "op": "insert_merge_field",
+      "at": {
+       "p": "$1",
+       "o": 0
+      },
+      "field": {
+       "kind": "greeting_line",
+       "invalid": null,
+       "name": null,
+       "punctuation": null,
+       "salutation": null
+      }
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "op_define_cjk_list",
+  "start": "text",
+  "expect": [
+   "A third paragraph, for a table after it."
+  ],
+  "markup": [
+   "japaneseCounting",
+   "ideographDigital"
+  ],
+  "steps": [
+   {
+    "ops": [
+     {
+      "op": "define_list",
+      "ids": [
+       "$1",
+       "$2"
+      ],
+      "def": {
+       "levels": [
+        {
+         "format": "japaneseCounting",
+         "text": "%1."
+        },
+        {
+         "format": "ideographDigital",
+         "text": "%2."
+        },
+        {
+         "format": "chineseCounting",
+         "text": "%3."
+        },
+        {
+         "format": "koreanCounting",
+         "text": "%4."
+        }
+       ]
+      }
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "op_set_ruby_sizes",
+  "start": "text",
+  "expect": [
+   "A third paragraph, for a table after it."
+  ],
+  "markup": [
+   "hpsRaise",
+   "hpsBaseText"
+  ],
+  "steps": [
+   {
+    "ops": [
+     {
+      "op": "east_asian",
+      "action": "set_ruby",
+      "from": {
+       "p": "$1",
+       "o": 4
+      },
+      "to": {
+       "p": "$1",
+       "o": 9
+      },
+      "text": "\u304b\u3093\u3058",
+      "align": "center",
+      "size": 5.0,
+      "baseSize": 10.5,
+      "raise": 9.0
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "op_picture_tight_wrap",
+  "start": "text",
+  "expect": [
+   "A third paragraph, for a table after it."
+  ],
+  "markup": [
+   "wrapTight"
+  ],
+  "steps": [
+   {
+    "ops": [
+     {
+      "op": "insert_image",
+      "at": {
+       "p": "$1",
+       "o": 5
+      },
+      "media": "$media",
+      "width": 100.0,
+      "height": 80.0,
+      "alt": "A square"
+     }
+    ]
+   },
+   {
+    "ops": [
+     {
+      "op": "set_image",
+      "at": {
+       "p": "$1",
+       "o": 5
+      },
+      "wrap": "tight",
+      "x": 20.0,
+      "y": 10.0,
+      "rel_x": "margin",
+      "rel_y": "paragraph"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "op_insert_building_block",
+  "start": "text",
+  "expect": [
+   "A third paragraph, for a table after it."
+  ],
+  "markup": [
+   "Document title"
+  ],
+  "steps": [
+   {
+    "ops": [
+     {
+      "op": "insert_cover_page",
+      "design": "docxtor.simple"
+     }
+    ]
+   },
+   {
+    "ops": [
+     {
+      "op": "insert_building_block",
+      "at": {
+       "p": "$last",
+       "o": 0
+      },
+      "name": "7FBD2D1C91CDC9FC2C1226DA332A16AE"
+     }
+    ]
+   }
+  ]
+ }
+]

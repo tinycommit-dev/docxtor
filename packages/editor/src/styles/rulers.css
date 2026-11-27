@@ -1,0 +1,239 @@
+/* The horizontal and vertical rulers. */
+/* ruler */
+/* The ruler's box holds the place at the top of the window; the ruler in it is scaled with the pages (it cannot be inside the scaled picture:
+   a sticky box does not follow the scroll through a transform). */
+.docxtor .ruler-host {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  margin: 0 auto;
+}
+.docxtor .ruler-host[hidden] {
+  display: none;
+}
+.docxtor .ruler {
+  position: relative;
+  transform-origin: 0 0;
+  height: 30px;
+  background: var(--canvas);
+  user-select: none;
+}
+.docxtor .ruler-track {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 8px;
+  height: 16px;
+  background: var(--panel-hi);
+  box-shadow: 0 0 0 1px var(--rule-2);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.docxtor .ruler-gap,
+.docxtor .ruler-margin {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background: var(--well);
+}
+.docxtor .ruler-track svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  color: var(--muted);
+}
+.docxtor .ruler-marker {
+  position: absolute;
+  width: 11px;
+  height: 8px;
+  margin-left: -5.5px;
+  cursor: ew-resize;
+  color: var(--ink-2);
+  z-index: 2;
+}
+.docxtor .ruler-marker svg {
+  width: 11px;
+  height: 8px;
+  display: block;
+}
+.docxtor .ruler-marker.first {
+  top: 2px;
+}
+.docxtor .ruler-marker.left,
+.docxtor .ruler-marker.right {
+  top: 22px;
+}
+.docxtor .ruler-marker:hover,
+.docxtor .ruler-marker.drag {
+  color: var(--signal);
+}
+/* a tab stop on the ruler: the mark's own line sits on the stop, so each kind is shifted to put it there */
+.docxtor .ruler-tab {
+  position: absolute;
+  top: 11px;
+  width: 10px;
+  height: 10px;
+  margin-left: -5px;
+  cursor: ew-resize;
+  color: var(--ink-2);
+  z-index: 2;
+}
+.docxtor .ruler-tab svg {
+  display: block;
+  width: 10px;
+  height: 10px;
+}
+.docxtor .ruler-tab.left {
+  margin-left: -3px;
+}
+.docxtor .ruler-tab.right {
+  margin-left: -7px;
+}
+.docxtor .ruler-tab.decimal {
+  margin-left: -4px;
+}
+.docxtor .ruler-tab:hover,
+.docxtor .ruler-tab.drag {
+  color: var(--signal);
+}
+.docxtor .ruler-tab.off {
+  opacity: 0.35;
+}
+/* the button at the left end of the ruler: the kind of stop a click on the ruler sets */
+.docxtor .ruler-kind {
+  position: absolute;
+  left: -30px;
+  top: 6px;
+  width: 22px;
+  height: 20px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--r-sm);
+  background: var(--panel-hi);
+  box-shadow: 0 0 0 1px var(--rule-2);
+  color: var(--ink-2);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+.docxtor .ruler-kind svg {
+  width: 10px;
+  height: 10px;
+}
+.docxtor .ruler-kind:hover {
+  color: var(--ink);
+  background: var(--key);
+}
+.docxtor .ruler-kind:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 1px;
+}
+@media (max-width: 760px) {
+  .docxtor .ruler-kind {
+    display: none;
+  }
+}
+/* the vertical ruler beside the page that holds the caret */
+.docxtor .vruler {
+  position: absolute;
+  z-index: 2;
+  user-select: none;
+}
+.docxtor .vruler[hidden] {
+  display: none;
+}
+.docxtor .vruler-track {
+  position: absolute;
+  inset: 0;
+  background: var(--panel-hi);
+  box-shadow: 0 0 0 1px var(--rule-2);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.docxtor .vruler-margin {
+  position: absolute;
+  left: 0;
+  right: 0;
+  background: var(--well);
+}
+.docxtor .vruler-track svg {
+  position: absolute;
+  inset: 0;
+  color: var(--muted);
+}
+.docxtor .vruler-handle {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 9px;
+  margin-top: -4.5px;
+  cursor: ns-resize;
+  z-index: 2;
+}
+.docxtor .vruler-handle::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 4px;
+  height: 1px;
+}
+.docxtor .vruler-handle:hover::after,
+.docxtor .vruler-handle.drag::after {
+  background: var(--signal);
+}
+.docxtor .canvas.read-only .vruler-handle {
+  pointer-events: none;
+}
+.docxtor .vruler-guide {
+  position: absolute;
+  height: 1px;
+  background: var(--signal);
+  pointer-events: none;
+  z-index: 4;
+}
+@media (max-width: 760px) {
+  .docxtor .vruler {
+    display: none;
+  }
+}
+.docxtor .ruler-guide {
+  position: absolute;
+  top: 30px;
+  width: 1px;
+  height: 100vh;
+  background: var(--signal);
+  pointer-events: none;
+  z-index: 4;
+}
+
+.docxtor .sheets {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.docxtor .sheet {
+  position: absolute;
+  left: 0;
+  background: var(--paper);
+  box-shadow: var(--paper-edge);
+}
+.docxtor .page-num {
+  position: absolute;
+  right: 0;
+  bottom: -20px;
+  font-size: 11px;
+  color: var(--faint);
+  font-variant-numeric: tabular-nums;
+}
+.docxtor .hf {
+  position: absolute;
+  /* Its own layer: a picture behind its text sits on the page, not under the page's white. */
+  isolation: isolate;
+  color: #000;
+  pointer-events: none;
+}
+.docxtor .hf .fp {
+  margin: 0 !important;
+}

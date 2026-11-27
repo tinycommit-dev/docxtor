@@ -1,0 +1,215 @@
+/* The zoom view, and the layers over the pages: line numbers, marks, spelling, bookmarks, watermark. */
+/* The pages read the same way whatever the interface does (Arabic, Hebrew): each paragraph takes its own direction from
+   the document. On the page containers themselves, so every copy of them (the PDF export, the navigator's thumbnails, the
+   gallery previews, printing) reads the same as the screen, wherever it is put. */
+.docxtor .canvas,
+.docxtor .stage,
+.docxtor .sheet,
+.docxtor .pg-snap,
+.docxtor.docxtor-print {
+  direction: ltr;
+}
+.docxtor .canvas {
+  /* One finger scrolls; two pinch-zoom the pages (zoom.ts), not the whole browser page. */
+  touch-action: pan-x pan-y;
+  flex: 1;
+  overflow: auto;
+  background: var(--canvas);
+  padding: 0 32px 120px;
+}
+.docxtor .zoom {
+  width: max-content;
+  margin: 0 auto;
+}
+/* The pages are laid out at 100% inside .zoom-view and drawn at the zoom with a transform (`setZoom`, in editor-view.ts); .zoom-fit has the size the scaled
+   picture takes, so scrolling and centring follow it. No will-change here: it would draw the text once and blur it at another scale. */
+.docxtor .zoom-fit {
+  position: relative;
+}
+.docxtor .zoom-view {
+  width: max-content;
+  transform-origin: 0 0;
+}
+.docxtor .stage {
+  position: relative;
+  margin: 0 auto;
+}
+
+/* line numbers, drawn on the sheet beside the text (outside the editable flow) */
+.docxtor .lnum {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  user-select: none;
+}
+.docxtor .lnum span {
+  position: absolute;
+  white-space: nowrap;
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+
+/* non-printing characters (see editor/marks.ts): a layer over the pages, never part of the text */
+.docxtor .np-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+  color: var(--paper-mark);
+  font-family: var(--font-ui);
+}
+.docxtor .np-layer[hidden] {
+  display: none;
+}
+.docxtor .np-dots {
+  position: absolute;
+  left: 0;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+}
+.docxtor .np-m {
+  position: absolute;
+  white-space: nowrap;
+}
+.docxtor .np-brk {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.docxtor .np-brk b {
+  font-weight: 500;
+}
+.docxtor .np-brk i {
+  flex: 1;
+  min-width: 8px;
+  border-top: 1px dotted currentColor;
+}
+.docxtor .np-brk i.double {
+  height: 3px;
+  border-top: 1px dotted currentColor;
+  border-bottom: 1px dotted currentColor;
+}
+
+/* misspelled words (see editor/spell-layer.ts): a wavy line on a layer over the stage, never part of the text, never printed.
+   Each .sp-u is the box of the word (so a right-click can find it); the wave is its bottom edge. */
+.docxtor .sp-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  overflow: hidden;
+  /* A layer of its own: Safari otherwise paints every masked wave again on each frame the text under it changes (long.docx, 192 marks:
+     140 ms a key against 20 ms without them; 27 ms with this). Chrome and Firefox were not slower either way. */
+  will-change: transform;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.docxtor .sp-u,
+.docxtor .sp-g {
+  position: absolute;
+}
+.docxtor .sp-u::after,
+.docxtor .sp-g::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 3px;
+  background: var(--paper-spelling);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 6 3'%3E%3Cpath d='M0 2.3Q1.5 0.2 3 2.3T6 2.3' fill='none' stroke='%23000' stroke-width='0.9'/%3E%3C/svg%3E") repeat-x left bottom / 6px 3px;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 6 3'%3E%3Cpath d='M0 2.3Q1.5 0.2 3 2.3T6 2.3' fill='none' stroke='%23000' stroke-width='0.9'/%3E%3C/svg%3E") repeat-x left bottom / 6px 3px;
+}
+
+/* Grammar problems (see editor/spell-layer.ts) use the same wave in blue; a style hint is dotted; a typo some checker found is red like a misspelling. */
+.docxtor .sp-g[data-kind="grammar"]::after {
+  background: var(--paper-grammar);
+}
+.docxtor .sp-g[data-kind="style"]::after {
+  height: 2px;
+  bottom: 0;
+  background: repeating-linear-gradient(to right, var(--paper-grammar) 0 2px, transparent 2px 4px);
+  -webkit-mask: none;
+  mask: none;
+}
+
+/* the other selected ranges (see editor/multi-select.ts): the selection's own wash on a layer over the stage, never part of the text and never printed.
+   Multiplied, so the letters under it stay as dark as under the real selection, which the browser paints behind them. A range with no length is a caret. */
+.docxtor .xs-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.docxtor .xs-r {
+  position: absolute;
+  background: var(--selection);
+  mix-blend-mode: multiply;
+}
+.docxtor .xs-caret {
+  position: absolute;
+  background: var(--signal);
+}
+
+/* bookmark markers (see editor/bookmarks.ts): a ribbon in the margin where a bookmark starts, over the stage, never printed */
+.docxtor .bm-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+.docxtor .bm-mark {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  padding: 0;
+  border: 0;
+  border-radius: 2px;
+  background: none;
+  color: var(--paper-mark);
+  cursor: pointer;
+  pointer-events: auto;
+}
+.docxtor .bm-mark svg {
+  display: block;
+  width: 14px;
+  height: 14px;
+}
+.docxtor .bm-mark:hover {
+  color: var(--paper-ink);
+}
+.docxtor .bm-mark:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 1px;
+}
+
+/* a watermark (see editor/watermark.ts): behind the text, centred in the margin box of a sheet, part of the sheet so it prints */
+.docxtor .wm {
+  position: absolute;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.docxtor .wm-mark {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  max-width: none;
+  white-space: nowrap;
+  line-height: 1;
+  color: var(--paper-watermark);
+  user-select: none;
+  -webkit-user-select: none;
+}

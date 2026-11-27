@@ -1,0 +1,653 @@
+/* Footnotes and edited stories, then the content of the pages: lists, pictures, shapes, columns, tables. */
+/* footnotes at the foot of the page */
+.docxtor .notes,
+.docxtor .notes-measure {
+  color: #000;
+  font-family: Calibri, Carlito, sans-serif;
+  font-size: 11pt;
+}
+.docxtor .notes {
+  position: absolute;
+  padding-top: 8px;
+  pointer-events: none;
+}
+.docxtor .notes::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 33%;
+  border-top: 0.75px solid #000;
+}
+.docxtor .notes .fp {
+  margin: 0 !important;
+}
+
+/* editing a header, footer or the footnotes of a page */
+.docxtor .story-mode .flow {
+  opacity: 0.38;
+  caret-color: transparent;
+}
+.docxtor .story-mode .flow ::selection {
+  background: transparent;
+}
+.docxtor .story-edit {
+  pointer-events: auto;
+  z-index: 2;
+  outline: none;
+  caret-color: var(--signal);
+  -webkit-user-modify: read-write;
+}
+/* a machined bracket marking the editable band, drawn outside the text box */
+.docxtor .story-edit::after {
+  content: "";
+  position: absolute;
+  inset: -6px -10px;
+  border: 1px dashed color-mix(in srgb, var(--signal) 65%, transparent);
+  border-radius: 2px;
+  pointer-events: none;
+}
+.docxtor .story-edit ::selection {
+  background: var(--selection);
+}
+/* a header or footer shared with the section before says so, as Word's "Same as Previous" does */
+.docxtor .story-edit[data-linked]::before {
+  content: attr(data-linked);
+  position: absolute;
+  inset-inline-end: -10px;
+  padding: 1px 8px;
+  font: 600 11px/1.5 var(--font-ui);
+  color: var(--ink);
+  background: var(--panel-hi);
+  border-radius: var(--r-sm);
+  white-space: nowrap;
+  pointer-events: none;
+}
+.docxtor .story-edit.hdr[data-linked]::before {
+  top: calc(100% + 8px);
+}
+.docxtor .story-edit.ftr[data-linked]::before {
+  bottom: calc(100% + 8px);
+}
+.docxtor .story-edit [data-fld] {
+  background: var(--press);
+  border-radius: 1px;
+}
+
+.docxtor .story-strip {
+  position: fixed;
+  z-index: 26;
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs);
+  background: var(--panel-hi);
+  border-radius: var(--r-md);
+  box-shadow: var(--panel-shadow);
+  animation: pop-in 0.12s var(--ease);
+}
+.docxtor .story-strip .tb {
+  font-size: 11.5px;
+  padding: 0 8px;
+  width: auto;
+}
+.docxtor .story-strip .seg button {
+  padding: 0 8px;
+  flex: none;
+  font-size: 11.5px;
+}
+.docxtor .story-where {
+  padding: 0 8px 0 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.docxtor .story-hint {
+  font-size: 11.5px;
+  color: var(--muted);
+  padding: 0 6px;
+}
+.docxtor .story-strip .tb.done {
+  color: var(--ink);
+  font-weight: 600;
+  box-shadow: var(--key-edge);
+  background: var(--key);
+  margin-inline-start: var(--space-xs);
+}
+.docxtor .flow {
+  position: relative;
+  z-index: 1;
+  outline: none;
+  display: flow-root;
+  color: #000;
+  font-family: Calibri, Carlito, sans-serif;
+  font-size: 11pt;
+  caret-color: var(--signal);
+  -webkit-user-modify: read-write;
+}
+.docxtor .flow ::selection,
+.docxtor .flow::selection {
+  background: var(--selection);
+}
+
+/* document content */
+.docxtor .fp {
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  tab-size: 48px;
+  position: relative;
+  min-height: 1em;
+}
+.docxtor .fp .lbl {
+  display: inline-block;
+  text-indent: 0;
+  user-select: none;
+  white-space: pre;
+}
+/* a label aligned right or centre sits on the number position: a zero-width box there, the label shifted back */
+.docxtor .fp .lbl.lbl-placed {
+  width: 0;
+  min-width: 0;
+}
+.docxtor .fp .lbl-in {
+  display: inline-block;
+  white-space: pre;
+}
+.docxtor .fp .lbl-pic {
+  display: inline-block;
+  vertical-align: middle;
+  object-fit: contain;
+  user-select: none;
+}
+/* the box of a checklist item ticks with a click */
+.docxtor .fp .lbl.lbl-check {
+  cursor: pointer;
+  border-radius: var(--r-sm);
+}
+.docxtor .fp .lbl.lbl-check:hover {
+  background: var(--paper-hover);
+}
+.docxtor .fp .lbl-check .box {
+  position: relative;
+  display: inline-block;
+  box-sizing: border-box;
+  width: 0.9em;
+  height: 0.9em;
+  vertical-align: -0.1em;
+  border: 1.5px solid var(--paper-ink);
+  border-radius: 2px;
+}
+.docxtor .fp .lbl-check .box svg {
+  position: absolute;
+  left: -1.5px;
+  top: -1.5px;
+  width: calc(100% + 3px);
+  height: calc(100% + 3px);
+  fill: none;
+  stroke: var(--paper-ink);
+  stroke-width: 1.5px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.docxtor .flow[contenteditable="false"] .fp .lbl.lbl-check {
+  cursor: default;
+}
+.docxtor .flow[contenteditable="false"] .fp .lbl.lbl-check:hover {
+  background: none;
+}
+.docxtor .fp .atom {
+  user-select: all;
+}
+.docxtor .fp .atom.img img,
+.docxtor .fp .atom.img .chart-svg {
+  vertical-align: bottom;
+}
+.docxtor .fp .atom.img::selection,
+.docxtor .fp .atom.img img::selection,
+.docxtor .fp .atom.img .chart-svg *::selection {
+  background: transparent;
+}
+.docxtor .fp .atom.img .chart-svg {
+  user-select: none;
+}
+.docxtor .fp .atom.img:hover img,
+.docxtor .fp .atom.img:hover .chart-svg {
+  outline: 1px solid var(--signal);
+}
+/* a formatted picture: a box that clips the image (crop, shape), an outline over it, and the filter its adjustments use */
+.docxtor .fp .atom.img .pic {
+  display: inline-block;
+  position: relative;
+  vertical-align: bottom;
+}
+.docxtor .fp .atom.img .pic-clip {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+.docxtor .fp .atom.img .pic-img {
+  position: absolute;
+  max-width: none;
+  outline: none;
+}
+.docxtor .fp .atom.img .pic-ln {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+.docxtor .fp .atom.img .pic-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+.docxtor .fp .atom.img:hover .pic {
+  outline: 1px solid var(--signal);
+}
+.docxtor .fp .atom.img:hover .pic .pic-img {
+  outline: none;
+}
+/* a picture that is only linked to the document: its size, the file's name, and a plain note */
+.docxtor .fp .atom.img .pic-missing {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  box-sizing: border-box;
+  padding: 8px;
+  overflow: hidden;
+  vertical-align: bottom;
+  background: var(--paper);
+  border: 1px dashed var(--paper-chart-axis);
+  color: var(--paper-chart-text);
+  font: 400 12px/1.3 var(--font-ui);
+  text-align: center;
+  text-indent: 0;
+  letter-spacing: normal;
+}
+.docxtor .fp .atom.img .pic-missing svg {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.docxtor .fp .atom.img .pic-missing-name {
+  max-width: 100%;
+  overflow: hidden;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.docxtor .fp .atom.img .pic-missing-action {
+  flex: none;
+  height: 26px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: var(--r-md);
+  background: var(--button);
+  color: var(--button-ink);
+  font: 600 12px/1 var(--font-ui);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.docxtor .fp .atom.img .pic-missing-action:hover {
+  background: color-mix(in srgb, var(--button) 86%, var(--panel-hi));
+}
+.docxtor .fp .atom.img:hover .pic-missing {
+  border-color: var(--signal);
+}
+/* shapes and text boxes: the drawing is an SVG stretched over the box, the text is paragraphs laid over it */
+.docxtor .fp .atom.shape {
+  display: inline-block;
+  position: relative;
+  vertical-align: bottom;
+  box-sizing: border-box;
+  text-indent: 0;
+  text-align: left;
+  font-weight: 400;
+  font-style: normal;
+  text-decoration: none;
+  letter-spacing: normal;
+  text-transform: none;
+  font-variant: normal;
+}
+/* A floating shape sits above the paragraphs it overlaps (they are positioned too), so a click on it reaches it. */
+.docxtor .fp .atom.shape.wrap-square,
+.docxtor .fp .atom.shape.wrap-tight {
+  z-index: 1;
+}
+.docxtor .fp .atom.shape::selection,
+.docxtor .fp .atom.shape *::selection {
+  background: transparent;
+}
+.docxtor .fp .atom.shape:hover:not(:has([data-editing])) {
+  outline: 1px solid var(--signal);
+}
+.docxtor .fp .atom.shape.line::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -6px;
+  bottom: -6px;
+}
+.docxtor .fp .atom.shape > .shape-svg,
+.docxtor .fp .shape-child > .shape-svg {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+.docxtor .fp .atom.shape .shape-pic {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.docxtor .fp .shape-text {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-sizing: border-box;
+  color: #000;
+  cursor: default;
+  outline: none;
+}
+.docxtor .fp .shape-text.nowrap .fp {
+  white-space: pre;
+}
+.docxtor .fp .shape-text[contenteditable="true"] {
+  cursor: text;
+  user-select: text;
+  -webkit-user-modify: read-write;
+}
+.docxtor .fp .shape-text[contenteditable="true"] ::selection {
+  background: var(--selection);
+}
+.docxtor .fp .atom.obj {
+  display: inline-block;
+  font: 500 10.5px/1.7 var(--font-ui);
+  color: #5d554a;
+  background: #f1ede6;
+  box-shadow: inset 0 0 0 1px #d8cfc1;
+  border-radius: 2px;
+  padding: 0 6px;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: baseline;
+  text-indent: 0;
+}
+.docxtor .fp .atom.note {
+  vertical-align: super;
+  font-size: 0.65em;
+  color: #1a4fbf;
+}
+.docxtor .fp .atom.pbr,
+.docxtor .fp .atom.cbr {
+  display: inline-block;
+  width: 0;
+}
+/* Hyphenation is set on the stage; a paragraph can opt out. */
+.docxtor .fp[data-nh] {
+  hyphens: manual;
+}
+/* Tab stops are measured after layout (editor/tabs.ts), which sets each tab's width; a leader fills it. */
+.docxtor .fp .tab-fill {
+  background-repeat: repeat-x;
+  background-position: left calc(100% - 0.3em);
+}
+/* The bar border of a paragraph: a line along the outside of its text. */
+.docxtor .fp[data-bar]::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--bar-x);
+  border-left: var(--bar);
+  pointer-events: none;
+}
+.docxtor .fp .tab-fill[data-leader="dot"],
+.docxtor .fp .tab-fill[data-leader="middleDot"] {
+  background-image: radial-gradient(circle, currentColor 0.6px, transparent 0.9px);
+  background-size: 0.3em 3px;
+}
+/* The middle dot sits at half the height of lower-case letters. */
+.docxtor .fp .tab-fill[data-leader="middleDot"] {
+  background-position: left calc(100% - 0.5em);
+}
+.docxtor .fp .tab-fill[data-leader="hyphen"] {
+  background-image: linear-gradient(to right, currentColor 50%, transparent 50%);
+  background-size: 0.5em 1px;
+  background-position: left calc(100% - 0.35em);
+}
+.docxtor .fp .tab-fill[data-leader="underscore"],
+.docxtor .fp .tab-fill[data-leader="heavy"] {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 100% 1px;
+  background-position: left calc(100% - 0.12em);
+}
+.docxtor .fp .tab-fill[data-leader="heavy"] {
+  background-size: 100% 2px;
+}
+.docxtor .fp .lnk-default {
+  color: #1155cc;
+  text-decoration-line: underline;
+}
+.docxtor .fp .lnk {
+  cursor: text;
+}
+.docxtor .fp .ins {
+  color: var(--paper-ins);
+  background: var(--paper-ins-soft);
+  text-decoration-line: underline;
+  text-decoration-color: var(--paper-ins);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+.docxtor .fp .ghost {
+  user-select: none;
+  text-indent: 0;
+}
+.docxtor .fp .ghost.del {
+  color: var(--paper-del);
+  background: var(--paper-del-soft);
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+}
+/* AI change marker: a proofreader's caret in the left margin, as a copy editor marks a change */
+.docxtor .fp.ai-changed::before {
+  content: "";
+  position: absolute;
+  left: -24px;
+  top: 0.15em;
+  width: 12px;
+  height: 12px;
+  background: var(--signal);
+  -webkit-mask: var(--caret-mark) center / contain no-repeat;
+  mask: var(--caret-mark) center / contain no-repeat;
+  pointer-events: none;
+}
+.docxtor span.pgsp {
+  display: inline-block;
+  width: 100%;
+  vertical-align: top;
+  user-select: none;
+  text-indent: 0;
+}
+/* the same gap between two blocks inside a table cell (a row that is cut at the page end) */
+.docxtor div.pgsp {
+  display: block;
+  user-select: none;
+}
+/* A section with columns: one wrapper holding its blocks. The paginator sets the columns (see Paginator.placeColumns). */
+.docxtor .cols {
+  display: flow-root;
+}
+/* Its first row can stand over the end of the text above (the section starts part-way down a page): clicks go through to that. */
+.docxtor .cols[data-pull] {
+  pointer-events: none;
+}
+.docxtor .cols[data-pull] > * {
+  pointer-events: auto;
+}
+.docxtor .cols[data-pull] > .fp[data-cs] {
+  pointer-events: none;
+}
+.docxtor .cols[data-pull] > .fp[data-cs] > :not(.colsp) {
+  pointer-events: auto;
+}
+.docxtor .cols[data-pull] > .ftw[data-cs] {
+  pointer-events: none;
+}
+.docxtor .cols[data-pull] > .ftw[data-cs] tr:not(.colsp) > td {
+  pointer-events: auto;
+}
+.docxtor .cols .colsp {
+  break-inside: avoid;
+  break-after: avoid;
+  pointer-events: none;
+}
+.docxtor .cols div.colsp {
+  display: block;
+}
+.docxtor .cols .fp[data-kl],
+.docxtor .cols .ftw[data-kl] {
+  break-inside: avoid;
+}
+.docxtor .cols .fp[data-kn] {
+  break-after: avoid;
+}
+.docxtor .cols .fp[data-wc="0"] {
+  orphans: 1;
+  widows: 1;
+}
+.docxtor .cols .colsp.fill {
+  break-after: auto;
+}
+.docxtor .cols .fp .atom.cbr {
+  display: block;
+  width: 0;
+  height: 0;
+  break-after: column;
+}
+/* the line between columns, drawn on the sheet (it must not cross the text the section starts below) */
+.docxtor .crule {
+  position: absolute;
+  width: 0;
+  border-inline-start: 1px solid var(--paper-ink);
+  pointer-events: none;
+}
+.docxtor .ftw {
+  position: relative;
+}
+.docxtor table.ft {
+  border-collapse: collapse;
+  font-size: inherit;
+}
+.docxtor table.ft td {
+  word-break: break-word;
+}
+.docxtor table.ft td > .fp:first-child,
+.docxtor table.ft td > .clip > .fp:first-child {
+  margin-top: 0 !important;
+}
+/* an autofit table's column grows to a long word, as in Word; a fixed one breaks the word */
+.docxtor table.ft[data-autofit] td {
+  word-break: normal;
+  overflow-wrap: break-word;
+}
+/* an exact row height clips what does not fit */
+.docxtor table.ft td > .clip {
+  overflow: hidden;
+}
+.docxtor table.ft td.gap {
+  pointer-events: none;
+}
+/* a table the text flows around (Word's floating table) */
+.docxtor .ftw.tfloat {
+  max-width: 100%;
+  /* above the paragraph it sits beside, which is positioned too and would otherwise take the clicks */
+  z-index: 1;
+}
+/* a content control around a row or a cell shows its name under the pointer, like a block control */
+.docxtor table.ft td[data-sdt],
+.docxtor table.ft td[data-row-sdt] {
+  position: relative;
+}
+.docxtor table.ft tr[data-sdt]:hover > td,
+.docxtor table.ft td[data-sdt]:hover {
+  outline: 1px dashed var(--rule-3);
+  outline-offset: -1px;
+}
+.docxtor table.ft td[data-row-sdt]::before,
+.docxtor table.ft td[data-sdt]::before {
+  content: attr(data-sdt-label);
+  position: absolute;
+  left: 0;
+  top: -18px;
+  font: 500 11px/1 var(--font-ui);
+  color: var(--z-body);
+  padding: 3px 5px;
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+  opacity: 0;
+}
+.docxtor table.ft td[data-row-sdt]::before {
+  content: attr(data-row-sdt);
+}
+.docxtor table.ft tr[data-sdt]:hover > td[data-row-sdt]::before,
+.docxtor table.ft td[data-sdt]:hover::before {
+  opacity: 1;
+}
+.docxtor tr.pgsp td {
+  border: none !important;
+}
+.docxtor .fc {
+  position: relative;
+  outline: 1px dashed transparent;
+  outline-offset: 4px;
+  transition: outline-color 0.15s;
+}
+.docxtor .fc:hover {
+  outline-color: var(--rule-3);
+}
+.docxtor .fc-label {
+  position: absolute;
+  right: 0;
+  top: -18px;
+  font: 500 11px/1 var(--font-ui);
+  color: var(--z-body);
+  padding: 3px 5px;
+  user-select: none;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.docxtor .fc:hover > .fc-label {
+  opacity: 1;
+}
+.docxtor .fx {
+  font: 500 11px var(--font-ui);
+  color: #5d554a;
+  background: #f4f0e9;
+  box-shadow: inset 0 0 0 1px #ddd3c4;
+  border-radius: 2px;
+  padding: 8px 12px;
+  margin: 6px 0;
+  user-select: none;
+}

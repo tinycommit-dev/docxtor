@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net7.0</TargetFramework>
+    <!-- .NET 7 is out of support, but the SDK installed here is 7. The program is built for 7 and runs on any newer runtime
+         that is installed (CI has .NET 8 only): RollForward Major lets 8 stand in when 7 is missing. -->
+    <RollForward>Major</RollForward>
+    <!-- Building for net7.0 with a newer SDK (CI) warns that 7 is out of support; the target is chosen on purpose. -->
+    <CheckEolTargetFramework>false</CheckEolTargetFramework>
+    <NoWarn>$(NoWarn);NETSDK1138</NoWarn>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>OoxmlValidate</RootNamespace>
+    <AssemblyName>ooxml-validate</AssemblyName>
+    <InvariantGlobalization>true</InvariantGlobalization>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- MIT. Pinned to an exact version so the rules do not change under us. -->
+    <PackageReference Include="DocumentFormat.OpenXml" Version="3.1.1" />
+  </ItemGroup>
+
+</Project>

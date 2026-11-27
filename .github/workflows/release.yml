@@ -1,0 +1,426 @@
+name: Release
+
+# A pushed tag v<version> (the version in the root package.json: docs/deploy.md, "Cutting a release") runs the gates, builds everything,
+# tests the Docker image and the Cloudflare preview, then publishes: the GitHub release, the image on ghcr.io and the hosted app.
+# "Run workflow" with dry_run on (the default) builds and tests all of it and uploads nothing.
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Dry run: build and test everything, upload nothing (no release, no image push, no Cloudflare deploy)"
+        type: boolean
+        default: true
+
+# Two releases never run at once, and a running one is never cancelled by the next.
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+# Nothing by default; every job asks for what it needs.
+permissions: {}
+
+env:
+  IMAGE: ghcr.io/tinycommit-dev/docxtor-web
+  PAGES_PROJECT: docxtor
+  WRANGLER_VERSION: 4.167.0 # the same as scripts/deploy.mjs
+
+jobs:
+  # The checks of ci.yml, as they are: hygiene, secrets, cargo test and clippy, the fidelity gate, the Word quick gate, the web build and its
+  # browser tests, Firefox and Safari's core set.
+  gates:
+    permissions:
+      contents: read
+    uses: ./.github/workflows/ci.yml
+
+  # What is being released: the version (one place: package.json), the tag that must match it, and the CHANGELOG section that becomes the notes.
+  version:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    outputs:
+      version: ${{ steps.v.outputs.version }}
+      prerelease: ${{ steps.v.outputs.prerelease }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+      - name: Version, tag and release notes
+        id: v
+        env:
+          REF_TYPE: ${{ github.ref_type }}
+          REF_NAME: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          version="$(node scripts/release.mjs version)"
+          mkdir -p release-draft
+          if [ "$REF_TYPE" = tag ]; then
+            node scripts/release.mjs check-tag "$REF_NAME"
+            node scripts/release.mjs notes "$version" > release-draft/release-notes.md
+          else
+            # A dry run from a branch: the changelog section may not be written yet.
+            node scripts/release.mjs notes "$version" > release-draft/release-notes.md || echo "(dry run: CHANGELOG.md has no section for $version yet)" > release-draft/release-notes.md
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          case "$version" in *-*) echo "prerelease=true" >> "$GITHUB_OUTPUT" ;; *) echo "prerelease=false" >> "$GITHUB_OUTPUT" ;; esac
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: release-notes
+          path: release-draft/release-notes.md
+          retention-days: 7
+
+  # The command and the MCP server, one archive each per platform. Linux builds are static (musl): they run on any distribution, whatever
+  # its glibc, which is what a downloaded program needs; each is built on a machine of its own architecture.
+  cli:
+    needs: version
+    runs-on: ${{ matrix.os }}
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        include: # both Mac programs build on an Apple-silicon Mac; the Intel one is cross-compiled
+          - { target: aarch64-apple-darwin, os: macos-15 }
+          - { target: x86_64-apple-darwin, os: macos-15 }
+          - { target: x86_64-unknown-linux-musl, os: ubuntu-24.04, musl: true }
+          - { target: aarch64-unknown-linux-musl, os: ubuntu-24.04-arm, musl: true }
+          - { target: x86_64-pc-windows-msvc, os: windows-2022 }
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Install Rust (the version rust-toolchain.toml names)
+        run: |
+          rustup toolchain install
+          rustup target add ${{ matrix.target }}
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
+        with:
+          key: ${{ matrix.target }}
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+      - name: Install the musl C toolchain
+        if: ${{ matrix.musl }}
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends musl-tools
+      - name: Build docxtor and docxtor-mcp
+        run: cargo build --release --locked --target ${{ matrix.target }} -p docxtor-cli -p docxtor-mcp
+      - name: Pack each with its licence notices
+        shell: bash
+        env:
+          VERSION: ${{ needs.version.outputs.version }}
+          TARGET: ${{ matrix.target }}
+        run: |
+          set -euo pipefail
+          for bin in docxtor docxtor-mcp; do
+            node scripts/package-cli.mjs --bin "$bin" --target "$TARGET" --version "$VERSION" --out dist
+          done
+          ls -l dist
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: cli-${{ matrix.target }}
+          path: dist/*
+          if-no-files-found: error
+          retention-days: 7
+
+  # The web app, built once as it ships (scripts/build-web.mjs: the engine from wasm:ship, then the app). One folder for Cloudflare, one archive to
+  # self-host. The Docker image builds the same way inside its own build stage.
+  web:
+    needs: version
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Install Rust (the version rust-toolchain.toml names)
+        run: |
+          rustup toolchain install
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: package-lock.json
+      - name: Install wasm-pack (the version the Docker image uses)
+        uses: taiki-e/install-action@fe3acb53a98b62c772db35de75ce0e4595e7ca8c # v2.90.8
+        with:
+          tool: wasm-pack@0.15.0
+      - run: npm ci
+      - name: Build the app as it ships and pack the self-host archive
+        run: npm run package:web
+      # After the archive is packed: the self-host archive and the image carry the app only, the hosted deploy also has the docs at /docs/.
+      - name: Add the documentation site to the hosted build (web/dist/docs)
+        run: npm run docs:add
+      - name: Headers for Cloudflare Pages, beside the files
+        run: cp deploy/_headers web/dist/_headers
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: web-archive
+          path: dist/docxtor-web-*.tar.gz
+          if-no-files-found: error
+          retention-days: 7
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: web-dist
+          path: web/dist
+          if-no-files-found: error
+          retention-days: 7
+
+  # The Docker image: built for amd64 and arm64 (arm64 under QEMU) and pushed with the version tag; then the production test and a vulnerability scan
+  # run against the pushed image on amd64. `latest` is added only at the end (image-latest), when everything else has passed. A dry run builds
+  # amd64 only, keeps it local and runs the same tests.
+  image:
+    needs: [gates, version]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+      attestations: write
+    env:
+      VERSION: ${{ needs.version.outputs.version }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: docker/setup-qemu-action@99012661954931238ded8c8b007157a8430204e1 # v4.4.0
+        with:
+          platforms: arm64
+      - uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
+      - name: Sign in to ghcr.io
+        if: ${{ !inputs.dry_run }}
+        uses: docker/login-action@8aa5831fb8d48d8f76594c7ddde61ae58019f550 # v4.8.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and push (amd64 and arm64)
+        id: push
+        if: ${{ !inputs.dry_run }}
+        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
+        with:
+          context: .
+          file: deploy/Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ env.IMAGE }}:${{ env.VERSION }}
+          build-args: |
+            VERSION=${{ env.VERSION }}
+            REVISION=${{ github.sha }}
+          provenance: mode=max
+          sbom: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      - name: Build for a dry run (amd64 only, kept here)
+        if: ${{ inputs.dry_run }}
+        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
+        with:
+          context: .
+          file: deploy/Dockerfile
+          platforms: linux/amd64
+          load: true
+          tags: docxtor-web:dry-run
+          build-args: |
+            VERSION=${{ env.VERSION }}
+            REVISION=${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      - name: Run the image the way it is meant to run (read-only, nothing writable but /tmp)
+        env:
+          DRY_RUN: ${{ inputs.dry_run }}
+        run: |
+          set -euo pipefail
+          if [ "$DRY_RUN" = true ]; then ref=docxtor-web:dry-run; else ref="$IMAGE:$VERSION"; docker pull --platform linux/amd64 "$ref"; fi
+          echo "IMAGE_REF=$ref" >> "$GITHUB_ENV"
+          docker run -d --name docxtor-web --read-only --tmpfs /tmp --cap-drop ALL --security-opt no-new-privileges -p 8080:8080 "$ref"
+          for _ in $(seq 1 30); do
+            if curl -fsS http://localhost:8080/healthz > /dev/null 2>&1; then break; fi
+            sleep 1
+          done
+          test "$(docker inspect -f '{{.State.Running}}' docxtor-web)" = true
+          test "$(docker exec docxtor-web id -u)" != 0
+      - name: The health path and the engine's headers
+        run: |
+          set -euo pipefail
+          headers="$(curl -fsSI http://localhost:8080/healthz)"
+          echo "$headers" | grep -i '^content-type: text/plain'
+          echo "$headers" | grep -i '^cache-control: no-store'
+          test "$(curl -fsS http://localhost:8080/healthz)" = ok
+          wasm="$(docker exec docxtor-web sh -c 'cd /usr/share/nginx/html/assets && ls docxtor_bg-*.wasm | head -n 1')"
+          curl -fsSI -H 'Accept-Encoding: gzip' "http://localhost:8080/assets/$wasm" | tee wasm-headers.txt
+          grep -i '^content-type: application/wasm' wasm-headers.txt
+          grep -i '^content-encoding: gzip' wasm-headers.txt
+          grep -i '^cache-control: public, max-age=31536000, immutable' wasm-headers.txt
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: package-lock.json
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: The production test against the container
+        env:
+          DOCXTOR_DIST_URL: http://localhost:8080/
+        run: npx playwright test e2e/production.spec.ts --project=chromium --workers=1
+      - name: Scan the image (fails on a critical vulnerability that has a fix)
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
+        with:
+          image-ref: ${{ env.IMAGE_REF }}
+          severity: CRITICAL
+          ignore-unfixed: true
+          exit-code: "1"
+      - name: Say where the image's provenance is
+        if: ${{ !inputs.dry_run }}
+        uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
+        with:
+          subject-name: ${{ env.IMAGE }}
+          subject-digest: ${{ steps.push.outputs.digest }}
+          push-to-registry: true
+      - name: Container log, if something failed
+        if: ${{ failure() }}
+        run: docker logs docxtor-web || true
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: ${{ failure() }}
+        with:
+          name: playwright-report-image
+          path: playwright-report/
+          retention-days: 7
+
+  # The hosted app, first at a preview address of its own: the production test runs against it, and only a pass lets production.
+  preview:
+    if: ${{ !inputs.dry_run }}
+    needs: [gates, version, web]
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    outputs:
+      url: ${{ steps.pages.outputs.pages-deployment-alias-url || steps.pages.outputs.deployment-url }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: web-dist
+          path: web/dist
+      - name: Deploy to a preview address (branch alias)
+        id: pages
+        uses: cloudflare/wrangler-action@953926a2e2182532811c01a25e53647d93bf07c0 # v4.1.3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          wranglerVersion: ${{ env.WRANGLER_VERSION }}
+          command: pages deploy web/dist --project-name=${{ env.PAGES_PROJECT }} --branch=release-${{ needs.version.outputs.version }} --commit-dirty=true
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: package-lock.json
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: The production test against the preview address
+        env:
+          DOCXTOR_DIST_URL: ${{ steps.pages.outputs.pages-deployment-alias-url || steps.pages.outputs.deployment-url }}
+          # The hosted build has the docs at /docs/ (the Docker image does not, so its run of this test leaves this off).
+          DOCXTOR_DOCS: "1"
+        run: npx playwright test e2e/production.spec.ts --project=chromium --workers=1
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: ${{ failure() }}
+        with:
+          name: playwright-report-preview
+          path: playwright-report/
+          retention-days: 7
+
+  # The GitHub release: every archive, SHA256SUMS over all of them, build provenance for each, and the CHANGELOG section as the notes.
+  release:
+    if: ${{ !inputs.dry_run }}
+    needs: [gates, version, cli, web, image, preview]
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          pattern: cli-*
+          path: release
+          merge-multiple: true
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: web-archive
+          path: release
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: release-notes
+          path: release-draft
+      - name: Checksums
+        run: |
+          set -euo pipefail
+          ls -l release
+          (cd release && sha256sum -- *) > SHA256SUMS
+          mv SHA256SUMS release/SHA256SUMS
+          cat release/SHA256SUMS
+      - name: Build provenance for every file
+        uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
+        with:
+          subject-checksums: release/SHA256SUMS
+      - name: Create the release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ github.ref_name }}
+          VERSION: ${{ needs.version.outputs.version }}
+          PRERELEASE: ${{ needs.version.outputs.prerelease }}
+        run: |
+          set -euo pipefail
+          flags=()
+          if [ "$PRERELEASE" = true ]; then flags+=(--prerelease); fi
+          gh release create "$TAG" release/* --verify-tag --title "Docxtor $VERSION" --notes-file release-draft/release-notes.md "${flags[@]}"
+
+  # Everything has passed and the release is out: the hosted app goes live and the image gets `latest` (not for a pre-release).
+  production:
+    needs: [version, preview, release]
+    runs-on: ubuntu-24.04
+    environment: production # in the repository's settings, "Required reviewers" on this environment make it wait for a person (optional)
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: web-dist
+          path: web/dist
+      - name: Deploy to production
+        uses: cloudflare/wrangler-action@953926a2e2182532811c01a25e53647d93bf07c0 # v4.1.3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          wranglerVersion: ${{ env.WRANGLER_VERSION }}
+          command: pages deploy web/dist --project-name=${{ env.PAGES_PROJECT }} --branch=main --commit-dirty=true
+
+  image-latest:
+    if: ${{ needs.version.outputs.prerelease != 'true' }}
+    needs: [version, image, release]
+    runs-on: ubuntu-24.04
+    permissions:
+      packages: write
+    steps:
+      - uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
+      - uses: docker/login-action@8aa5831fb8d48d8f76594c7ddde61ae58019f550 # v4.8.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Tag the tested image as latest
+        env:
+          VERSION: ${{ needs.version.outputs.version }}
+        run: docker buildx imagetools create --tag "$IMAGE:latest" "$IMAGE:$VERSION"

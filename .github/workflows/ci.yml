@@ -1,0 +1,296 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  # The release workflow (release.yml) runs these same checks first.
+  workflow_call:
+
+# A new commit on a pull request stops the run for the commit before it.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  hygiene:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+      - name: No absolute home paths in tracked files
+        run: node scripts/check-private-paths.mjs
+
+  secrets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - name: Scan the whole history with gitleaks
+        env:
+          GITLEAKS_VERSION: 8.30.1
+          GITLEAKS_SHA256: 551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb
+        run: |
+          curl -sSfL -o gitleaks.tar.gz "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
+          echo "${GITLEAKS_SHA256}  gitleaks.tar.gz" | sha256sum --check
+          tar -xzf gitleaks.tar.gz gitleaks
+          ./gitleaks git --no-banner --redact --verbose .
+
+  # Known problems in what Docxtor depends on: Rust advisories, licences, banned and unknown sources (deny.toml), and the npm
+  # packages. Docxtor runs these against the lock files, so a new advisory fails the next run even when nothing changed.
+  deps:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+      - name: Install cargo-audit 0.23.0 and cargo-deny 0.21.0
+        uses: taiki-e/install-action@fe3acb53a98b62c772db35de75ce0e4595e7ca8c # v2.90.8
+        with:
+          tool: cargo-audit@0.23.0,cargo-deny@0.21.0
+      - name: Rust advisories (cargo audit)
+        run: cargo audit
+      - name: Rust advisories, licences, bans and sources (cargo deny)
+        run: cargo deny check
+      - name: npm audit, the packages and the app that ship
+        run: npm audit --omit=dev
+      - name: npm audit, everything (high and critical fail the job)
+        run: npm audit --audit-level=high
+
+  engine:
+    runs-on: ubuntu-latest
+    env:
+      # The damaged-file test calls a case that takes longer than this a hang. GitHub's runners are about three times slower than
+      # a recent laptop, so the debug build's 8 s locally is 20 s here: still far short of a real hang, which never answers.
+      DOCXTOR_MUTATE_LIMIT_MS: "20000"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Install Rust (the version rust-toolchain.toml names)
+        run: |
+          rustup toolchain install
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
+      - name: Install python-docx (a second reader for saved files in the round-trip tests)
+        run: sudo apt-get install -y --no-install-recommends python3-docx
+      - name: Test
+        run: cargo test --workspace
+      - name: Clippy
+        run: cargo clippy --all-targets -- -D warnings
+
+  # The quick part of the Word checks (the full run is nightly.yml): one saved file per op kind and the fixtures through
+  # Microsoft's Open XML validator. Docxtor must add no error that scripts/validate-allow.json does not name.
+  word-quick:
+    runs-on: ubuntu-latest
+    env:
+      DOCXTOR_REQUIRE: "1"
+      DOCXTOR_VALIDATE_SETS: own,features
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Install Rust (the version rust-toolchain.toml names)
+        run: |
+          rustup toolchain install
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+      - uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6.1.0
+        with:
+          dotnet-version: 8.0.x
+      - name: Build the docxtor command
+        run: cargo build --profile gate -q -p docxtor-cli
+      - name: Fidelity gate (every fixture opens and saves with 99% or more of its content kept)
+        run: cargo run -q --profile gate -p docxtor-cli -- corpus fixtures --min 99
+      - name: Make the feature files (one per op kind)
+        run: DOCXTOR_FEATURES_SHAPES=kinds DOCXTOR_FEATURES_OUT="$RUNNER_TEMP/features" cargo test --profile gate -q -p docxtor-core --test random_ops feature_files -- --nocapture
+      - name: Open XML validator gate on the feature files and the fixtures
+        env:
+          DOCXTOR_FEATURES_DIR: ${{ runner.temp }}/features
+        run: npm run corpus:validate
+
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Install Rust (the version rust-toolchain.toml names)
+        run: |
+          rustup toolchain install
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: package-lock.json
+      - name: Install wasm-pack 0.15.0
+        uses: taiki-e/install-action@fe3acb53a98b62c772db35de75ce0e4595e7ca8c # v2.90.8
+        with:
+          tool: wasm-pack@0.15.0
+      - name: Build
+        run: |
+          npm ci
+          npm run wasm
+          npm run build
+      - name: Documentation site builds (a dead link or a page that does not compile fails here)
+        run: npm run docs:build
+      - name: Engine runs in Node
+        run: npm test
+      - name: Install cargo-about
+        uses: taiki-e/install-action@fe3acb53a98b62c772db35de75ce0e4595e7ca8c # v2.90.8
+        with:
+          tool: cargo-about@0.9.3
+      - name: Licence notices are current and every shipped dependency has an allowed licence
+        run: npm run check:notices
+
+  # The browser tests on Chromium, every one: the engine is built once (engine-wasm), then the tests are split across
+  # thirteen machines with 2 workers each (a runner has 4 cores, and more workers slow every test down): the accessibility
+  # checks (axe on every screen and dialog in both themes, about 15 minutes of test time) in five parts, everything else
+  # in eight. `chromium` passes only when all thirteen do.
+  engine-wasm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Install Rust (the version rust-toolchain.toml names)
+        run: |
+          rustup toolchain install
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: package-lock.json
+      - name: Install wasm-pack 0.15.0
+        uses: taiki-e/install-action@fe3acb53a98b62c772db35de75ce0e4595e7ca8c # v2.90.8
+        with:
+          tool: wasm-pack@0.15.0
+      - name: Build the engine and the spelling checker
+        run: |
+          npm ci
+          npm run wasm
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: engine-wasm
+          path: |
+            packages/core/wasm/
+            packages/editor/src/spelling/wasm/
+          retention-days: 1
+
+  chromium-part:
+    needs: engine-wasm
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        part: [1, 2, 3, 4, 5, 6, 7, 8]
+    name: chromium (part ${{ matrix.part }} of 8)
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: package-lock.json
+      - run: npm ci
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: engine-wasm
+          path: packages/
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Browser tests
+        run: npx playwright test --shard=${{ matrix.part }}/8 --grep-invert 'a11y\.spec\.ts'
+      - name: Upload Playwright report
+        if: failure()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: playwright-report-${{ matrix.part }}
+          path: playwright-report/
+          retention-days: 7
+
+  chromium-a11y:
+    needs: engine-wasm
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        part: [1, 2, 3, 4, 5]
+    name: chromium (accessibility, part ${{ matrix.part }} of 5)
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: package-lock.json
+      - run: npm ci
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: engine-wasm
+          path: packages/
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Browser tests
+        run: npx playwright test e2e/a11y.spec.ts --shard=${{ matrix.part }}/5
+      - name: Upload Playwright report
+        if: failure()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: playwright-report-a11y-${{ matrix.part }}
+          path: playwright-report/
+          retention-days: 7
+
+  # The one check the branch rules require for the browser tests: green only when every part is.
+  chromium:
+    needs: [chromium-part, chromium-a11y]
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Every part passed
+        run: test "${{ needs.chromium-part.result }}" = success && test "${{ needs.chromium-a11y.result }}" = success
+
+  # Firefox and Safari (Playwright's WebKit) run the core of editing: every browser test tagged @core
+  # (e2e/browsers-core.spec.ts and docs/browsers.md say what is in it). Chromium runs everything in `chromium`.
+  browsers-core:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [firefox, webkit]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Install Rust (the version rust-toolchain.toml names)
+        run: |
+          rustup toolchain install
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: package-lock.json
+      - name: Install wasm-pack 0.15.0
+        uses: taiki-e/install-action@fe3acb53a98b62c772db35de75ce0e4595e7ca8c # v2.90.8
+        with:
+          tool: wasm-pack@0.15.0
+      - name: Build the engine
+        run: |
+          npm ci
+          npm run wasm
+      - name: Install Playwright ${{ matrix.browser }}
+        run: npx playwright install --with-deps ${{ matrix.browser }}
+      - name: The core set is not empty
+        run: |
+          list="$(npx playwright test --project=${{ matrix.browser }} --grep @core --list)"
+          echo "$list" | tail -n 1
+          count="$(echo "$list" | sed -n 's/^Total: \([0-9]*\) tests.*/\1/p')"
+          test "${count:-0}" -ge 40
+      - name: Core set on ${{ matrix.browser }}
+        run: npx playwright test --project=${{ matrix.browser }} --grep @core --workers=2
+      - name: Upload Playwright report
+        if: failure()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: playwright-report-${{ matrix.browser }}
+          path: playwright-report/
+          retention-days: 7

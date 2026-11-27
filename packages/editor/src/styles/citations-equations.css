@@ -1,0 +1,265 @@
+/* Citations, equations and arranging objects. */
+/* ---------- citations ---------- */
+.docxtor .fp .cite {
+  border-radius: 2px;
+  cursor: pointer;
+}
+.docxtor .fp .cite:hover,
+.docxtor .fp .cite.cite-on {
+  background: var(--paper-hover);
+  box-shadow: 0 0 0 1px var(--paper-cite);
+}
+.docxtor .cite-pop {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  width: 300px;
+  max-width: 100%;
+  padding: 0 var(--space-xs) var(--space-xs);
+}
+.docxtor .cite-sources {
+  display: flex;
+  flex-direction: column;
+}
+.docxtor .cite-src {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 6px 0;
+  border-bottom: 1px solid var(--rule);
+}
+.docxtor .cite-src:last-child {
+  border-bottom: 0;
+}
+.docxtor .cite-src-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.docxtor .cite-src-title {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.docxtor .cite-src-detail {
+  color: var(--muted);
+  font-size: 12px;
+}
+.docxtor .cite-pop .btn.sm {
+  height: 26px;
+  padding: 0 10px;
+  font-size: 12px;
+}
+.docxtor .cite-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.docxtor .cite-label {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 500;
+}
+.docxtor .cite-input,
+.docxtor .cite-add {
+  height: 34px;
+  border: 0;
+  border-radius: var(--r-sm);
+  padding: 0 10px;
+  background: var(--key);
+  color: var(--ink);
+  font: inherit;
+  box-shadow: inset 0 0 0 1px var(--rule-2);
+}
+.docxtor .cite-input:focus,
+.docxtor .cite-add:focus {
+  outline: 1px solid var(--signal);
+}
+.docxtor .cite-check {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  cursor: pointer;
+}
+.docxtor .cite-check input {
+  accent-color: var(--ink);
+  margin: 0;
+}
+
+/* ---------- equations ---------- */
+/* An equation is one unit in the text, like an image. The engine's MathML is drawn by the browser. */
+.docxtor .fp .atom.math {
+  border-radius: 2px;
+  cursor: default;
+  text-indent: 0;
+}
+.docxtor .fp .atom.math:hover {
+  background: var(--paper-hover);
+}
+.docxtor .fp .atom.math math,
+.docxtor .eq-preview math,
+.docxtor .eq-key math {
+  font-family: "Cambria Math", "STIX Two Math", "Latin Modern Math", "Noto Sans Math", math;
+}
+/* A display equation has a line to itself and sits where its justification says (centred by default). */
+.docxtor .fp .atom.math.display {
+  display: block;
+  text-align: center;
+  margin: 0.35em 0;
+}
+.docxtor .fp .atom.math.display[data-jc="left"] {
+  text-align: left;
+}
+.docxtor .fp .atom.math.display[data-jc="right"] {
+  text-align: right;
+}
+.docxtor .fp .atom.math math[display="block"] {
+  display: inline math;
+}
+.docxtor math mtd[columnalign="left"] {
+  text-align: start;
+}
+.docxtor math mtd[columnalign="right"] {
+  text-align: end;
+}
+.docxtor math .m-box {
+  border: 1px solid currentColor;
+  padding: 0.12em 0.2em;
+}
+.docxtor .eq-pop {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  width: 360px;
+  max-width: 100%;
+  padding: 0 var(--space-xs) var(--space-xs);
+}
+.docxtor .eq-keys {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2xs);
+}
+.docxtor .eq-key {
+  min-width: 28px;
+  height: 30px;
+  padding: 0 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: var(--r-sm);
+  background: var(--key);
+  box-shadow: var(--key-edge);
+  color: var(--ink);
+  cursor: pointer;
+  font: inherit;
+}
+.docxtor .eq-key:hover {
+  background: var(--hover);
+}
+.docxtor .eq-key:active {
+  background: var(--press);
+}
+.docxtor .eq-key math {
+  font-size: 13px;
+}
+.docxtor .eq-struct {
+  min-width: 38px;
+}
+.docxtor .eq-fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+.docxtor .eq-field {
+  min-height: 56px;
+  resize: vertical;
+  border: 0;
+  border-radius: var(--r-sm);
+  padding: 7px 10px;
+  background: var(--key);
+  color: var(--ink);
+  font: inherit;
+  line-height: 1.4;
+  box-shadow: inset 0 0 0 1px var(--rule-2);
+}
+.docxtor .eq-field:focus {
+  outline: 1px solid var(--signal);
+}
+.docxtor .eq-field[aria-invalid="true"] {
+  box-shadow: inset 0 0 0 1px var(--danger);
+}
+.docxtor .eq-error {
+  margin: 0;
+  color: var(--danger);
+  font-size: 12px;
+}
+.docxtor .eq-error:empty {
+  display: none;
+}
+/* The preview is a bit of page: white, with ink, in both themes. */
+.docxtor .eq-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 64px;
+  padding: var(--space-sm);
+  border-radius: var(--r-sm);
+  background: var(--paper);
+  color: var(--paper-ink);
+  box-shadow: inset 0 0 0 1px var(--rule-2);
+  font-size: 20px;
+  overflow: auto;
+}
+.docxtor .eq-preview.stale math {
+  opacity: 0.6;
+}
+.docxtor .eq-hint {
+  color: var(--paper-mark);
+  font-size: 12px;
+}
+
+/* ---------- arranging objects and drawing by hand ---------- */
+.docxtor .arrange-menu {
+  display: flex;
+  flex-direction: column;
+  min-width: 190px;
+}
+.docxtor .obj-strip .text-tb {
+  padding: 0 10px;
+  font-size: 11.5px;
+}
+/* the layer that takes the pen strokes sits over the pages; the strokes are drawn in the pen's own colour */
+.docxtor .ink-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  cursor: crosshair;
+  touch-action: none;
+  outline: none;
+}
+.docxtor .ink-layer svg {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+.docxtor .ink-stroke {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.docxtor .ink-strip .color-chip {
+  gap: 6px;
+  font-size: 11.5px;
+}
+.docxtor .ink-strip .chip {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  box-shadow: inset 0 0 0 1px var(--rule-3);
+}

@@ -1,0 +1,107 @@
+//! Docxtor core: a lossless DOCX document model with an editing engine designed to be
+//! driven equally by a UI, scripts, and AI agents.
+
+// The tool definitions are one long `json!` literal.
+#![recursion_limit = "256"]
+
+pub mod a11y;
+pub mod alt_chunk;
+pub mod ai;
+pub mod automark;
+pub mod bibtex;
+pub mod body;
+pub mod budget;
+pub mod binding;
+pub mod cfb;
+pub mod builtin_styles;
+pub mod chart;
+pub mod charfmt;
+pub mod colour;
+pub mod cite_fields;
+pub mod controls;
+pub mod cite_styles;
+pub mod citations;
+pub mod compare;
+pub mod csl;
+pub mod csl_json;
+pub mod docmeta;
+pub mod docprops;
+pub mod east_asian;
+pub mod document;
+pub use document::invariants;
+pub mod invariants_known;
+pub mod diff;
+pub mod edit;
+pub mod export;
+pub mod field_eq;
+pub mod field_fmt;
+pub mod field_values;
+pub mod fields;
+pub mod forms;
+pub mod fonts;
+pub mod formula;
+pub mod fragment;
+pub mod gallery;
+pub mod fidelity;
+pub mod html_import;
+pub mod image;
+pub mod imgconv;
+pub mod index;
+pub mod layout_props;
+pub mod marks;
+pub mod markdown;
+pub mod matcher;
+pub mod math;
+pub mod merge;
+pub mod model;
+pub mod notes;
+pub mod numbering;
+pub mod open;
+pub mod office_crypt;
+pub mod list_glyphs;
+pub mod numfmt;
+pub mod perf;
+pub mod ai_refs;
+pub mod ai_lists;
+pub mod ai_charts;
+pub mod ai_forms;
+pub mod ai_east_asian;
+pub mod ai_design;
+pub mod ai_merge;
+pub mod ai_outline;
+pub mod ai_review;
+pub mod ops;
+pub mod package;
+// Files on disk: for the command line and the MCP server, not for the browser build.
+#[cfg(not(target_arch = "wasm32"))]
+pub mod safe_write;
+pub mod picture;
+pub mod props;
+pub mod protection;
+pub mod rtf;
+pub mod ruby;
+pub mod render;
+pub mod shading;
+pub mod shapes;
+pub mod sort;
+pub mod stories;
+pub mod style_edit;
+pub mod style_sets;
+pub mod styles;
+pub mod symbol_fonts;
+pub mod table;
+pub mod table_designs;
+pub mod table_edit;
+pub mod table_format;
+pub mod template;
+pub mod themes;
+pub mod table_style;
+pub mod tabs;
+pub mod toa;
+pub mod toc;
+pub mod wordcount;
+pub mod toc_spec;
+pub mod xml;
+
+pub use document::{Access, DocError, Document};
+pub use ops::{EditError, Id, Op, OpResult, Pos};

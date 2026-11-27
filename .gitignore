@@ -1,0 +1,30 @@
+/target
+node_modules/
+web/dist/
+packages/*/dist/
+packages/core/wasm/
+*.local
+.DS_Store
+fixtures/out/
+.playwright-mcp/
+test-results/
+playwright-report/
+.claude/worktrees/
+web/dist-test/
+monkey-results/
+perf/report.md
+# The spelling checker in WebAssembly (crates/docxtor-spell), built by npm run wasm
+packages/editor/src/spelling/wasm/
+# Scratch files of scripts/docs-examples.test.mjs and e2e/docs-examples.spec.ts
+scripts/.docs-tmp/
+web/examples/_docs/
+/dist/
+# The documentation site (npm run docs:build) and VitePress's cache
+docs/.vitepress/dist/
+docs/.vitepress/cache/
+# Private working files: kept on disk, not published
+/CLAUDE.md
+/notes/
+/.claude/launch.json
+/.impeccable.md
+/release-draft/

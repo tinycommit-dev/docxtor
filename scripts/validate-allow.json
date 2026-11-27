@@ -1,0 +1,5 @@
+{
+  "comment": "Errors from Microsoft's Open XML validator that Docxtor's files may have although the original has not. Empty: the validator found five kinds of error, all Docxtor's bugs, all fixed (see docs/fidelity.md). An entry: {id, part?, description? (exact), contains?, in? (corpus, own or features), reason, date}. The gate fails an entry without a reason and a date. skipped: files Docxtor may fail to open: {file, reason, date}.",
+  "errors": [],
+  "skipped": []
+}

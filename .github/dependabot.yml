@@ -1,0 +1,35 @@
+# One pull request a week for each kind of dependency (Rust crates, npm packages, GitHub Actions), with every update of
+# that kind in it, so related updates (crates that depend on each other) are tested and land together.
+version: 2
+updates:
+  - package-ecosystem: cargo
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      cargo:
+        patterns: ["*"]
+    # zip 9.1 to 9.8 make the engine about 106 KB bigger (26 KB brotli), which fails the size gates in npm run perf.
+    # Remove this when a later zip is smaller or the size is accepted.
+    ignore:
+      - dependency-name: zip
+        versions: [">= 9.1.0, < 9.9.0"]
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      npm:
+        patterns: ["*"]
+    # Playwright 1.65 brings Chromium 159, whose scrolling uses more memory and fails three memory gates in npm run perf.
+    # Remove this when a later Playwright passes them or the new numbers are accepted.
+    ignore:
+      - dependency-name: "@playwright/test"
+        versions: [">= 1.65.0, < 1.66.0"]
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      github-actions:
+        patterns: ["*"]

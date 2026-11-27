@@ -1,0 +1,108 @@
+{
+  "date": "2026-11-20T06:08:56.900Z",
+  "commit": "a392135",
+  "load": {
+    "load1": 8.67,
+    "load5": 9.29,
+    "cpus": 10,
+    "perCore": 0.87,
+    "memoryFreePercent": 74,
+    "busiest": "260.7 % /Applications/Google Chrome.app/Contents/Frameworks/Google Chrome Framew",
+    "platform": "darwin 25.6.0",
+    "node": "v22.23.3"
+  },
+  "results": [
+    {
+      "plant": "allocate 20 MB on every open",
+      "caught": true,
+      "gatesFailed": 4,
+      "examples": [
+        "native.100.open.bytes: 6339063 to 27310583 (allowed +31695.315000000002)",
+        "native.100.open.peak: 4461657 to 20971520 (allowed +22308.285)",
+        "native.1000.open.bytes: 55190007 to 76161527 (allowed +275950.03500000003)",
+        "native.5000.open.bytes: 272319415 to 293290935 (allowed +1361597.075)"
+      ]
+    },
+    {
+      "plant": "copy the whole body a second time on every edit",
+      "caught": true,
+      "gatesFailed": 34,
+      "examples": [
+        "native.100.key.allocs: 4458 to 6395 (allowed +22.29)",
+        "native.100.key.bytes: 283384 to 405328 (allowed +1416.92)",
+        "native.100.key.clones: 1 to 2 (allowed +0.01)",
+        "native.100.split.allocs: 3915 to 5852 (allowed +19.575)",
+        "native.100.split.bytes: 248136 to 370106 (allowed +1240.68)",
+        "native.100.split.clones: 1 to 2 (allowed +0.01)",
+        "native.100.undo.allocs: 12221 to 14167 (allowed +61.105000000000004)",
+        "native.100.undo.bytes: 3389328 to 3511804 (allowed +16946.64)"
+      ]
+    },
+    {
+      "plant": "a busy loop on every edit (caught by time, interleaved: every planted run slower than every clean run)",
+      "cleanSpread": 0.061,
+      "reps": 7,
+      "trusted": false,
+      "rows": [
+        {
+          "iterations": 20000,
+          "plantedMs": 2.492,
+          "cleanMs": 2.475,
+          "addedMs": 0.017,
+          "slower": 1.01,
+          "caught": false
+        },
+        {
+          "iterations": 60000,
+          "plantedMs": 2.618,
+          "cleanMs": 2.475,
+          "addedMs": 0.143,
+          "slower": 1.06,
+          "caught": false
+        },
+        {
+          "iterations": 200000,
+          "plantedMs": 2.87,
+          "cleanMs": 2.475,
+          "addedMs": 0.395,
+          "slower": 1.16,
+          "caught": true
+        },
+        {
+          "iterations": 600000,
+          "plantedMs": 3.627,
+          "cleanMs": 2.475,
+          "addedMs": 1.152,
+          "slower": 1.47,
+          "caught": true
+        },
+        {
+          "iterations": 2000000,
+          "plantedMs": 6.398,
+          "cleanMs": 2.475,
+          "addedMs": 3.923,
+          "slower": 2.59,
+          "caught": true
+        }
+      ],
+      "smallestCaughtAddedMs": 0.395
+    },
+    {
+      "plant": "busy loop of 400000 iterations on every edit, in the browser (Chrome's script + layout + style time per key, interleaved)",
+      "cleanMs": [
+        2.45,
+        2.44,
+        2.53,
+        2.45
+      ],
+      "plantedMs": [
+        3.2,
+        3.18,
+        3.25,
+        3.19
+      ],
+      "caught": true,
+      "trusted": false
+    }
+  ]
+}

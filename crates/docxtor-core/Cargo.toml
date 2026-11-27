@@ -1,0 +1,25 @@
+[package]
+name = "docxtor-core"
+description = "Lossless DOCX document model, editing engine and AI interface for Docxtor"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+
+[dependencies]
+quick-xml.workspace = true
+zip.workspace = true
+# Already built for the zip crate; the repair reader inflates damaged entries itself.
+flate2 = { version = "1.1", default-features = false, features = ["zlib-rs"] }
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+aes = "0.9"
+sha1 = "0.11"
+sha2 = "0.11"
+hmac = "0.13"
+
+[features]
+# Deliberate regressions for the performance harness to catch (src/perf.rs). Never on in a shipped build.
+perf-plant = []

@@ -1,0 +1,207 @@
+/* Colour, type and size tokens for both themes, and the reduced-motion switch.
+   avoid-ai-design-ignore-file: SD1, T1  (Inter and the cream + orange palette are fixed parts of the design) */
+
+.docxtor {
+  --font-ui: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  /* numbers use the UI face with tabular figures; no monospace chrome */
+  --font-readout: var(--font-ui);
+  --font-code: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  /* Zapier tokens */
+  --z-canvas: #fffefb;
+  --z-canvas-soft: #f8f4f0;
+  --z-ink: #201515;
+  --z-ink-soft: #2f2a26;
+  --z-ink-mid: #36342e;
+  --z-body: #605d52;
+  --z-body-mid: #939084;
+  --z-mute: #c5c0b1;
+  --z-orange: #ff4f00;
+
+  /* roles */
+  --canvas: #efe9e0; /* the desk behind the pages */
+  --chassis: var(--z-canvas); /* top bar */
+  --panel: var(--z-canvas-soft); /* sidebar, insets */
+  --panel-hi: var(--z-canvas); /* toolbar, menus, dialogs */
+  --well: #efe9e0;
+  --paper: #ffffff; /* pages stay white, as in Word */
+  --paper-ink: var(--z-ink); /* text drawn on a page, such as a list style's preview: dark in both themes */
+  --paper-line: var(--z-mute); /* greyed-out text lines in such a drawing */
+  --paper-mark: #6b675d; /* non-printing characters drawn on the page: muted, >= 4.5:1 on white in both themes */
+  --paper-field: rgb(32 21 21 / 0.07); /* the tint behind a field code when field codes are shown, drawn on the page; the code is --paper-mark, 4.8:1 on it */
+  --paper-spelling: #d93025; /* the wavy underline under a misspelled word, drawn on the page: red, 4.8:1 on white in both themes (pages stay white) */
+  --paper-grammar: #1967d2; /* the wavy underline under a grammar problem (dotted for a style hint), drawn on the page: blue like Docs', 5.4:1 on white in both themes */
+  --paper-hover: rgb(32 21 21 / 0.08); /* a hover tint on the page itself, such as a checklist box */
+  --paper-ins: #266a42; /* a tracked insertion drawn on the page: green, 6:1 on white in both themes */
+  --paper-ins-soft: rgb(38 106 66 / 0.12);
+  --paper-del: #b42318; /* a tracked deletion drawn on the page: red, 6.5:1 on white in both themes */
+  --paper-del-soft: rgb(180 35 24 / 0.1);
+  --paper-range: rgb(32 21 21 / 0.07); /* the parts of a protected document anyone may edit: a light tint on the white page, in both themes */
+  --paper-cite: #8f8b7f; /* the outline around a citation under the pointer, drawn on the page: 3.4:1 on white in both themes */
+  --paper-watermark: #c0c0c0; /* a watermark with no colour of its own: Word's silver */
+  /* Charts are drawn on the page, so they stay as they print in both themes. The six series colours are Word's Office
+     palette, used for a series the file gives no colour (a theme's own accents win); the text and lines are Word's greys. */
+  --chart-1: #4472c4;
+  --chart-2: #ed7d31;
+  --chart-3: #a5a5a5;
+  --chart-4: #ffc000;
+  --chart-5: #5b9bd5;
+  --chart-6: #70ad47;
+  --paper-chart-text: #595959; /* axis and legend text on a chart: 7:1 on white */
+  --paper-gridline: #d9d5ca; /* the gridlines shown on a page (View, Gridlines): a hairline, not text */
+  --focus-dim: rgb(32 21 21 / 0.66); /* the veil over everything but the lines in view in Line focus */
+  --paper-chart-grid: #d9d9d9; /* gridlines: a hairline, not text */
+  --paper-chart-axis: #bfbfbf;
+  /* Smart chips are drawn on the white page, so each colour keeps its pair in both themes (text on its fill 6.8:1 or better). The fill is a tint of the colour; the ring is the text colour at a quarter. */
+  --chip-gray-bg: #eee9df;
+  --chip-gray-fg: #36342e;
+  --chip-blue-bg: #e0eafb;
+  --chip-blue-fg: #17418f;
+  --chip-green-bg: #dcf0e3;
+  --chip-green-fg: #1a5b35;
+  --chip-yellow-bg: #fbeec2;
+  --chip-yellow-fg: #654400;
+  --chip-red-bg: #fbe2de;
+  --chip-red-fg: #951b11;
+  --chip-purple-bg: #eae2f6;
+  --chip-purple-fg: #55298a;
+  --ink: var(--z-ink);
+  --ink-2: var(--z-ink-mid);
+  --muted: var(--z-body);
+  --faint: #6b675d; /* still >= 4.5:1 on every surface */
+  --quiet: var(--z-body-mid); /* placeholders and disabled icons only */
+  --rule: #ebe5da;
+  --rule-2: #dcd5c7;
+  --rule-3: var(--z-mute);
+  --hover: rgb(32 21 21 / 0.05);
+  --press: rgb(32 21 21 / 0.09);
+  --selected: rgb(32 21 21 / 0.1);
+  --selected-hover: rgb(32 21 21 / 0.14);
+
+  --signal: var(--z-orange);
+  --signal-ink: var(--z-canvas);
+  --signal-text: #b03600; /* orange for text: >= 4.5:1 on every light surface */
+  --signal-soft: rgb(255 79 0 / 0.1);
+  --selection: rgb(255 79 0 / 0.2);
+  --ok: #266a42;
+  --ok-soft: rgb(38 106 66 / 0.12);
+  --danger: #b42318;
+  --danger-soft: rgb(180 35 24 / 0.08);
+
+  --button: var(--z-ink); /* primary buttons are ink */
+  --button-ink: var(--z-canvas);
+  --key: var(--z-canvas);
+  --key-edge: 0 0 0 1px var(--rule-2);
+  --key-down: 0 0 0 1px var(--rule-3);
+  --paper-edge: 0 0 0 1px #ddd6c9;
+  --panel-shadow: 0 0 0 1px var(--rule-2), 0 12px 32px -16px rgb(32 21 21 / 0.22);
+
+  --r-sm: 6px;
+  --r-md: 12px;
+  --r-lg: 16px;
+  /* Dialog sizes (DESIGN.md): four widths and one height limit. */
+  --dialog-s: 440px;
+  --dialog-m: 600px;
+  --dialog-l: 800px;
+  --dialog-xl: 1040px;
+  --dialog-h: min(720px, calc(100dvh - 48px));
+  --dialog-h-xl: min(880px, calc(100dvh - 48px));
+  --space-2xs: 2px;
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 12px;
+  --space-lg: 16px;
+  --space-xl: 24px;
+  --space-2xl: 32px;
+  --space-3xl: 48px;
+  --space-4xl: 64px;
+
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  /* the proofreader's insertion caret, the mark for everything the AI does */
+  --caret-mark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M1.5 10.5 6 2l4.5 8.5' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  .docxtor:not([data-theme="light"]) {
+    --canvas: #1a1212;
+    --chassis: #201515;
+    --panel: #2f2a26;
+    --panel-hi: #36342e;
+    --well: #1a1212;
+    --ink: #fffefb;
+    --ink-2: #e6e0d4;
+    --muted: #c5c0b1;
+    --faint: #a9a497;
+    --quiet: #7d796e;
+    --rule: rgb(255 254 251 / 0.08);
+    --rule-2: rgb(255 254 251 / 0.16);
+    --rule-3: rgb(255 254 251 / 0.3);
+    --hover: rgb(255 254 251 / 0.06);
+    --press: rgb(255 254 251 / 0.11);
+    --selected: rgb(255 254 251 / 0.14);
+    --selected-hover: rgb(255 254 251 / 0.19);
+    --signal-text: #ff7a3d;
+    --signal-soft: rgb(255 79 0 / 0.18);
+    --selection: rgb(255 79 0 / 0.3);
+    --ok: #7ccf9b;
+    --ok-soft: rgb(124 207 155 / 0.16);
+    --danger: #ff8a7a;
+    --danger-soft: rgb(255 138 122 / 0.14);
+    --button: #fffefb;
+    --button-ink: #201515;
+    --key: #36342e;
+    --key-edge: 0 0 0 1px rgb(255 254 251 / 0.14);
+    --key-down: 0 0 0 1px rgb(255 254 251 / 0.24);
+    --paper-edge: 0 0 0 1px rgb(0 0 0 / 0.5);
+    --panel-shadow: 0 0 0 1px rgb(255 254 251 / 0.12), 0 12px 32px -16px rgb(0 0 0 / 0.7);
+    color-scheme: dark;
+  }
+}
+.docxtor[data-theme="dark"] {
+  --canvas: #1a1212;
+  --chassis: #201515;
+  --panel: #2f2a26;
+  --panel-hi: #36342e;
+  --well: #1a1212;
+  --ink: #fffefb;
+  --ink-2: #e6e0d4;
+  --muted: #c5c0b1;
+  --faint: #a9a497;
+  --quiet: #7d796e;
+  --rule: rgb(255 254 251 / 0.08);
+  --rule-2: rgb(255 254 251 / 0.16);
+  --rule-3: rgb(255 254 251 / 0.3);
+  --hover: rgb(255 254 251 / 0.06);
+  --press: rgb(255 254 251 / 0.11);
+  --selected: rgb(255 254 251 / 0.14);
+  --selected-hover: rgb(255 254 251 / 0.19);
+  --signal-text: #ff7a3d;
+  --signal-soft: rgb(255 79 0 / 0.18);
+  --selection: rgb(255 79 0 / 0.3);
+  --ok: #7ccf9b;
+  --ok-soft: rgb(124 207 155 / 0.16);
+  --danger: #ff8a7a;
+  --danger-soft: rgb(255 138 122 / 0.14);
+  --button: #fffefb;
+  --button-ink: #201515;
+  --key: #36342e;
+  --key-edge: 0 0 0 1px rgb(255 254 251 / 0.14);
+  --key-down: 0 0 0 1px rgb(255 254 251 / 0.24);
+  --paper-edge: 0 0 0 1px rgb(0 0 0 / 0.5);
+  --panel-shadow: 0 0 0 1px rgb(255 254 251 / 0.12), 0 12px 32px -16px rgb(0 0 0 / 0.7);
+  color-scheme: dark;
+}
+
+.docxtor,
+.docxtor *,
+.docxtor *::before,
+.docxtor *::after {
+  box-sizing: border-box;
+}
+.docxtor {
+  color: var(--ink);
+  font: 400 13px/1.45 var(--font-ui);
+  font-feature-settings: "cv11";
+  -webkit-font-smoothing: antialiased;
+}

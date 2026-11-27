@@ -1,0 +1,19 @@
+{
+  "name": "@docxtor/extensions",
+  "version": "0.1.0",
+  "description": "The Docxtor extension API: commands, toolbar items, panels, importers and exporters, templates, themes, AI providers and tools, storage providers.",
+  "license": "MIT OR Apache-2.0",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "files": ["src"],
+  "sideEffects": false,
+  "dependencies": {
+    "@docxtor/core": "*"
+  },
+  "scripts": {
+    "build": "tsc --noEmit -p .",
+    "test": "node --experimental-strip-types --test \"test/*.test.ts\""
+  }
+}

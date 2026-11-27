@@ -1,0 +1,21 @@
+[package]
+name = "docxtor-wasm"
+description = "WebAssembly bindings for the Docxtor document engine"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+docxtor-core.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+wasm-bindgen = "0.2"
+
+[features]
+# Deliberate regressions for the performance harness; see docxtor-core's perf module. Never on in a shipped build.
+perf-plant = ["docxtor-core/perf-plant"]

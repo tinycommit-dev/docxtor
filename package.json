@@ -1,0 +1,51 @@
+{
+  "name": "docxtor-monorepo",
+  "private": true,
+  "version": "0.1.0",
+  "license": "MIT OR Apache-2.0",
+  "workspaces": [
+    "packages/core",
+    "packages/extensions",
+    "packages/editor",
+    "web"
+  ],
+  "scripts": {
+    "wasm": "npm run wasm -w @docxtor/core && npm run wasm -w @docxtor/editor",
+    "wasm:ship": "npm run wasm:ship -w @docxtor/core && npm run wasm -w @docxtor/editor",
+    "dev": "npm run dev -w docxtor-web",
+    "build": "npm run build -w @docxtor/core && npm run build -w @docxtor/extensions && npm run build -w @docxtor/editor && npm run build -w docxtor-web",
+    "test": "node scripts/check-layers.mjs && node scripts/check-size.mjs && npm test -w @docxtor/core && npm test -w @docxtor/extensions && npm test -w @docxtor/editor && npm test -w docxtor-web && npm run test:docs && npm run test:release && node scripts/messages.mjs --check && node scripts/messages.mjs --pack web/src/languages/es.json",
+    "messages": "node scripts/messages.mjs",
+    "notices": "node scripts/notices.mjs",
+    "check:paths": "node scripts/check-private-paths.mjs",
+    "check:notices": "node scripts/notices.mjs --check && node --test scripts/notices.test.mjs",
+    "test:release": "node scripts/headers.mjs --check && node --test scripts/headers.test.mjs scripts/package-web.test.mjs scripts/release.test.mjs scripts/nginx-config.test.mjs scripts/package-cli.test.mjs",
+    "test:docs": "node --test scripts/docs-examples.test.mjs scripts/docs-site.test.mjs examples/ai-proxy/proxy.test.mjs scripts/privacy.test.mjs scripts/voice.test.mjs",
+    "test:e2e": "playwright test",
+    "test:e2e:core": "DOCXTOR_BROWSERS=firefox,webkit playwright test --grep @core",
+    "test:memory": "playwright test e2e/memory.spec.ts --workers=1",
+    "test:a11y": "playwright test e2e/a11y.spec.ts",
+    "clean": "node scripts/clean.mjs",
+    "corpus:fetch": "node scripts/corpus.mjs",
+    "corpus:validate": "node scripts/validate.mjs",
+    "corpus:lo": "node scripts/lo-check.mjs",
+    "perf:quick": "node --experimental-strip-types --no-warnings perf/run.mts quick",
+    "perf": "node --experimental-strip-types --no-warnings perf/run.mts standard",
+    "perf:full": "node --experimental-strip-types --no-warnings perf/run.mts full",
+    "perf:accept": "node --experimental-strip-types --no-warnings perf/run.mts standard --accept",
+    "headers": "node scripts/headers.mjs",
+    "package:web": "node scripts/package-web.mjs",
+    "deploy": "node scripts/deploy.mjs",
+    "preview:dist": "node scripts/serve-dist.mjs",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:add": "node scripts/add-docs.mjs"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.14.1",
+    "@fontsource-variable/inter": "^5.3.0",
+    "@playwright/test": "^1.64.1",
+    "typescript": "^7.0.2",
+    "vitepress": "2.0.0-alpha.21"
+  }
+}

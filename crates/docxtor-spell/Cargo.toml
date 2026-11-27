@@ -1,0 +1,17 @@
+[package]
+name = "docxtor-spell"
+description = "Docxtor's spelling checker for the browser: Hunspell dictionaries read by spellbook, in WebAssembly"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+# Reads Hunspell dictionaries without expanding every word form (English 2 MB of memory where nspell took 12, French 5 where it
+# took 295). MPL-2.0, used unchanged (see THIRD_PARTY_NOTICES.md).
+spellbook = "0.4.2"
+wasm-bindgen = "0.2"

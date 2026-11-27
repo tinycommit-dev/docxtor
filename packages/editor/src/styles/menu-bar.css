@@ -1,0 +1,184 @@
+/* The menu bar, the word count, the missing fonts strip and file notices. */
+/* ---------- menu bar ---------- */
+.docxtor .menubar-items {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  min-width: 0;
+}
+.docxtor .menubar-top {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 26px;
+  padding: 0 var(--space-sm);
+  border: 0;
+  border-radius: var(--r-sm);
+  background: none;
+  color: var(--ink);
+  font-size: 13px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.docxtor .menubar-top:hover {
+  background: var(--hover);
+}
+.docxtor .menubar-top.open {
+  background: var(--selected);
+}
+.docxtor .menubar-top:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: -2px;
+}
+.docxtor .menubar-top svg {
+  width: 16px;
+  height: 16px;
+}
+.docxtor .menubar-fold {
+  display: none;
+}
+@media (max-width: 760px) {
+  .docxtor .menubar-fold {
+    display: inline-flex;
+  }
+  .docxtor .menubar-top:not(.menubar-fold) {
+    display: none;
+  }
+}
+.docxtor .menu-drop {
+  min-width: 248px;
+}
+.docxtor .menu-icon {
+  display: inline-flex;
+  width: 16px;
+  flex: none;
+  justify-content: center;
+}
+.docxtor .menu-icon svg {
+  width: 16px;
+  height: 16px;
+}
+.docxtor .menu-icon.on svg {
+  color: var(--ink);
+}
+.docxtor .menu-item:disabled .menu-icon svg {
+  color: var(--quiet);
+}
+.docxtor .menu-label {
+  flex: 1;
+  min-width: 0;
+}
+.docxtor .menu-label.strong {
+  font-weight: 650;
+}
+.docxtor .menu-item .hint {
+  padding-inline-start: var(--space-lg);
+}
+.docxtor .menu-sub svg {
+  transform: rotate(-90deg);
+}
+.docxtor .menu-item[aria-expanded="true"] {
+  background: var(--hover);
+}
+
+/* ---------- word count ---------- */
+.docxtor .word-count {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--space-sm) var(--space-lg);
+  margin: 0;
+}
+.docxtor .word-count dt {
+  color: var(--muted);
+}
+.docxtor .word-count dd {
+  margin: 0;
+  text-align: end;
+  font-size: 13px;
+}
+
+/* ---------- missing fonts ---------- */
+/* A quiet strip above the pages, in the desk's tone: it says what's wrong and stays out of the way. */
+.docxtor .fonts-strip {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-xs) var(--space-md);
+  padding: var(--space-sm) var(--space-lg);
+  background: var(--panel);
+  border-bottom: 1px solid var(--rule);
+  color: var(--ink);
+}
+.docxtor .fonts-strip[hidden] {
+  display: none;
+}
+.docxtor .fonts-strip p {
+  margin: 0;
+  min-width: 0;
+  max-width: 80ch;
+}
+.docxtor .fonts-strip-actions {
+  display: flex;
+  gap: var(--space-xs);
+}
+/* ---------- file notices ---------- */
+/* The strip is the missing fonts strip's twin: a quiet line above the pages in the desk's tone. */
+.docxtor .open-notice {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-xs) var(--space-md);
+  padding: var(--space-sm) var(--space-lg);
+  background: var(--panel);
+  border-bottom: 1px solid var(--rule);
+  color: var(--ink);
+}
+.docxtor .open-notice[hidden] {
+  display: none;
+}
+.docxtor .open-notice p {
+  margin: 0;
+  min-width: 0;
+  max-width: 80ch;
+}
+.docxtor .open-notice-actions {
+  display: flex;
+  gap: var(--space-xs);
+}
+.docxtor .open-notes {
+  margin: 0;
+  padding-inline-start: var(--space-lg);
+  display: grid;
+  gap: var(--space-sm);
+  font-size: 14px;
+}
+.docxtor .open-failed {
+  max-width: 60ch;
+}
+.docxtor .mf-rows {
+  display: grid;
+  gap: var(--space-sm);
+}
+.docxtor .mf-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-md);
+}
+.docxtor .mf-name {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+.docxtor .mf-use {
+  font-size: 12px;
+  color: var(--muted);
+}
+@media (max-width: 480px) {
+  .docxtor .mf-row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-xs);
+  }
+}

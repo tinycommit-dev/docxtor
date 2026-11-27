@@ -1,0 +1,27 @@
+name: Feature request
+description: Suggest something Docxtor should do
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What are you trying to do?
+      description: The task or document you could not finish, in your own words.
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: What would you like Docxtor to do?
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: What do you do today instead?
+      description: Another editor, a workaround, or an extension you tried.
+  - type: textarea
+    id: word
+    attributes:
+      label: How does Word or Google Docs do it?
+      description: The menu path or a link, if it exists there.

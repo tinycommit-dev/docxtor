@@ -1,0 +1,156 @@
+/* The root, the reset for host pages, the engraved label and the AI's caret mark. */
+/* A root created by DocxtorEditor.mount() or <docxtor-editor>: toolbar on top, pages filling the rest.
+   The host gives it a height (e.g. height: 80vh, or flex: 1 inside its own layout). */
+.docxtor.docxtor-editor {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+  /* The pages' natural width must not stretch the host's grid or flex cell; the editor zooms to fit instead. */
+  contain: inline-size;
+  background: var(--canvas);
+  overflow: hidden;
+}
+docxtor-editor {
+  display: flex;
+  height: 600px;
+}
+.docxtor.docxtor-editor > .editor-host {
+  flex: 1;
+}
+/* Popovers, dialogs, toasts and tool strips: no box of its own, just Docxtor's tokens and theme. */
+.docxtor.docxtor-layer {
+  display: contents;
+}
+/* Host pages often style bare buttons and inputs; reset what Docxtor's own rules don't set. */
+.docxtor button,
+.docxtor input,
+.docxtor select,
+.docxtor textarea {
+  font: inherit;
+  color: inherit;
+  text-transform: none;
+  letter-spacing: normal;
+  text-shadow: none;
+  margin: 0;
+  min-width: 0;
+  min-height: 0;
+  line-height: inherit;
+}
+.docxtor [hidden] {
+  display: none !important;
+}
+.docxtor :focus-visible {
+  outline: 2px solid var(--signal);
+  outline-offset: 1px;
+}
+.docxtor ::selection {
+  background: var(--selection);
+}
+@media (prefers-reduced-motion: reduce) {
+  /* Disable transitions outright: a tiny duration with the default "transition-property: all"
+     would turn every style change into an animation and make layout measurements stale. */
+  .docxtor *,
+  .docxtor *::before,
+  .docxtor *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition: none !important;
+  }
+}
+/* Document content is measured synchronously by the paginator: never animate it. */
+.docxtor .flow,
+.docxtor .flow * {
+  transition: none !important;
+}
+
+/* engraved panel label: condensed small caps */
+.docxtor .lbl-eng,
+.docxtor .panel-title,
+.docxtor .menu-title,
+.docxtor .field label,
+.docxtor .status-key {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+}
+.docxtor .readout {
+  font-family: var(--font-readout);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.docxtor .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 30px;
+  padding: 0 11px;
+  border-radius: var(--r-md);
+  border: 0;
+  background: var(--key);
+  box-shadow: var(--key-edge);
+  cursor: pointer;
+  white-space: nowrap;
+  font-weight: 500;
+  transition: background 0.12s, transform 0.06s;
+}
+.docxtor .btn:hover {
+  background: var(--panel);
+}
+.docxtor .btn:active {
+  box-shadow: var(--key-down);
+  transform: translateY(1px);
+}
+.docxtor .btn.primary {
+  background: var(--button);
+  color: var(--button-ink);
+  box-shadow: none;
+  font-weight: 600;
+}
+.docxtor .btn.primary:hover {
+  background: color-mix(in srgb, var(--button) 86%, var(--panel-hi));
+}
+.docxtor .btn.ghost {
+  background: transparent;
+  box-shadow: none;
+}
+.docxtor .btn.ghost:hover {
+  background: var(--hover);
+}
+.docxtor .btn.danger {
+  color: var(--danger);
+}
+.docxtor .btn svg,
+.docxtor .tb svg {
+  width: 16px;
+  height: 16px;
+  flex: none;
+  stroke-width: 1.6;
+}
+.docxtor .icon-btn {
+  width: 30px;
+  padding: 0;
+  justify-content: center;
+}
+/* The AI's mark: a proofreader's insertion caret (‸). It sits in an icon-sized slot so
+   keys with the mark align with keys that carry an icon. */
+.docxtor .lamp {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  flex: none;
+  background: currentColor;
+  -webkit-mask: var(--caret-mark) center / 12px no-repeat;
+  mask: var(--caret-mark) center / 12px no-repeat;
+}
+.docxtor .btn .lamp {
+  color: var(--muted);
+}
+.docxtor .btn.on .lamp {
+  color: var(--ink);
+}
+.docxtor .kbd {
+  font-family: var(--font-readout);
+  font-size: 11.5px;
+  color: var(--faint);
+}

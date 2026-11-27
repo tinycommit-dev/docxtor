@@ -1,0 +1,335 @@
+/* Character formatting, colour menus, the Font dialog and fields. */
+/* Character formatting: hidden text, text borders, and the colour menus and dialogs. */
+.docxtor .stage:not(.show-hidden) .hid {
+  display: none !important;
+}
+/* Hidden text that is shown reads as hidden: Word draws it with a dotted underline. */
+.docxtor .stage.show-hidden .hid {
+  border-bottom: 1px dotted currentColor;
+}
+/* the colour palette: theme columns, standard and recent colours, More colors */
+.docxtor .palette {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-xs) 0;
+}
+.docxtor .palette .menu-title {
+  padding: var(--space-xs) var(--space-md);
+}
+.docxtor .pal-title {
+  padding: var(--space-sm) var(--space-md) var(--space-xs);
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--muted);
+}
+.docxtor .pal-theme {
+  display: grid;
+  grid-template-columns: repeat(10, 20px);
+  gap: 4px;
+  padding: 0 var(--space-md);
+}
+.docxtor .pal-col {
+  display: flex;
+  flex-direction: column;
+  /* 4px between 20px swatches: their centres are 24px apart (WCAG 2.5.8) */
+  gap: 4px;
+}
+.docxtor .pal-col .swatch:first-child {
+  margin-bottom: 4px;
+}
+.docxtor .pal-row {
+  display: grid;
+  grid-template-columns: repeat(10, 20px);
+  gap: 4px;
+  padding: 0 var(--space-md);
+}
+.docxtor .palette .pal-line {
+  margin-top: var(--space-xs);
+}
+.docxtor .swatch-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-sm);
+}
+.docxtor .swatch-more {
+  padding: 0 var(--space-md);
+}
+.docxtor .palette .pal-line.on {
+  background: var(--selected);
+}
+/* the style picker: a mark after each name says if it is a paragraph, character or linked style */
+.docxtor .style-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-lg);
+}
+.docxtor .style-item .style-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.docxtor .style-kind {
+  flex: none;
+  color: var(--muted);
+  font-size: 11.5px;
+}
+/* More colors */
+.docxtor .colors-dialog {
+  width: min(var(--dialog-s), 100%);
+}
+.docxtor .cd-top {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr) auto;
+  gap: var(--space-lg);
+  align-items: end;
+  margin-bottom: var(--space-lg);
+}
+.docxtor .cd-top .field {
+  margin-bottom: 0;
+}
+.docxtor .cd-compare {
+  display: flex;
+  flex-direction: column;
+  height: 56px;
+  border-radius: var(--r-sm);
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px var(--rule-2);
+}
+.docxtor .cd-compare span {
+  flex: 1;
+}
+.docxtor .cd-sliders {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+}
+.docxtor .cd-range {
+  appearance: none;
+  height: 12px;
+  border-radius: 6px;
+  box-shadow: inset 0 0 0 1px var(--rule-2);
+  padding: 0;
+}
+.docxtor .cd-range::-webkit-slider-thumb {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--paper);
+  box-shadow: 0 0 0 2px var(--ink);
+  cursor: pointer;
+}
+.docxtor .cd-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0 var(--space-lg);
+}
+.docxtor .cd-grid .field {
+  margin-bottom: var(--space-md);
+}
+/* the Font dialog */
+.docxtor .font-dialog {
+  width: min(var(--dialog-m), 100%);
+}
+.docxtor .fd-grid-3 {
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr);
+}
+.docxtor .fd-effects {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 var(--space-lg);
+}
+.docxtor .font-dialog .fd-effects .check {
+  margin-bottom: var(--space-sm);
+}
+.docxtor .fd-color {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  height: 34px;
+  border: 0;
+  border-radius: var(--r-sm);
+  padding: 0 10px;
+  background: var(--key);
+  box-shadow: inset 0 0 0 1px var(--rule-2);
+  cursor: pointer;
+  text-align: start;
+}
+.docxtor .fd-color:hover {
+  background: var(--hover);
+}
+.docxtor .fd-color span:last-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.docxtor .fd-dot {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  box-shadow: inset 0 0 0 1px var(--rule-3);
+}
+.docxtor .fd-dot.none {
+  background: linear-gradient(135deg, transparent 45%, var(--rule-3) 45% 55%, transparent 55%) !important;
+}
+.docxtor .fd-preview {
+  display: flex;
+  align-items: center;
+  min-height: 72px;
+  padding: var(--space-md) var(--space-lg);
+  border-radius: var(--r-sm);
+  background: var(--paper);
+  color: var(--paper-ink);
+  box-shadow: inset 0 0 0 1px var(--rule-2);
+  overflow: hidden;
+}
+.docxtor .fd-sample {
+  white-space: pre-wrap;
+  font-family: Calibri, Carlito, "Segoe UI", sans-serif;
+  font-size: 11pt;
+}
+@media (max-width: 480px) {
+  .docxtor .fd-grid-3,
+  .docxtor .fd-effects,
+  .docxtor .cd-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .docxtor .pal-theme,
+  .docxtor .pal-row {
+    grid-template-columns: repeat(10, minmax(0, 1fr));
+  }
+}
+
+/* Fields. A field whose value the layout works out keeps its stored text (the model's positions count it) and shows the
+   new value through data-val; the stored text takes no room. */
+.docxtor .fp .fval {
+  font-size: 0 !important;
+}
+.docxtor .fp .fval[data-val]::after {
+  content: attr(data-val);
+  font-size: var(--fs, 1em);
+}
+.docxtor .fp .fhid {
+  display: none;
+}
+.docxtor .fp .atom.val,
+.docxtor .fp .atom.sym {
+  white-space: pre;
+}
+.docxtor .fp .atom.note.custom {
+  display: inline-block;
+  width: 0;
+  overflow: hidden;
+}
+/* A legacy check box: a box, with a tick when checked. */
+.docxtor .fp .ghost.ff {
+  display: inline-block;
+  position: relative;
+  box-sizing: border-box;
+  width: 0.85em;
+  height: 0.85em;
+  margin: 0 0.12em;
+  border: 1.25px solid currentColor;
+  border-radius: 1px;
+  vertical-align: -0.08em;
+}
+.docxtor .fp .ghost.ff[data-checked="1"]::after {
+  content: "";
+  position: absolute;
+  left: 22%;
+  top: -6%;
+  width: 28%;
+  height: 58%;
+  border: solid currentColor;
+  border-width: 0 1.75px 1.75px 0;
+  transform: rotate(40deg);
+}
+.docxtor .fp .ghost.eq {
+  display: inline-block;
+  vertical-align: middle;
+  user-select: none;
+}
+/* Field codes shown (View, Field codes): each field reads as { CODE } on a light tint, and its result is out of sight. */
+.docxtor .fp .fc-gone {
+  display: none;
+}
+.docxtor .fp .fc-first {
+  font-size: 0 !important;
+  line-height: calc(var(--fs, 1em) * 1.25);
+}
+.docxtor .fp .fc-first > * {
+  display: none;
+}
+.docxtor .fp .fc-first::before {
+  content: attr(data-code);
+  font-size: var(--fs, 1em);
+  font-style: normal;
+  font-weight: 400;
+  color: var(--paper-mark);
+  background: var(--paper-field);
+  border-radius: 2px;
+  padding: 0 0.15em;
+  cursor: text;
+}
+.docxtor .code-edit {
+  position: fixed;
+  z-index: 30;
+  box-sizing: border-box;
+  min-width: 14em;
+  padding: 2px 6px;
+  font: 400 13px/1.5 var(--font-ui);
+  color: var(--ink);
+  background: var(--panel-hi);
+  border: 1.5px solid var(--z-ink);
+  border-radius: 4px;
+}
+
+/* Insert, Date and time, and Insert, Field. */
+.docxtor .dt-dialog {
+  width: min(var(--dialog-s), 100%);
+}
+.docxtor .dt-list {
+  height: 280px;
+}
+.docxtor .fd-dialog {
+  width: min(var(--dialog-l), 100%);
+}
+.docxtor .fd-cols {
+  display: grid;
+  grid-template-columns: 250px minmax(0, 1fr);
+  gap: var(--space-lg);
+  align-items: start;
+}
+.docxtor .fd-names {
+  height: 280px;
+}
+.docxtor .fd-names .xr-detail {
+  max-width: 55%;
+}
+.docxtor .fd-main {
+  min-width: 0;
+}
+.docxtor .fd-desc {
+  margin: 0 0 var(--space-md);
+}
+.docxtor .fd-form {
+  display: grid;
+  gap: var(--space-xs);
+  max-height: 210px;
+  overflow: auto;
+}
+.docxtor .fd-form .field {
+  margin-bottom: var(--space-sm);
+}
+.docxtor .fd-preview {
+  min-height: 1.5em;
+  font-weight: 400;
+}
+@media (max-width: 640px) {
+  .docxtor .fd-cols {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

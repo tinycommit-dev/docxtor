@@ -1,0 +1,42 @@
+{
+ "why": "E2: an undo put back a relationship to a custom XML part a save had taken out",
+ "found": "2026-11-22",
+ "start": "built:rich",
+ "steps": [
+  {
+   "step": "undo"
+  },
+  {
+   "kind": "insert_markdown",
+   "merge": true,
+   "ops": [
+    {
+     "after": 3,
+     "markdown": "| a | b |\n|---|---|\n| 1 | 2 |\n\n![x](y)",
+     "op": "insert_markdown"
+    }
+   ],
+   "step": "apply",
+   "strict": false
+  },
+  {
+   "kind": "insert_page_part",
+   "merge": false,
+   "ops": [
+    {
+     "design": "docxtor.blank",
+     "kind": "footer",
+     "op": "insert_page_part"
+    }
+   ],
+   "step": "apply",
+   "strict": true
+  },
+  {
+   "step": "undo"
+  },
+  {
+   "step": "undo"
+  }
+ ]
+}

@@ -1,0 +1,7 @@
+# The Rust release Docxtor is built and tested with, here and in CI, so a new Rust release never changes a build or a lint by
+# itself. Moving to a newer one is a change of its own: update the channel, then run cargo clippy and npm run perf.
+[toolchain]
+channel = "1.92.0"
+components = ["clippy", "rustfmt"]
+targets = ["wasm32-unknown-unknown"]
+profile = "minimal"
