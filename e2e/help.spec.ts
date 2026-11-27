@@ -1,20 +1,23 @@
 // The Help menu: written help pages that work offline, what's new, and links to report a problem and to the source code.
 import { chooseMenu, dialog, expect, openFixture, openMenu, menuItem, test } from "./helpers";
 
-// The repository's address comes from the build (VITE_DOCXTOR_REPO); the shipped app has none until it is public, and no links.
-const REPO = (process.env.VITE_DOCXTOR_REPO ?? "").replace(/\/+$/, "");
+// The repository's and the documentation's addresses: the public ones unless the build names others (VITE_DOCXTOR_REPO, VITE_DOCXTOR_DOCS).
+const REPO = (process.env.VITE_DOCXTOR_REPO ?? "https://github.com/tinycommit-dev/docxtor").replace(/\/+$/, "");
+const DOCS = process.env.VITE_DOCXTOR_DOCS ?? "https://docxtor.tinycommit.dev/docs/";
 
 test.describe("help", () => {
   test.beforeEach(async ({ page, context }) => {
     // The links open the project's pages: the tests don't go to the network for them.
     await context.route("https://github.com/**", (route) => route.fulfill({ contentType: "text/html", body: "<title>Docxtor</title>" }));
+    await context.route("https://docxtor.tinycommit.dev/**", (route) => route.fulfill({ contentType: "text/html", body: "<title>Docxtor docs</title>" }));
     await openFixture(page, "simple.docx");
   });
 
-  test("the Help menu lists the help pages and what's new, and the two links only when the repository's address is set", async ({ page }) => {
+  test("the Help menu lists the help pages and what's new, and the links when their addresses are set", async ({ page }) => {
     await openMenu(page, "Help");
     for (const label of ["Search the menus", "Keyboard shortcuts", "Help", "What's new", "Open the tour in a new tab"]) await expect(menuItem(page, label)).toBeVisible();
     for (const label of ["Report a problem", "Source code"]) await expect(menuItem(page, label)).toHaveCount(REPO ? 1 : 0);
+    await expect(menuItem(page, "Documentation")).toHaveCount(DOCS ? 1 : 0);
   });
 
   test("Help opens the pages, one topic at a time, and F1 opens it too", async ({ page }) => {
@@ -56,6 +59,25 @@ test.describe("help", () => {
     expect(body).toMatch(/Docxtor \d+\.\d+\.\d+, .*Chrome/);
     expect(body).not.toContain("simple");
     await tab.close();
+  });
+
+  test("Documentation opens the documentation", async ({ page, context }) => {
+    test.skip(!DOCS, "no documentation address in this build (VITE_DOCXTOR_DOCS)");
+    const [tab] = await Promise.all([context.waitForEvent("page"), chooseMenu(page, "Help", "Documentation")]);
+    await tab.waitForURL((u) => u.toString().startsWith(DOCS));
+    await tab.close();
+  });
+
+  test("the start screen links to the documentation and the source code at the top", async ({ page }) => {
+    await page.goto("/");
+    const links = page.getByRole("navigation", { name: "About Docxtor" });
+    if (DOCS) await expect(links.getByRole("link", { name: "Documentation" })).toHaveAttribute("href", DOCS);
+    if (REPO) await expect(links.getByRole("link", { name: "Source code on GitHub" })).toHaveAttribute("href", REPO);
+    await expect(links.getByRole("link")).toHaveCount((DOCS ? 1 : 0) + (REPO ? 1 : 0));
+    // At the top, beside the wordmark and above the heading: a long list of documents never pushes them out of sight.
+    const nav = (await links.boundingBox())!;
+    const heading = (await page.getByRole("heading", { name: "Your documents" }).boundingBox())!;
+    expect(nav.y + nav.height).toBeLessThan(heading.y);
   });
 
   test("Source code opens the repository", async ({ page, context }) => {

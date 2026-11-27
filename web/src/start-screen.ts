@@ -2,6 +2,7 @@
 import type { PreviewLine } from "./files/fs";
 import { I, h, svg, t } from "@docxtor/editor";
 import type { App } from "./main";
+import { DOCS, REPO } from "./help";
 import { DOC_EXT, canPickFiles, canUseFolders, recents, setPinned } from "./files/fs";
 
 // ---------------------------------------------------------------------------
@@ -87,7 +88,19 @@ export async function showStart(app: App, resume?: Resume) {
     h(
       "div",
       { class: "start-inner" },
-      h("span", { class: "wordmark" }, "docxtor"),
+      h(
+        "div",
+        { class: "start-top" },
+        h("span", { class: "wordmark" }, "docxtor"),
+        DOCS || REPO
+          ? h(
+              "nav",
+              { class: "start-links", "aria-label": t("About Docxtor") },
+              DOCS ? h("a", { href: DOCS, target: "_blank", rel: "noopener" }, t("Documentation")) : null,
+              REPO ? h("a", { href: REPO, target: "_blank", rel: "noopener" }, t("Source code on GitHub")) : null,
+            )
+          : null,
+      ),
       h("h1", {}, t("Your documents")),
       h(
         "p",
