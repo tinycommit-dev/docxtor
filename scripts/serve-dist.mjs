@@ -1,6 +1,6 @@
 // Serves the production build (web/dist) the way Cloudflare Pages does: with the headers of deploy/_headers (every matching rule adds its
 // headers, same names joined, `! Name` detaches), `/` and a folder as its index.html, a page without its .html ending (/docs/embedding for
-// docs/embedding.html), and a 404 for anything else. `npm run preview:dist` (after `npm run build`), then open http://localhost:5190/. Also used by e2e/production.spec.ts.
+// docs/embedding.html, and a redirect from the address with it), and a 404 for anything else. `npm run preview:dist` (after `npm run build`), then open http://localhost:5190/. Also used by e2e/production.spec.ts.
 import { createReadStream, existsSync, readFileSync, statSync } from "node:fs";
 import { createServer } from "node:http";
 import { extname, join, normalize, resolve } from "node:path";
@@ -16,7 +16,14 @@ createServer((req, res) => {
   const path = decodeURIComponent(url.pathname);
   let file = normalize(join(root, path));
   if (!file.startsWith(root)) file = "";
-  // Cloudflare Pages: a folder answers with its index.html (and /docs asks for /docs/), a page is found without its .html.
+  // Cloudflare Pages: a folder answers with its index.html (and /docs asks for /docs/), a page is found without its .html, and an
+  // address that names the .html is sent to the one without it (/index.html to /, /docs/embedding.html to /docs/embedding).
+  if (path.endsWith(".html") && file && existsSync(file)) {
+    const to = path.endsWith("/index.html") ? path.slice(0, -"index.html".length) : path.slice(0, -".html".length);
+    res.writeHead(308, { location: `${to}${url.search}` });
+    res.end();
+    return;
+  }
   if (file && existsSync(file) && statSync(file).isDirectory()) {
     if (!path.endsWith("/")) {
       res.writeHead(308, { location: `${path}/${url.search}` });

@@ -56,8 +56,9 @@ function offline(): Plugin {
       const emitted = Object.keys(bundle).filter((f) => !f.endsWith(".map") && !f.endsWith(".woff") && !LATE_FONT.test(f));
       // Files from public/ are copied after the bundle is made, so they are listed from the folder.
       const pub = filesUnder(resolve(__dirname, "public"));
-      // The page itself is written after this runs; it is named here because it is always there.
-      const list = [...new Set(["./", "index.html", ...emitted, ...pub])].sort();
+      // The page itself is written after this runs; it is named here because it is always there. It is kept as "./" only: Cloudflare Pages
+      // answers /index.html with a redirect to /, and a browser will not open a page from a kept copy that came through a redirect.
+      const list = [...new Set(["./", ...emitted.filter((f) => f !== "index.html"), ...pub])].sort();
       const hash = createHash("sha1");
       for (const f of list) hash.update(f);
       for (const f of pub) hash.update(readFileSync(resolve(__dirname, "public", f)));

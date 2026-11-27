@@ -7,7 +7,8 @@ const PRECACHE = __PRECACHE__;
 const CACHE = `docxtor-app-${VERSION}`;
 // What is kept as it is used belongs to the version too, so an update never leaves an old copy answering for ever.
 const RUNTIME = `docxtor-runtime-${VERSION}`;
-const SHELL = new URL("./index.html", self.registration.scope).href;
+// The page is kept under the directory's own address: some servers (Cloudflare Pages) send /index.html on to / with a redirect.
+const SHELL = new URL("./", self.registration.scope).href;
 // Docxtor owns the directory it is served from, but only its own page is the app: other addresses in the scope are not ours to answer.
 const HOME = new URL("./", self.registration.scope).pathname;
 const isApp = (url) => url.pathname === HOME || url.pathname === `${HOME}index.html`;
@@ -49,6 +50,11 @@ self.addEventListener("fetch", (event) => {
   event.respondWith(answer(event, request).catch((error) => new Response(`Docxtor's service worker could not answer: ${error}`, { status: 500, headers: { "content-type": "text/plain; charset=utf-8" } })));
 });
 
+/** A page load cannot take a copy that came through a redirect (the browser fails it): the same body and headers, without the redirect. */
+function direct(response) {
+  return response.redirected ? new Response(response.body, { status: response.status, statusText: response.statusText, headers: response.headers }) : response;
+}
+
 /** The kept copy of a request: this version's first, then any other version's (an open page may still ask for it). */
 async function kept(request, options) {
   const own = await caches.open(CACHE);
@@ -62,7 +68,7 @@ async function answer(event, request) {
   // Any other address on this server (a privacy page, a file, a 404) gets what the server says, or its kept file when it has one.
   if (request.mode === "navigate" && isApp(new URL(request.url))) {
     const shell = await kept(SHELL);
-    if (shell) return shell;
+    if (shell) return direct(shell);
     try {
       return await fetch(request);
     } catch {
@@ -70,7 +76,7 @@ async function answer(event, request) {
     }
   }
   const copy = await kept(request, { ignoreSearch: true });
-  if (copy) return copy;
+  if (copy) return request.mode === "navigate" ? direct(copy) : copy;
   try {
     const response = await fetch(request);
     // What the build did not list (a font for another script) is kept as it is used. Other pages are not Docxtor's to keep.

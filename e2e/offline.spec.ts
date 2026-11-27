@@ -24,7 +24,8 @@ test.describe("works offline", () => {
   test("the build has no outside font or script address, and its service worker lists everything the app needs", () => {
     const files = list();
     expect(files).toContain("./");
-    expect(files).toContain("index.html");
+    // The page is kept as "./" alone: Cloudflare Pages redirects /index.html to /, and a page cannot open from a redirected copy.
+    expect(files).not.toContain("index.html");
     expect(files).toContain("manifest.webmanifest");
     expect(files).toContain("icons/icon-192.png");
     expect(files).toContain("icons/icon-512.png");
