@@ -3,7 +3,8 @@ name: Release
 # A pushed tag v<version> (the version in the root package.json: docs/deploy.md, "Cutting a release") runs the gates, builds everything,
 # tests the Docker image and the Cloudflare preview, then publishes: the GitHub release, the image on ghcr.io and the hosted app.
 # "Run workflow" with dry_run on (the default) builds and tests all of it and uploads nothing. With site_only on (and dry_run off) it puts the
-# current branch on the hosted app alone: the gates, the web build, the tested preview, then production; no release, no image, no programs.
+# current branch on the hosted app alone: the web build, the tested preview, then production; no release, no image, no programs. It does not
+# run the gates again: it waits for CI on the same commit and goes on only when that passed.
 on:
   push:
     tags: ["v*"]
@@ -14,7 +15,7 @@ on:
         type: boolean
         default: true
       site_only:
-        description: "The hosted app only: gates, web build, tested preview, then production (no release, no image, no programs)"
+        description: "The hosted app only: once CI has passed on this commit, the web build, tested preview, then production (no release, no image, no programs)"
         type: boolean
         default: false
 
@@ -35,9 +36,37 @@ jobs:
   # The checks of ci.yml, as they are: hygiene, secrets, cargo test and clippy, the fidelity gate, the Word quick gate, the web build and its
   # browser tests, Firefox and Safari's core set.
   gates:
+    if: ${{ !inputs.site_only }}
     permissions:
       contents: read
     uses: ./.github/workflows/ci.yml
+
+  # A site-only run does not run the checks again: CI must have passed on this very commit. When CI is still running on it, this waits for it.
+  checked:
+    if: ${{ inputs.site_only }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    permissions:
+      actions: read
+    steps:
+      - name: CI passed on this commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          for i in $(seq 1 80); do
+            runs="$(gh api "repos/$GH_REPO/actions/workflows/ci.yml/runs?head_sha=$SHA&per_page=20" --jq '[.workflow_runs[] | {status, conclusion}]')"
+            if jq -e 'any(.conclusion == "success")' <<<"$runs" >/dev/null; then echo "CI passed on $SHA"; exit 0; fi
+            if jq -e 'length > 0 and all(.status == "completed")' <<<"$runs" >/dev/null; then echo "::error::CI did not pass on $SHA"; exit 1; fi
+            # No run yet: a push starts CI within seconds, so after two minutes there is none to wait for.
+            if [ "$i" -ge 4 ] && jq -e 'length == 0' <<<"$runs" >/dev/null; then echo "::error::CI has not run on $SHA (push it, or run it from the Actions tab)"; exit 1; fi
+            echo "CI on $SHA is still running"
+            sleep 30
+          done
+          echo "::error::CI on $SHA did not finish in 40 minutes"
+          exit 1
 
   # What is being released: the version (one place: package.json), the tag that must match it, and the CHANGELOG section that becomes the notes.
   version:
@@ -301,8 +330,9 @@ jobs:
 
   # The hosted app, first at a preview address of its own: the production test runs against it, and only a pass lets production.
   preview:
-    if: ${{ !inputs.dry_run }}
-    needs: [gates, version, web]
+    # after the gates, or (site only) after the check that CI passed on this commit
+    if: ${{ !cancelled() && !inputs.dry_run && needs.version.result == 'success' && needs.web.result == 'success' && (needs.gates.result == 'success' || (inputs.site_only && needs.checked.result == 'success')) }}
+    needs: [gates, checked, version, web]
     runs-on: ubuntu-24.04
     permissions:
       contents: read
