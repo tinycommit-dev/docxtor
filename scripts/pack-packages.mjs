@@ -225,7 +225,7 @@ const mb = (n) => (n / 1e6).toFixed(2) + " MB";
 export function packPackages({ buildEngine = false, say = console.log } = {}) {
   const why = engineStale();
   if (why) {
-    if (!buildEngine) throw new Error(`The engine in packages/core/wasm is not the shipped build: ${why}.\nRun npm run pack:packages -- --build-engine (about 4 minutes), or npm run wasm:ship and then scripts/build-web.mjs's stamp (npm run package:web does both).`);
+    if (!buildEngine) throw new Error(`The engine in packages/core/wasm is not the shipped build: ${why}.\nRun npm run pack:packages -- --build-engine (about 4 minutes).`);
     say(`Building the shipped engine (wasm:ship, about 4 minutes): ${why}.`);
     execFileSync("npm", ["run", "wasm:ship"], { cwd: root, stdio: "inherit", timeout: 1_200_000 });
     stampEngine();

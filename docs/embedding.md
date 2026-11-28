@@ -8,6 +8,8 @@ You can run Docxtor inside your own product in three ways: as an HTML element, a
 > 2. `npm install` links the three packages into `node_modules/@docxtor/`, so code inside the checkout (a page under `web/`, a script) imports `@docxtor/core`, `@docxtor/extensions` and `@docxtor/editor` by those names. They export TypeScript source (`src/index.ts`), not built JavaScript: Vite bundles it, and Node 22.18 or later runs it by stripping the types.
 > 3. Or skip the packages: `npm run build` makes the whole app as static files in `web/dist`, and you host it yourself ([Putting Docxtor online](deploy.md)).
 >
+> To try the packages as they will be installed, `npm run pack:packages` builds the shipped engine and packs the three tarballs into `build/npm/`, and `npm install ./build/npm/docxtor-core-0.1.0.tgz ./build/npm/docxtor-extensions-0.1.0.tgz ./build/npm/docxtor-editor-0.1.0.tgz` installs them into your own project. `npm run test:packages` does that in throwaway apps for Node, TypeScript, Vite, webpack, esbuild and Next.
+>
 > Every example below that is a program is run by `npm test` or by the browser spec `e2e/docs-examples.spec.ts`, against these workspace packages. [`web/examples/embed.html`](../web/examples/embed.html) puts two editors on one page; run `npm run dev` and open `/examples/embed.html` to try it.
 
 ## 1. The `<docxtor-editor>` element
