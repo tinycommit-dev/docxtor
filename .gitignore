@@ -28,3 +28,6 @@ docs/.vitepress/cache/
 /.claude/launch.json
 /.impeccable.md
 /release-draft/
+
+# The npm packages as staged and packed by scripts/pack-packages.mjs
+/build/

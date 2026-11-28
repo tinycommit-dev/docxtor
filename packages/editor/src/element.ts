@@ -12,7 +12,11 @@ import { DocxtorEditor } from "./docxtor-editor";
 import type { SpellingProvider } from "./spelling/types";
 import type { Theme } from "./ui/dom";
 
-export class DocxtorEditorElement extends HTMLElement {
+// Where there is no DOM (a server rendering a page, Node), importing this module must still work: the element class then has an empty base
+// and is not registered.
+const ElementBase = (typeof HTMLElement === "undefined" ? class {} : HTMLElement) as typeof HTMLElement;
+
+export class DocxtorEditorElement extends ElementBase {
   static observedAttributes = ["src", "theme", "icon-pack", "readonly"];
   /** The editor behind the element (created when the element is first connected). */
   editor: DocxtorEditor | null = null;
@@ -92,7 +96,7 @@ export class DocxtorEditorElement extends HTMLElement {
   }
 }
 
-if (!customElements.get("docxtor-editor")) customElements.define("docxtor-editor", DocxtorEditorElement);
+if (typeof customElements !== "undefined" && !customElements.get("docxtor-editor")) customElements.define("docxtor-editor", DocxtorEditorElement);
 
 declare global {
   interface HTMLElementTagNameMap {
