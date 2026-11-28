@@ -16,6 +16,7 @@ import { cpSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statS
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { engineStale, spellStale, stampEngine } from "./build-web.mjs";
+import { homePathsUnder } from "./home-paths.mjs";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 export const OUT = join(root, "build/npm");
@@ -216,6 +217,8 @@ function stage(name) {
   if (existsSync(join(pkg, "THIRD_PARTY_LICENSES.txt"))) cpSync(join(pkg, "THIRD_PARTY_LICENSES.txt"), join(out, "THIRD_PARTY_LICENSES.txt"));
   writeFileSync(join(out, "package.json"), JSON.stringify(stagedManifest(name), null, 2) + "\n");
   assertResolves(out);
+  const home = homePathsUnder(out);
+  if (home.length) throw new Error(`@docxtor/${name} holds home folder paths (rebuild the wasm: npm run pack:packages -- --build-engine):\n  ${home.join("\n  ")}`);
   return out;
 }
 
