@@ -5,10 +5,9 @@ import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { HOME_PATH as PATH, MADE_UP } from "./home-paths.mjs";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const MADE_UP = new Set(["me", "x", "ana", "name", "user", "username", "you"]);
-const PATH = /(?<![A-Za-z]:)(?<![A-Za-z0-9_.-])\/(?:Users|home)\/([A-Za-z0-9._-]+)\//g;
 
 const files = execFileSync("git", ["ls-files", "-z"], { cwd: root, encoding: "utf8", maxBuffer: 1 << 28 }).split("\0").filter(Boolean);
 const found = [];

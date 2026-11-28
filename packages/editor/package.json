@@ -14,6 +14,7 @@
   ],
   "sideEffects": [
     "*.css",
+    "./src/index.ts",
     "./src/element.ts"
   ],
   "dependencies": {
@@ -22,7 +23,7 @@
   },
   "scripts": {
     "build": "tsc --noEmit -p .",
-    "wasm": "cd ../.. && wasm-pack build crates/docxtor-spell --target web --release --no-opt --out-dir ../../packages/editor/src/spelling/wasm --out-name spell && rm -f packages/editor/src/spelling/wasm/.gitignore packages/editor/src/spelling/wasm/package.json && node scripts/strip-wasm-names.mjs packages/editor/src/spelling/wasm/spell_bg.wasm",
+    "wasm": "cd ../.. && RUSTFLAGS=\"--remap-path-prefix=$HOME=~\" wasm-pack build crates/docxtor-spell --target web --release --no-opt --out-dir ../../packages/editor/src/spelling/wasm --out-name spell && rm -f packages/editor/src/spelling/wasm/.gitignore packages/editor/src/spelling/wasm/package.json && node scripts/strip-wasm-names.mjs packages/editor/src/spelling/wasm/spell_bg.wasm",
     "test": "node --experimental-strip-types --test \"test/*.test.ts\""
   }
 }

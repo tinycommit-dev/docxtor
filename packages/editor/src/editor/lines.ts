@@ -2,7 +2,9 @@
 // line numbers of far pages; the paginator records it per block with the page map (`Paginator.blockLines`), so nothing has to count the
 // lines of a block that is not drawn.
 
-const scratch = document.createRange();
+// Made when first needed: importing the module must not touch the DOM (a server imports the package).
+let range: Range | undefined;
+const scratch = () => (range ??= document.createRange());
 
 /** One row of a paragraph: where it is on the screen (viewport px) and its left edge. */
 export interface LineRow {
@@ -18,8 +20,9 @@ export function lineRows(el: HTMLElement): LineRow[] {
   const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
   for (let n = walker.nextNode(); n; n = walker.nextNode()) {
     if (!(n as Text).data.trim() || !ownText(n)) continue;
-    scratch.selectNodeContents(n);
-    for (const r of Array.from(scratch.getClientRects())) if (r.height > 1) rects.push(r);
+    const rg = scratch();
+    rg.selectNodeContents(n);
+    for (const r of Array.from(rg.getClientRects())) if (r.height > 1) rects.push(r);
   }
   // Pictures and other objects sit on a line too.
   for (const o of Array.from(el.querySelectorAll<HTMLElement>("img, .atom"))) {

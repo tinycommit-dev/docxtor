@@ -6,6 +6,7 @@
 // The shipped engine takes about 4 minutes. A stamp (packages/core/wasm/.ship.json: the engine file's hash) says which build is in
 // packages/core/wasm, so a later `npm run wasm` (the default build, for development) is never mistaken for the shipped one.
 import { execFileSync } from "node:child_process";
+import { homePathsIn, homePathsUnder } from "./home-paths.mjs";
 import { createHash } from "node:crypto";
 import { existsSync, readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
@@ -37,6 +38,7 @@ export function engineStale() {
   if (JSON.parse(readFileSync(STAMP, "utf8")).sha256 !== sha256(ENGINE)) return "the engine there is a different build (npm run wasm?) than the one marked shipped";
   const sources = newest(["crates/docxtor-core", "crates/docxtor-wasm", "Cargo.toml", "Cargo.lock", "scripts/strip-wasm-names.mjs"]);
   if (sources > statSync(ENGINE).mtimeMs) return "the engine's sources are newer than the build";
+  if (homePathsIn(ENGINE).length) return "the engine there holds a home folder path (built before the wasm builds remapped $HOME)";
   return null;
 }
 
@@ -44,6 +46,7 @@ export function engineStale() {
 export function spellStale() {
   if (!existsSync(SPELL)) return "there is no spelling build";
   if (newest(["crates/docxtor-spell", "Cargo.toml", "Cargo.lock", "scripts/strip-wasm-names.mjs"]) > statSync(SPELL).mtimeMs) return "its sources are newer than the build";
+  if (homePathsIn(SPELL).length) return "it holds a home folder path (built before the wasm builds remapped $HOME)";
   return null;
 }
 
@@ -76,6 +79,8 @@ export function buildWeb({ reuse = true, say = console.log } = {}) {
   }
   run(["run", "build"], say);
   if (!existsSync(join(root, "web/dist/index.html"))) throw new Error("The build wrote no web/dist/index.html.");
+  const home = homePathsUnder(join(root, "web/dist"));
+  if (home.length) throw new Error(`The built app holds home folder paths:\n  ${home.join("\n  ")}`);
   return { engine, dist: join(root, "web/dist") };
 }
 

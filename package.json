@@ -35,6 +35,8 @@
     "perf:accept": "node --experimental-strip-types --no-warnings perf/run.mts standard --accept",
     "headers": "node scripts/headers.mjs",
     "package:web": "node scripts/package-web.mjs",
+    "pack:packages": "node scripts/pack-packages.mjs",
+    "test:packages": "node scripts/pack-test.mjs",
     "deploy": "node scripts/deploy.mjs",
     "preview:dist": "node scripts/serve-dist.mjs",
     "docs:dev": "vitepress dev docs",

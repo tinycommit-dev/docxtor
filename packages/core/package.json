@@ -11,8 +11,8 @@
   "files": ["src", "wasm", "THIRD_PARTY_LICENSES.txt"],
   "sideEffects": false,
   "scripts": {
-    "wasm": "cd ../.. && wasm-pack build crates/docxtor-wasm --target web --release --no-opt --out-dir ../../packages/core/wasm --out-name docxtor && rm -f packages/core/wasm/.gitignore packages/core/wasm/package.json && node scripts/strip-wasm-names.mjs packages/core/wasm/docxtor_bg.wasm",
-    "wasm:ship": "cd ../.. && wasm-pack build crates/docxtor-wasm --target web --profile wasm-ship --no-opt --out-dir ../../packages/core/wasm --out-name docxtor && rm -f packages/core/wasm/.gitignore packages/core/wasm/package.json && node scripts/strip-wasm-names.mjs packages/core/wasm/docxtor_bg.wasm",
+    "wasm": "cd ../.. && RUSTFLAGS=\"--remap-path-prefix=$HOME=~\" wasm-pack build crates/docxtor-wasm --target web --release --no-opt --out-dir ../../packages/core/wasm --out-name docxtor && rm -f packages/core/wasm/.gitignore packages/core/wasm/package.json && node scripts/strip-wasm-names.mjs packages/core/wasm/docxtor_bg.wasm",
+    "wasm:ship": "cd ../.. && RUSTFLAGS=\"--remap-path-prefix=$HOME=~\" wasm-pack build crates/docxtor-wasm --target web --profile wasm-ship --no-opt --out-dir ../../packages/core/wasm --out-name docxtor && rm -f packages/core/wasm/.gitignore packages/core/wasm/package.json && node scripts/strip-wasm-names.mjs packages/core/wasm/docxtor_bg.wasm",
     "build": "tsc --noEmit -p .",
     "test": "node --experimental-strip-types --test \"test/*.test.ts\""
   }
