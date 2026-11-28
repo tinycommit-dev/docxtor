@@ -68,6 +68,15 @@ function fixFile(file) {
   if (text !== before) writeFileSync(file, text);
 }
 
+/**
+ * wasm-bindgen's .d.ts files declare `[Symbol.dispose]`, which a TypeScript project whose `lib` is older than ES2023 cannot read
+ * (error TS2550 in a file it has to read, unless it skips checking .d.ts files). The reference makes the file bring its own lib.
+ */
+function bringDisposeLib(file) {
+  const text = read(file);
+  if (text.includes("Symbol.dispose") && !text.includes('lib="esnext.disposable"')) writeFileSync(file, `/// <reference lib="esnext.disposable" />\n${text}`);
+}
+
 /** tsc for one package, then the fixes. `dist` is emptied first. */
 function build(name) {
   const dir = join(root, "packages", name);
@@ -76,6 +85,7 @@ function build(name) {
   if (name === "editor") {
     // The spelling checker's glue and WebAssembly are generated files tsc does not copy; checker.js imports ./wasm/spell.js.
     cpSync(join(dir, "src/spelling/wasm"), join(dir, "dist/spelling/wasm"), { recursive: true });
+    bringDisposeLib(join(dir, "dist/spelling/wasm/spell.d.ts"));
   }
   for (const f of walk(join(dir, "dist"))) if (/\.(js|d\.ts)$/.test(f) && !f.includes("spelling/wasm")) fixFile(f);
 }
@@ -168,8 +178,9 @@ function stagedManifest(name) {
     types: "./dist/index.d.ts",
     exports,
     files,
-    // Importing the package runs nothing; the editor's stylesheet and its custom element (registered when element.js loads) are the exceptions.
-    sideEffects: name === "editor" ? ["**/*.css", "./dist/element.js"] : false,
+    // Importing the package runs nothing, with three exceptions: the stylesheets, the custom element (registered when element.js loads) and
+    // the entry that re-exports it: `import "@docxtor/editor"` on its own (the <docxtor-editor> way) must not be dropped as unused.
+    sideEffects: name === "editor" ? ["**/*.css", "./dist/index.js", "./dist/element.js"] : false,
     ...(Object.keys(dependencies).length ? { dependencies } : {}),
     engines: { node: ">=20" },
     keywords: ["docxtor", ...KEYWORDS[name]],
@@ -189,6 +200,7 @@ function stage(name) {
   if (name === "core") {
     mkdirSync(join(out, "wasm"));
     for (const f of ["docxtor.js", "docxtor.d.ts", "docxtor_bg.wasm", "docxtor_bg.wasm.d.ts"]) cpSync(join(pkg, "wasm", f), join(out, "wasm", f));
+    bringDisposeLib(join(out, "wasm/docxtor.d.ts"));
   }
   if (name === "editor") {
     // The stylesheets keep their folders, so editor.css's @imports hold.

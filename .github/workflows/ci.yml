@@ -143,6 +143,40 @@ jobs:
       - name: Licence notices are current and every shipped dependency has an allowed licence
         run: npm run check:notices
 
+  # The three npm packages as they would be published (scripts/pack-packages.mjs): built with the shipped engine, packed, and then installed from
+  # the tarballs into throwaway apps (scripts/pack-test.mjs): Node, TypeScript, Vite, webpack, esbuild and Next, with publint and
+  # arethetypeswrong. The tarballs are kept as an artifact.
+  packages:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Install Rust (the version rust-toolchain.toml names)
+        run: |
+          rustup toolchain install
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: package-lock.json
+      - name: Install wasm-pack 0.15.0
+        uses: taiki-e/install-action@fe3acb53a98b62c772db35de75ce0e4595e7ca8c # v2.90.8
+        with:
+          tool: wasm-pack@0.15.0
+      - run: npm ci
+      - name: Build the packages (the shipped engine, about 4 minutes) and pack them
+        run: npm run pack:packages -- --build-engine
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Install the tarballs into throwaway apps and use them
+        run: npm run test:packages
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: npm-packages
+          path: build/npm/*.tgz
+          retention-days: 14
+
   # The browser tests on Chromium, every one: the engine is built once (engine-wasm), then the tests are split across
   # thirteen machines with 2 workers each (a runner has 4 cores, and more workers slow every test down): the accessibility
   # checks (axe on every screen and dialog in both themes, about 15 minutes of test time) in five parts, everything else

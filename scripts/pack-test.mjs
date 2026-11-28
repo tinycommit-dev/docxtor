@@ -95,7 +95,7 @@ function serve(dirs) {
         }
       }
     }
-    log.push({ path, status: file ? 200 : 404 });
+    log.push({ path, status: file ? 200 : 404, size: file ? statSync(file).size : 0 });
     if (!file) {
       res.writeHead(404, { "content-type": "text/plain" });
       res.end("not found");
@@ -165,9 +165,6 @@ async function inBrowser(name, base, { workers }) {
     page.on("pageerror", (e) => problems.push(`page error: ${e.message}`));
     page.on("console", (m) => m.type() === "error" && !/Failed to load resource/.test(m.text()) && problems.push(`console: ${m.text()}`));
     page.on("worker", (w) => started.push(w.url()));
-    context.on("response", async (r) => {
-      if (/\.wasm(\?|$)/.test(r.url()) && r.status() === 200) wasm.push(await r.body().then((b) => b.length).catch(() => 0));
-    });
     await page.goto(`http://127.0.0.1:${srv.port}/index.html`);
     await page.waitForFunction(() => window.__ready === true, null, { timeout: 90_000 });
     const errors = await page.evaluate(() => window.__errors);
@@ -189,19 +186,23 @@ async function inBrowser(name, base, { workers }) {
     // The engine's and the spelling checker's WebAssembly, fetched and served.
     const engine = statSync(join(OUT, "core/wasm/docxtor_bg.wasm")).size;
     const spell = statSync(join(OUT, "editor/dist/spelling/wasm/spell_bg.wasm")).size;
-    for (let i = 0; i < 100 && !wasm.includes(spell); i++) await page.waitForTimeout(100);
+    const wasmServed = () => srv.log.filter((r) => /\.wasm$/.test(r.path) && r.status === 200).map((r) => r.size);
+    for (let i = 0; i < 100 && !wasmServed().includes(spell); i++) await page.waitForTimeout(100);
+    wasm.push(...wasmServed());
     if (!wasm.includes(engine)) problems.push(`the engine (${engine} bytes) was not fetched; wasm responses: ${wasm.join(", ")}`);
     if (!wasm.includes(spell)) problems.push(`the spelling checker (${spell} bytes) was not fetched; wasm responses: ${wasm.join(", ")}`);
     const missing = srv.log.filter((r) => r.status === 404).map((r) => r.path);
+    // A worker whose file is not there still shows up as started (and fails at once): count the ones that ran.
+    const ran = started.filter((u) => !missing.includes(new URL(u).pathname));
     if (workers) {
-      if (started.length < 2) problems.push(`expected the compile and zip workers to start, saw ${started.length}: ${started.join(", ")}`);
+      if (ran.length < 2) problems.push(`expected the compile and zip workers to start, saw ${ran.length}: ${ran.join(", ")}`);
     } else {
-      if (started.length) problems.push(`workers started in a bundle that has none: ${started.join(", ")}`);
+      if (ran.length) problems.push(`workers ran in a bundle that has none: ${ran.join(", ")}`);
       for (const w of ["compile-worker", "zip-worker"]) if (!missing.some((m) => m.includes(w))) problems.push(`expected the page to ask for ${w} and not find it; 404s: ${missing.join(", ")}`);
     }
     if (workers && missing.length) problems.push(`404s: ${missing.join(", ")}`);
     if (problems.length) throw new Error(problems.join("\n"));
-    return `${saved.length} bytes saved, ${started.length} workers, wasm ${wasm.map((n) => sizeMB(n) + " MB").join(" + ")}${missing.length ? `, 404: ${missing.join(" ")}` : ""}`;
+    return `${saved.length} bytes saved, ${ran.length} workers ran, wasm ${wasm.map((n) => sizeMB(n) + " MB").join(" + ")}${missing.length ? `, 404: ${missing.join(" ")}` : ""}`;
   } finally {
     await browser.close();
     srv.close();
@@ -245,7 +246,7 @@ function prepare() {
 import { fileURLToPath } from "node:url";
 import { Engine, loadEngine } from "@docxtor/core";
 await loadEngine(await readFile(fileURLToPath(import.meta.resolve("@docxtor/core/wasm/docxtor_bg.wasm"))));
-const md = Array.from({ length: 7000 }, (_, i) => "Paragraph " + (i + 1) + " is here with some words to fill a line or two of the page for the test.").join("\\n\\n");
+const md = Array.from({ length: 12000 }, (_, i) => "Paragraph " + (i + 1) + " is here with some words to fill a line or two of the page for the test.").join("\\n\\n");
 const doc = Engine.fromMarkdown(md);
 await writeFile(process.argv[2], doc.save());
 `,
@@ -297,7 +298,6 @@ await step("types", () => {
     `import { Engine, loadEngine, type Op, type OpResult } from "@docxtor/core";
 import { defineExtension, type Extension, type ExtensionContext } from "@docxtor/extensions";
 import { DocxtorEditor, DocxtorEditorElement, type DocxtorEditorOptions, type SpellingProvider } from "@docxtor/editor";
-import "@docxtor/editor/style.css";
 
 const spelling: SpellingProvider = { load: async () => null };
 const options: DocxtorEditorOptions = { spelling, onSave: (bytes: Uint8Array) => void bytes.length };
@@ -346,7 +346,8 @@ await step("attw", () => {
   for (const [n, file] of Object.entries(tgz)) {
     // The stylesheet and the engine's .wasm are not modules: they have no types to check.
     const out = sh("node", [join(site, "node_modules/@arethetypeswrong/cli/dist/index.js"), "--pack", file, "--profile", "esm-only", "--exclude-entrypoints", "style.css", "wasm/docxtor_bg.wasm", "--format", "ascii"], { cwd: site, timeout: 180_000 });
-    lines.push(`${n}: ${out.includes("No problems found") ? "no problems" : out.trim().split("\n").slice(-3).join(" ")}`);
+    // attw exits with an error when a resolution that counts (Node ESM, bundlers) has a problem; the CommonJS ones are ignored by the profile.
+    lines.push(`${n}: ${/🟢/.test(out) && !/❌|🚨|💀/.test(out) ? "no problems (esm-only profile)" : out.trim()}`);
   }
   return lines.join("; ");
 });
@@ -383,7 +384,7 @@ await step("esbuild", async () => {
   mkdirSync(join(app, "dist"), { recursive: true });
   writeFileSync(join(app, "main.js"), APP_CLASS);
   writeFileSync(join(app, "dist/index.html"), HTML('type="module" src="main.js"', '<link rel="stylesheet" href="main.css">'));
-  sh("node", [join(site, "node_modules/esbuild/bin/esbuild"), "main.js", "--bundle", "--format=esm", "--outdir=dist", "--log-level=warning"], { cwd: app, timeout: 300_000 });
+  sh(join(site, "node_modules/.bin/esbuild"), ["main.js", "--bundle", "--format=esm", "--outdir=dist", "--log-level=warning"], { cwd: app, timeout: 300_000 });
   // esbuild leaves new URL("x.wasm", import.meta.url) alone: the two engines go next to the bundle, as the packages' READMEs say.
   cpSync(join(site, "node_modules/@docxtor/core/wasm/docxtor_bg.wasm"), join(app, "dist/docxtor_bg.wasm"));
   cpSync(join(site, "node_modules/@docxtor/editor/dist/spelling/wasm/spell_bg.wasm"), join(app, "dist/spell_bg.wasm"));
@@ -402,6 +403,9 @@ await step("next", () => {
   );
   writeFileSync(join(app, "next.config.mjs"), `export default {};\n`);
   const out = sh("node", [join(app, "node_modules/next/dist/bin/next"), "build"], { cwd: app, timeout: 480_000, env: { NEXT_TELEMETRY_DISABLED: "1" } });
+  // Next's other bundler, too (Turbopack is the default).
+  rmSync(join(app, ".next"), { recursive: true, force: true });
+  sh("node", [join(app, "node_modules/next/dist/bin/next"), "build", "--webpack"], { cwd: app, timeout: 480_000, env: { NEXT_TELEMETRY_DISABLED: "1" } });
   // Render it on a server too: the page's server component runs the packages' modules.
   const start = spawnSync("node", ["-e", `
     const { spawn } = require("node:child_process");
@@ -417,7 +421,7 @@ await step("next", () => {
     tick(0);
   `], { cwd: app, encoding: "utf8", timeout: 60_000 });
   if (start.status !== 0) throw new Error(`next start: ${start.stdout}${start.stderr}`);
-  return `next build ok (${out.match(/Next\.js [\d.]+/)?.[0] ?? "next"}), server render: ${start.stdout.trim()}`;
+  return `next build ok with Turbopack and webpack (${out.match(/Next\.js [\d.]+/)?.[0] ?? "next"}), server render: ${start.stdout.trim()}`;
 });
 
 console.log(`\n${results.map((r) => `${r.ok ? "PASS" : "FAIL"}  ${r.name.padEnd(9)} ${r.secs.toFixed(1).padStart(6)} s`).join("\n")}\nTotal ${((Date.now() - t0) / 1000).toFixed(0)} s`);
